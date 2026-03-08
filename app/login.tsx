@@ -10,6 +10,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
 import { ApiError, authService } from "@/services/auth";
+import { useUserStore } from "@/stores/user-store";
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -17,6 +18,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const setUser = useUserStore((state) => state.setUser);
 
   // Adjust top margin for web large screens
   const topMargin = isWeb && isLargeScreen ? sy(180) : sy(221) + insets.top;
@@ -36,12 +38,8 @@ export default function LoginScreen() {
     try {
       const response = await authService.login({ email, password });
       console.log("Login successful:", response.user);
-
-      if (Platform.OS === "web") {
-        alert(`Welcome, ${response.user.email}!`);
-      } else {
-        Alert.alert("Success", `Welcome, ${response.user.email}!`);
-      }
+      setUser(response.user);
+      router.replace("/home");
     } catch (error) {
       console.error("Login failed:", error);
 
