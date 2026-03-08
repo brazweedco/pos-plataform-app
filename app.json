@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "BrazWeed POS",
+    "slug": "brazweed-pos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/brazweed-logo.png",
+    "scheme": "brazweedpos",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.brazweed.pos"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FEF9F3",
+        "foregroundImage": "./assets/images/brazweed-logo.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.brazweed.pos"
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/brazweed-logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/brazweed-logo.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#FEF9F3"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
