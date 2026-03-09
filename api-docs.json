@@ -1,0 +1,5522 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "/",
+      "description": "Default Server URL"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Brands",
+      "description": "Brand management API"
+    },
+    {
+      "name": "Companies",
+      "description": "Company registration API (tenants)"
+    },
+    {
+      "name": "Products",
+      "description": "Product management API"
+    },
+    {
+      "name": "Sales",
+      "description": "Sales management API"
+    },
+    {
+      "name": "Carts",
+      "description": "Shopping cart management API"
+    },
+    {
+      "name": "Stripe Connect",
+      "description": "Stripe Connect onboarding and management API"
+    },
+    {
+      "name": "Discounts",
+      "description": "Discount management API"
+    },
+    {
+      "name": "Stripe Connect Callbacks",
+      "description": "Stripe Connect callback endpoints (no auth required)"
+    },
+    {
+      "name": "Authentication",
+      "description": "Authentication and user management API"
+    },
+    {
+      "name": "Stocks",
+      "description": "Stock management API"
+    },
+    {
+      "name": "Categories",
+      "description": "Category management API"
+    },
+    {
+      "name": "Checkout",
+      "description": "Stripe checkout session API"
+    },
+    {
+      "name": "Delivery Orders",
+      "description": "Delivery order management API"
+    },
+    {
+      "name": "Subscriptions",
+      "description": "Company subscription and billing management"
+    },
+    {
+      "name": "Employees",
+      "description": "Employee and tips management API"
+    }
+  ],
+  "paths": {
+    "/api/v1/stocks/product/{productId}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Get stock for a product",
+        "description": "Returns stock information for a specific product",
+        "operationId": "getByProductId",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStockResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Update stock",
+        "description": "Updates stock with operation (SET, INCREMENT, DECREMENT)",
+        "operationId": "updateStock",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}/stock": {
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "updateStock_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStock"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees/{id}": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "findById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/{id}": {
+      "get": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "findById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDiscount"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDiscount"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "deactivate_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{id}": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Find company by ID",
+        "description": "Returns a specific company by its ID",
+        "operationId": "findById_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Update company",
+        "description": "Updates an existing company's data",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Delete company",
+        "description": "Deletes a company (soft delete)",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/categories/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Find category by ID",
+        "description": "Returns a specific category by its ID",
+        "operationId": "findById_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Update category",
+        "description": "Updates an existing category",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Delete category",
+        "description": "Deletes a category (soft delete)",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{cartId}/items/{itemId}": {
+      "put": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "updateItem",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "removeItem",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/brands/{id}": {
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Find brand by ID",
+        "description": "Returns a specific brand by its ID",
+        "operationId": "findById_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBrandResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Update brand",
+        "description": "Updates an existing brand",
+        "operationId": "update_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrandRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBrandResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Delete brand",
+        "description": "Deletes a brand (soft delete)",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}/void": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "voidSale",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "reason",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}/complete": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "completeSale",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "findAll_1",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "brandId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseProductResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/delivery": {
+      "get": {
+        "tags": [
+          "Delivery Orders"
+        ],
+        "operationId": "findAll_2",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "CONFIRMED",
+                "IN_TRANSIT",
+                "DELIVERED",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseDeliveryOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Delivery Orders"
+        ],
+        "operationId": "create_1",
+        "parameters": [
+          {
+            "name": "X-Employee-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDeliveryOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "findAll_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "create_2",
+        "parameters": [
+          {
+            "name": "temporaryPassword",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees/{id}/deactivate": {
+      "post": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/employees/{id}/activate": {
+      "post": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "activate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/employees/tips": {
+      "post": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "recordTip",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseTip"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts": {
+      "get": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "findAll_4",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListDiscount"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDiscount"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "List all companies",
+        "description": "Returns all non-deleted companies",
+        "operationId": "findAll_5",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Create company",
+        "description": "Creates a new company (tenant)",
+        "operationId": "create_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{id}/deactivate": {
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Deactivate company",
+        "description": "Deactivates an active company",
+        "operationId": "deactivate_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{id}/activate": {
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Activate company",
+        "description": "Activates a deactivated company",
+        "operationId": "activate_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/subscription/portal": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Create customer portal session",
+        "description": "Creates a Stripe customer portal session for managing subscription",
+        "operationId": "createCustomerPortal",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSubscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/subscription/checkout": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Create subscription checkout",
+        "description": "Creates a Stripe checkout session for subscribing to a plan",
+        "operationId": "createSubscriptionCheckout",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSubscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/subscription/cancel": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Cancel subscription",
+        "description": "Cancels the current subscription. Use immediately=true to cancel now, or false to cancel at period end",
+        "operationId": "cancelSubscription",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "immediately",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSubscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/stripe/refresh": {
+      "post": {
+        "tags": [
+          "Stripe Connect"
+        ],
+        "summary": "Generate new onboarding link",
+        "description": "Generates a new onboarding link for completing Stripe Connect setup",
+        "operationId": "refreshOnboardingLink",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStripeConnectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/stripe/connect": {
+      "post": {
+        "tags": [
+          "Stripe Connect"
+        ],
+        "summary": "Create Stripe Connect account",
+        "description": "Creates a new Stripe Connect account for the company and returns onboarding URL",
+        "operationId": "createConnectedAccount",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StripeOnboardingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStripeConnectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/checkout/session": {
+      "post": {
+        "tags": [
+          "Checkout"
+        ],
+        "operationId": "createCheckoutSession",
+        "parameters": [
+          {
+            "name": "X-Employee-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCheckoutResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "List all categories",
+        "description": "Returns all non-deleted categories with pagination",
+        "operationId": "findAll_6",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Create category",
+        "description": "Creates a new category",
+        "operationId": "create_5",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "createCart",
+        "parameters": [
+          {
+            "name": "X-Employee-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{cartId}/items": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "addItem",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{cartId}/checkout": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "checkout",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{cartId}/abandon": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "abandonCart",
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/brands": {
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "List all brands",
+        "description": "Returns all non-deleted brands with pagination",
+        "operationId": "findAll_7",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseBrandResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Create brand",
+        "description": "Creates a new brand",
+        "operationId": "create_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BrandRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBrandResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/brands/{id}/deactivate": {
+      "post": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Deactivate brand",
+        "description": "Deactivates an active brand",
+        "operationId": "deactivate_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/brands/{id}/activate": {
+      "post": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Activate brand",
+        "description": "Activates a deactivated brand",
+        "operationId": "activate_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseRegisterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register-with-verification": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register user with email verification",
+        "description": "Creates a new user and sends a verification email with temporary password",
+        "operationId": "registerWithVerification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterWithVerificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseRegisterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "refresh",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseLoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseLoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/email/verify": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Verify email",
+        "description": "Verifies the user's email address using the confirmation code",
+        "operationId": "verifyEmail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyEmailRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/email/send-verification": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Send verification email",
+        "description": "Sends a verification code to the user's email address",
+        "operationId": "sendEmailVerification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailVerificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/email/mark-verified": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Mark email as verified (Admin)",
+        "description": "Administratively marks a user's email as verified",
+        "operationId": "markEmailAsVerified",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailVerificationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/delivery/{id}/status": {
+      "patch": {
+        "tags": [
+          "Delivery Orders"
+        ],
+        "operationId": "updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "CONFIRMED",
+                "IN_TRANSIT",
+                "DELIVERED",
+                "CANCELLED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDeliveryOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stocks/low": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "summary": "Get low stock items",
+        "description": "Returns all products with low stock",
+        "operationId": "getLowStock",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListStockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/summary": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "operationId": "getSummary",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSaleSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/sku/{sku}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "findBySku",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/low-stock": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "getLowStock_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListStock"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/delivery/{id}": {
+      "get": {
+        "tags": [
+          "Delivery Orders"
+        ],
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDeliveryOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/delivery/active": {
+      "get": {
+        "tags": [
+          "Delivery Orders"
+        ],
+        "operationId": "findActiveOrders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListDeliveryOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees/{id}/tips/today": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "getTodaysTips",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBigDecimal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees/tips/summary": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "getTipsSummary",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseMapStringObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/employees/active": {
+      "get": {
+        "tags": [
+          "Employees"
+        ],
+        "operationId": "findActive",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListEmployeeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/active": {
+      "get": {
+        "tags": [
+          "Discounts"
+        ],
+        "operationId": "findActive_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListDiscount"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/subscription": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Get subscription status",
+        "description": "Returns the current subscription status for the company",
+        "operationId": "getSubscriptionStatus",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseSubscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/subscription/plans": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "List available plans",
+        "description": "Returns all available subscription plans with pricing",
+        "operationId": "getAvailablePlans",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPlanResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/stripe/status": {
+      "get": {
+        "tags": [
+          "Stripe Connect"
+        ],
+        "summary": "Get Stripe Connect status",
+        "description": "Returns the current status of the company's Stripe Connect account",
+        "operationId": "getAccountStatus",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseStripeConnectResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/stripe/can-accept-payments": {
+      "get": {
+        "tags": [
+          "Stripe Connect"
+        ],
+        "summary": "Check if company can accept payments",
+        "description": "Returns whether the company's Stripe Connect account is ready to accept payments",
+        "operationId": "canAcceptPayments",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/stripe/refresh": {
+      "get": {
+        "tags": [
+          "Stripe Connect Callbacks"
+        ],
+        "summary": "Handle Stripe onboarding refresh",
+        "description": "Called by Stripe when the onboarding link expires. Generates a new link and redirects.",
+        "operationId": "handleRefresh",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/companies/cnpj/{cnpj}": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Find company by CNPJ",
+        "description": "Returns a specific company by its CNPJ",
+        "operationId": "findByCnpj",
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/active": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "List active companies",
+        "description": "Returns only active companies",
+        "operationId": "findActive_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCompanyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories/active": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "List active categories",
+        "description": "Returns only active categories",
+        "operationId": "findActive_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/{id}": {
+      "get": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "getCart",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/carts/employee/{employeeId}/open": {
+      "get": {
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "getOpenCarts",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/brands/active": {
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "List active brands",
+        "description": "Returns only active brands",
+        "operationId": "findActive_4",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListBrandResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUserMeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/email/status": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Check email verification status",
+        "description": "Checks if the authenticated user's email is verified",
+        "operationId": "checkEmailVerificationStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{companyId}/stripe/disconnect": {
+      "delete": {
+        "tags": [
+          "Stripe Connect"
+        ],
+        "summary": "Disconnect Stripe account",
+        "description": "Disconnects the Stripe Connect account from the company",
+        "operationId": "disconnectAccount",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StockUpdateRequest": {
+        "required": [
+          "amount",
+          "operation"
+        ],
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "SET",
+              "INCREMENT",
+              "DECREMENT"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "ApiResponseStockResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/StockResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StockResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productSku": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "lowStockAlert": {
+            "type": "number"
+          },
+          "lowStock": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductRequest": {
+        "required": [
+          "name",
+          "price",
+          "sku"
+        ],
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "brandId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "price": {
+            "type": "number"
+          },
+          "weightGrams": {
+            "type": "number"
+          },
+          "thcPercentage": {
+            "type": "number"
+          },
+          "cbdPercentage": {
+            "type": "number"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseProductResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProductResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BrandInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "CategoryInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/BrandInfo"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryInfo"
+          },
+          "productType": {
+            "$ref": "#/components/schemas/ProductTypeInfo"
+          },
+          "price": {
+            "type": "number"
+          },
+          "weightGrams": {
+            "type": "number"
+          },
+          "thcPercentage": {
+            "type": "number"
+          },
+          "cbdPercentage": {
+            "type": "number"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "stock": {
+            "$ref": "#/components/schemas/StockInfo"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductTypeInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "StockInfo": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "lowStock": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseStock": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Stock"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Brand": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/Brand"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "price": {
+            "type": "number"
+          },
+          "weightGrams": {
+            "type": "number"
+          },
+          "thcPercentage": {
+            "type": "number"
+          },
+          "cbdPercentage": {
+            "type": "number"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "productType": {
+            "$ref": "#/components/schemas/ProductType"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "stock": {
+            "$ref": "#/components/schemas/Stock"
+          }
+        }
+      },
+      "ProductType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Stock": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "UNIT",
+              "GRAM",
+              "MG"
+            ]
+          },
+          "lowStockAlert": {
+            "type": "number"
+          },
+          "lowStock": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EmployeeRequest": {
+        "required": [
+          "email",
+          "name",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "TENANT_ADMIN",
+              "MANAGER",
+              "SELLER"
+            ]
+          },
+          "pin": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseEmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/EmployeeResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DiscountRequest": {
+        "required": [
+          "name",
+          "type",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PERCENTAGE",
+              "FIXED",
+              "BOGO",
+              "LOYALTY"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "minQuantity": {
+            "type": "number"
+          },
+          "maxUses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDiscount": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Discount"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Discount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PERCENTAGE",
+              "FIXED",
+              "BOGO",
+              "LOYALTY"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "minQuantity": {
+            "type": "number"
+          },
+          "maxUses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "valid": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CompanyRequest": {
+        "required": [
+          "cnpj",
+          "email",
+          "legalName",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "legalName": {
+            "type": "string"
+          },
+          "cnpj": {
+            "maxLength": 14,
+            "minLength": 14,
+            "pattern": "\\d{14}",
+            "type": "string"
+          },
+          "stateRegistration": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "pattern": "\\d{10,11}",
+            "type": "string"
+          },
+          "mobilePhone": {
+            "pattern": "\\d{10,11}",
+            "type": "string"
+          },
+          "zipCode": {
+            "pattern": "\\d{8}",
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string"
+          },
+          "taxRate": {
+            "type": "number"
+          },
+          "plan": {
+            "type": "string",
+            "enum": [
+              "MONTHLY",
+              "QUARTERLY",
+              "YEARLY"
+            ]
+          }
+        }
+      },
+      "ApiResponseCompanyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CompanyResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CompanyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "legalName": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "stateRegistration": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "mobilePhone": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "complement": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string"
+          },
+          "taxRate": {
+            "type": "number"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CategoryRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CategoryResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CategoryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateItemRequest": {
+        "required": [
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "ApiResponseCartResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CartResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CartItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productSku": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          }
+        }
+      },
+      "CartResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItemResponse"
+            }
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "totalDiscount": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BrandRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseBrandResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/BrandResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BrandResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseSaleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SaleResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EmployeeInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "SaleItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "skuSnapshot": {
+            "type": "string"
+          },
+          "nameSnapshot": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          }
+        }
+      },
+      "SaleResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cartId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/EmployeeInfo"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "taxAmount": {
+            "type": "number"
+          },
+          "discountTotal": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleItemResponse"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DeliveryItemRequest": {
+        "required": [
+          "productId",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "allotmentGrams": {
+            "type": "number"
+          }
+        }
+      },
+      "DeliveryOrderRequest": {
+        "required": [
+          "address",
+          "customerName",
+          "items"
+        ],
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryItemRequest"
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseDeliveryOrderResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/DeliveryOrderResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DeliveryItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "allotmentGrams": {
+            "type": "number"
+          }
+        }
+      },
+      "DeliveryOrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryItemResponse"
+            }
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "taxAmount": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalAllotment": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TipRequest": {
+        "required": [
+          "amount",
+          "employeeId",
+          "saleId"
+        ],
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "STRIPE",
+              "CASH",
+              "OTHER"
+            ]
+          }
+        }
+      },
+      "ApiResponseTip": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Tip"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "CHECKED_OUT",
+              "ABANDONED"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartItem"
+            }
+          },
+          "totalDiscount": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cart": {
+            "$ref": "#/components/schemas/Cart"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "discount": {
+            "$ref": "#/components/schemas/Discount"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cognitoSub": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "TENANT_ADMIN",
+              "MANAGER",
+              "SELLER"
+            ]
+          },
+          "pinHash": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "workSchedules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkSchedule"
+            }
+          },
+          "tips": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tip"
+            }
+          }
+        }
+      },
+      "LocalTime": {
+        "type": "object",
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minute": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "second": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "STRIPE",
+              "CASH",
+              "DEBIT",
+              "CREDIT",
+              "ACH"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cart": {
+            "$ref": "#/components/schemas/Cart"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "taxAmount": {
+            "type": "number"
+          },
+          "discountTotal": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "REFUNDED",
+              "VOIDED"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleItem"
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "tips": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tip"
+            }
+          }
+        }
+      },
+      "SaleItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sale": {
+            "$ref": "#/components/schemas/Sale"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "skuSnapshot": {
+            "type": "string"
+          },
+          "nameSnapshot": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "discountAmount": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "number"
+          }
+        }
+      },
+      "Tip": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sale": {
+            "$ref": "#/components/schemas/Sale"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "STRIPE",
+              "CASH",
+              "OTHER"
+            ]
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sale": {
+            "$ref": "#/components/schemas/Sale"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "stripeSessionId": {
+            "type": "string"
+          },
+          "stripePaymentIntent": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FAILED",
+              "REFUNDED"
+            ]
+          },
+          "stripeStatus": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "WorkSchedule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "dayOfWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "$ref": "#/components/schemas/LocalTime"
+          },
+          "endTime": {
+            "$ref": "#/components/schemas/LocalTime"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SubscriptionResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plan": {
+            "type": "string",
+            "enum": [
+              "MONTHLY",
+              "QUARTERLY",
+              "YEARLY"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "TRIALING",
+              "ACTIVE",
+              "PAST_DUE",
+              "CANCELED",
+              "UNPAID",
+              "INCOMPLETE",
+              "INCOMPLETE_EXPIRED"
+            ]
+          },
+          "stripeSubscriptionId": {
+            "type": "string"
+          },
+          "stripeCustomerId": {
+            "type": "string"
+          },
+          "currentPeriodEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "canAccessPlatform": {
+            "type": "boolean"
+          },
+          "checkoutUrl": {
+            "type": "string"
+          },
+          "customerPortalUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "SubscriptionRequest": {
+        "required": [
+          "plan"
+        ],
+        "type": "object",
+        "properties": {
+          "plan": {
+            "type": "string",
+            "enum": [
+              "MONTHLY",
+              "QUARTERLY",
+              "YEARLY"
+            ]
+          }
+        }
+      },
+      "ApiResponseStripeConnectResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/StripeConnectResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StripeConnectResponse": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stripeAccountId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NOT_CONNECTED",
+              "PENDING",
+              "ACTIVE",
+              "RESTRICTED",
+              "DISABLED"
+            ]
+          },
+          "onboardingComplete": {
+            "type": "boolean"
+          },
+          "chargesEnabled": {
+            "type": "boolean"
+          },
+          "payoutsEnabled": {
+            "type": "boolean"
+          },
+          "onboardingUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "StripeOnboardingRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "businessType": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckoutRequest": {
+        "required": [
+          "cartId"
+        ],
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tipAmount": {
+            "type": "number"
+          },
+          "customerEmail": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseCheckoutResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CheckoutResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CheckoutResponse": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stripeSessionId": {
+            "type": "string"
+          },
+          "checkoutUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "CartRequest": {
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "type": "string"
+          }
+        }
+      },
+      "AddItemRequest": {
+        "required": [
+          "productId",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "discountId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "required": [
+          "email",
+          "name",
+          "password",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 2,
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 2147483647,
+            "minLength": 8,
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "TENANT_ADMIN",
+              "MANAGER",
+              "SELLER"
+            ]
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "ApiResponseRegisterResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RegisterResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterWithVerificationRequest": {
+        "required": [
+          "email",
+          "name",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "minLength": 2,
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "TENANT_ADMIN",
+              "MANAGER",
+              "SELLER"
+            ]
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "RefreshRequest": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseLoginResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LoginResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "tokenType": {
+            "type": "string"
+          },
+          "expiresIn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantName": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "VerifyEmailRequest": {
+        "required": [
+          "code",
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "code": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseString": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EmailVerificationRequest": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseListStockResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StockResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PageResponseSaleResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseSaleSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SaleSummaryResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SaleSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "totalSales": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalRevenue": {
+            "type": "number"
+          },
+          "totalTax": {
+            "type": "number"
+          },
+          "totalDiscount": {
+            "type": "number"
+          },
+          "averageTicket": {
+            "type": "number"
+          },
+          "periodStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseProductResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListStock": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Stock"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseDeliveryOrderResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryOrderResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListDeliveryOrderResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryOrderResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListEmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseBigDecimal": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseMapStringObject": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListDiscount": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Discount"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListCompanyResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListPlanResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PlanResponse": {
+        "type": "object",
+        "properties": {
+          "planType": {
+            "type": "string",
+            "enum": [
+              "MONTHLY",
+              "QUARTERLY",
+              "YEARLY"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "billingPeriod": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "stripePriceId": {
+            "type": "string"
+          },
+          "current": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApiResponseBoolean": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "boolean"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListCartResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseBrandResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrandResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListBrandResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrandResponse"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseUserMeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/UserMeResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TenantInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "UserMeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/TenantInfo"
+          }
+        }
+      }
+    }
+  }
+}

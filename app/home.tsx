@@ -66,6 +66,9 @@ export default function HomeScreen() {
   const handleTabPress = (tab: typeof activeTab) => {
     setActiveTab(tab);
     // Handle navigation based on tab
+    if (tab === "stock") {
+      router.push("/inventory");
+    }
   };
 
   return (
