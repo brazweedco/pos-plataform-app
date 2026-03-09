@@ -12,6 +12,10 @@
       "description": "Brand management API"
     },
     {
+      "name": "Product Types",
+      "description": "Product type management API"
+    },
+    {
       "name": "Companies",
       "description": "Company registration API (tenants)"
     },
@@ -276,12 +280,110 @@
         }
       }
     },
+    "/api/v1/product-types/{id}": {
+      "get": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "Find product type by ID",
+        "description": "Returns a specific product type by its ID",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "Update product type",
+        "description": "Updates an existing product type",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "Delete product type",
+        "description": "Deletes a product type (soft delete)",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/employees/{id}": {
       "get": {
         "tags": [
           "Employees"
         ],
-        "operationId": "findById_3",
+        "operationId": "findById_4",
         "parameters": [
           {
             "name": "id",
@@ -310,7 +412,7 @@
         "tags": [
           "Employees"
         ],
-        "operationId": "update_1",
+        "operationId": "update_2",
         "parameters": [
           {
             "name": "id",
@@ -351,7 +453,7 @@
         "tags": [
           "Discounts"
         ],
-        "operationId": "findById_4",
+        "operationId": "findById_5",
         "parameters": [
           {
             "name": "id",
@@ -380,7 +482,7 @@
         "tags": [
           "Discounts"
         ],
-        "operationId": "update_2",
+        "operationId": "update_3",
         "parameters": [
           {
             "name": "id",
@@ -445,7 +547,7 @@
         ],
         "summary": "Find company by ID",
         "description": "Returns a specific company by its ID",
-        "operationId": "findById_5",
+        "operationId": "findById_6",
         "parameters": [
           {
             "name": "id",
@@ -476,7 +578,7 @@
         ],
         "summary": "Update company",
         "description": "Updates an existing company's data",
-        "operationId": "update_3",
+        "operationId": "update_4",
         "parameters": [
           {
             "name": "id",
@@ -517,7 +619,7 @@
         ],
         "summary": "Delete company",
         "description": "Deletes a company (soft delete)",
-        "operationId": "delete_1",
+        "operationId": "delete_2",
         "parameters": [
           {
             "name": "id",
@@ -543,7 +645,7 @@
         ],
         "summary": "Find category by ID",
         "description": "Returns a specific category by its ID",
-        "operationId": "findById_6",
+        "operationId": "findById_7",
         "parameters": [
           {
             "name": "id",
@@ -574,7 +676,7 @@
         ],
         "summary": "Update category",
         "description": "Updates an existing category",
-        "operationId": "update_4",
+        "operationId": "update_5",
         "parameters": [
           {
             "name": "id",
@@ -615,7 +717,7 @@
         ],
         "summary": "Delete category",
         "description": "Deletes a category (soft delete)",
-        "operationId": "delete_2",
+        "operationId": "delete_3",
         "parameters": [
           {
             "name": "id",
@@ -729,7 +831,7 @@
         ],
         "summary": "Find brand by ID",
         "description": "Returns a specific brand by its ID",
-        "operationId": "findById_7",
+        "operationId": "findById_8",
         "parameters": [
           {
             "name": "id",
@@ -760,7 +862,7 @@
         ],
         "summary": "Update brand",
         "description": "Updates an existing brand",
-        "operationId": "update_5",
+        "operationId": "update_6",
         "parameters": [
           {
             "name": "id",
@@ -801,7 +903,7 @@
         ],
         "summary": "Delete brand",
         "description": "Deletes a brand (soft delete)",
-        "operationId": "delete_3",
+        "operationId": "delete_4",
         "parameters": [
           {
             "name": "id",
@@ -982,12 +1084,74 @@
         }
       }
     },
+    "/api/v1/product-types": {
+      "get": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "List all product types",
+        "description": "Returns all non-deleted product types with pagination",
+        "operationId": "findAll_2",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseProductTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "Create product type",
+        "description": "Creates a new product type",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseProductTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/orders/delivery": {
       "get": {
         "tags": [
           "Delivery Orders"
         ],
-        "operationId": "findAll_2",
+        "operationId": "findAll_3",
         "parameters": [
           {
             "name": "status",
@@ -1030,7 +1194,7 @@
         "tags": [
           "Delivery Orders"
         ],
-        "operationId": "create_1",
+        "operationId": "create_2",
         "parameters": [
           {
             "name": "X-Employee-Id",
@@ -1071,7 +1235,7 @@
         "tags": [
           "Employees"
         ],
-        "operationId": "findAll_3",
+        "operationId": "findAll_4",
         "responses": {
           "200": {
             "description": "OK",
@@ -1089,7 +1253,7 @@
         "tags": [
           "Employees"
         ],
-        "operationId": "create_2",
+        "operationId": "create_3",
         "parameters": [
           {
             "name": "temporaryPassword",
@@ -1207,7 +1371,7 @@
         "tags": [
           "Discounts"
         ],
-        "operationId": "findAll_4",
+        "operationId": "findAll_5",
         "responses": {
           "200": {
             "description": "OK",
@@ -1225,7 +1389,7 @@
         "tags": [
           "Discounts"
         ],
-        "operationId": "create_3",
+        "operationId": "create_4",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1257,7 +1421,7 @@
         ],
         "summary": "List all companies",
         "description": "Returns all non-deleted companies",
-        "operationId": "findAll_5",
+        "operationId": "findAll_6",
         "responses": {
           "200": {
             "description": "OK",
@@ -1277,7 +1441,7 @@
         ],
         "summary": "Create company",
         "description": "Creates a new company (tenant)",
-        "operationId": "create_4",
+        "operationId": "create_5",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1595,7 +1759,7 @@
         ],
         "summary": "List all categories",
         "description": "Returns all non-deleted categories with pagination",
-        "operationId": "findAll_6",
+        "operationId": "findAll_7",
         "parameters": [
           {
             "name": "pageable",
@@ -1625,7 +1789,7 @@
         ],
         "summary": "Create category",
         "description": "Creates a new category",
-        "operationId": "create_5",
+        "operationId": "create_6",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1794,7 +1958,7 @@
         ],
         "summary": "List all brands",
         "description": "Returns all non-deleted brands with pagination",
-        "operationId": "findAll_7",
+        "operationId": "findAll_8",
         "parameters": [
           {
             "name": "pageable",
@@ -1824,7 +1988,7 @@
         ],
         "summary": "Create brand",
         "description": "Creates a new brand",
-        "operationId": "create_6",
+        "operationId": "create_7",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2329,12 +2493,34 @@
         }
       }
     },
+    "/api/v1/product-types/active": {
+      "get": {
+        "tags": [
+          "Product Types"
+        ],
+        "summary": "List active product types",
+        "description": "Returns only active product types",
+        "operationId": "findActive",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListProductTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/orders/delivery/{id}": {
       "get": {
         "tags": [
           "Delivery Orders"
         ],
-        "operationId": "findById_2",
+        "operationId": "findById_3",
         "parameters": [
           {
             "name": "id",
@@ -2447,7 +2633,7 @@
         "tags": [
           "Employees"
         ],
-        "operationId": "findActive",
+        "operationId": "findActive_1",
         "responses": {
           "200": {
             "description": "OK",
@@ -2467,7 +2653,7 @@
         "tags": [
           "Discounts"
         ],
-        "operationId": "findActive_1",
+        "operationId": "findActive_2",
         "responses": {
           "200": {
             "description": "OK",
@@ -2679,7 +2865,7 @@
         ],
         "summary": "List active companies",
         "description": "Returns only active companies",
-        "operationId": "findActive_2",
+        "operationId": "findActive_3",
         "responses": {
           "200": {
             "description": "OK",
@@ -2701,7 +2887,7 @@
         ],
         "summary": "List active categories",
         "description": "Returns only active categories",
-        "operationId": "findActive_3",
+        "operationId": "findActive_4",
         "responses": {
           "200": {
             "description": "OK",
@@ -2785,7 +2971,7 @@
         ],
         "summary": "List active brands",
         "description": "Returns only active brands",
-        "operationId": "findActive_4",
+        "operationId": "findActive_5",
         "responses": {
           "200": {
             "description": "OK",
@@ -3317,6 +3503,58 @@
           },
           "lowStock": {
             "type": "boolean"
+          }
+        }
+      },
+      "ProductTypeRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseProductTypeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProductTypeResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductTypeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -5180,6 +5418,48 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Stock"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseProductTypeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTypeResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListProductTypeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductTypeResponse"
             }
           },
           "timestamp": {
