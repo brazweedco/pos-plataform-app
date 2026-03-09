@@ -9,18 +9,37 @@ import Animated, {
 
 import { BrazweedLogo } from "@/components/brazweed-logo";
 import { ScreenContainer } from "@/components/screen-container";
+import { authService } from "@/services/auth";
+import { useUserStore } from "@/stores/user-store";
 
 export default function SplashScreen() {
   const logoScale = useSharedValue(0.8);
   const logoOpacity = useSharedValue(0);
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
     logoScale.value = withTiming(1, { duration: 600 });
     logoOpacity.value = withTiming(1, { duration: 600 });
 
+    const initAuth = async () => {
+      // Initialize auth from storage (restores tokens and tenant ID)
+      const isAuthenticated = await authService.initialize();
+
+      if (isAuthenticated) {
+        // Restore user to store
+        const user = await authService.getUser();
+        if (user) {
+          setUser(user);
+        }
+        router.replace("/home");
+      } else {
+        router.replace("/login");
+      }
+    };
+
     const timer = setTimeout(() => {
-      router.replace("/login");
-    }, 2000);
+      initAuth();
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);

@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,8 +19,8 @@ import { ProductCard } from "@/components/product-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
+import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
-import { useProductStore } from "@/stores/product-store";
 import { LOW_STOCK_THRESHOLD, Product } from "@/types/product";
 
 type StockFilter = "all" | "low" | "out";
@@ -39,14 +40,22 @@ export default function InventoryScreen() {
   const [activeFilter, setActiveFilter] = useState<StockFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Get products from store
-  const products = useProductStore((state) => state.products);
-  const isLoading = useProductStore((state) => state.isLoading);
+  // Fetch products from API
+  const { products, isLoading, refetch } = useProducts();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  };
 
   const handleTabPress = (tab: typeof activeTab) => {
     setActiveTab(tab);
     if (tab === "home") {
       router.push("/home");
+    } else if (tab === "product") {
+      router.push("/products");
     }
   };
 
@@ -64,12 +73,10 @@ export default function InventoryScreen() {
 
   // Filter products based on active filter and search query
   const filteredProducts = products.filter((product) => {
-    // Search filter
     const matchesSearch =
       searchQuery === "" ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchQuery.toLowerCase());
+      product.sku.toLowerCase().includes(searchQuery.toLowerCase())
 
     // Stock filter
     if (activeFilter === "low") {
@@ -148,6 +155,14 @@ export default function InventoryScreen() {
             },
           ]}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+              tintColor={COLORS.primary}
+              colors={[COLORS.primary]}
+            />
+          }
         >
           {isLoading ? (
             <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>

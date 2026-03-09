@@ -24,9 +24,11 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import { StatCard } from "@/components/stat-card";
 import { COLORS } from "@/constants/layout";
+import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
+import { LOW_STOCK_THRESHOLD } from "@/types/product";
 import { formatRole } from "@/utils/format-role";
 
 // Mock deliveries data (empty for now)
@@ -49,6 +51,13 @@ export default function HomeScreen() {
   const isOnline = useUserStore((state) => state.isOnline);
   const clearUser = useUserStore((state) => state.clear);
 
+  // Fetch products to calculate low stock count
+  const { products } = useProducts();
+  const lowStockCount = products.filter(
+    (p) => p.stock > 0 && p.stock <= LOW_STOCK_THRESHOLD
+  ).length;
+  const outOfStockCount = products.filter((p) => p.stock === 0).length;
+
   // Extract user name (use name or email prefix)
   const userName = user?.name || user?.email?.split("@")[0] || "User";
   const userRole = formatRole(user?.role);
@@ -68,6 +77,8 @@ export default function HomeScreen() {
     // Handle navigation based on tab
     if (tab === "stock") {
       router.push("/inventory");
+    } else if (tab === "product") {
+      router.push("/products");
     }
   };
 
@@ -207,7 +218,11 @@ export default function HomeScreen() {
             />
             <StatCard
               title="Low Stock"
-              value="—"
+              value={
+                lowStockCount + outOfStockCount > 0
+                  ? `${lowStockCount + outOfStockCount} items`
+                  : "—"
+              }
               icon={<PackageIcon size={s(26)} />}
             />
           </View>

@@ -4444,10 +4444,10 @@
               "$ref": "#/components/schemas/CartItem"
             }
           },
-          "totalDiscount": {
+          "subtotal": {
             "type": "number"
           },
-          "subtotal": {
+          "totalDiscount": {
             "type": "number"
           }
         }

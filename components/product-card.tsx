@@ -77,7 +77,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
             ]}
           >
             <Text style={[styles.categoryText, { fontSize: s(10) }]}>
-              {product.category}
+              {product.category?.name ?? "Uncategorized"}
             </Text>
           </View>
           <View style={styles.stockStatus}>

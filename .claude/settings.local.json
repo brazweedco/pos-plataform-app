@@ -24,7 +24,8 @@
       "mcp__claude_ai_Figma__get_variable_defs",
       "Bash(npm uninstall:*)",
       "Bash(tr:*)",
-      "Bash(npx expo lint:*)"
+      "Bash(npx expo lint:*)",
+      "Bash(findstr:*)"
     ]
   }
 }
