@@ -4,6 +4,7 @@ import { storage } from "./storage";
 const ACCESS_TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
 const USER_KEY = "user";
+const TENANT_ID_KEY = "tenant_id";
 
 export const authService = {
   /**
@@ -22,6 +23,12 @@ export const authService = {
     await storage.setItem(ACCESS_TOKEN_KEY, accessToken);
     await storage.setItem(REFRESH_TOKEN_KEY, refreshToken);
     await storage.setItem(USER_KEY, JSON.stringify(user));
+
+    // Store and set tenant ID
+    if (user.tenantId) {
+      await storage.setItem(TENANT_ID_KEY, user.tenantId);
+      api.setTenantId(user.tenantId);
+    }
 
     // Set tokens in API client
     api.setTokens(accessToken, refreshToken);
@@ -52,6 +59,12 @@ export const authService = {
     await storage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
     await storage.setItem(USER_KEY, JSON.stringify(user));
 
+    // Update tenant ID
+    if (user.tenantId) {
+      await storage.setItem(TENANT_ID_KEY, user.tenantId);
+      api.setTenantId(user.tenantId);
+    }
+
     // Update API client
     api.setTokens(accessToken, newRefreshToken);
 
@@ -65,6 +78,7 @@ export const authService = {
     await storage.removeItem(ACCESS_TOKEN_KEY);
     await storage.removeItem(REFRESH_TOKEN_KEY);
     await storage.removeItem(USER_KEY);
+    await storage.removeItem(TENANT_ID_KEY);
     api.clearTokens();
   },
 
@@ -96,9 +110,13 @@ export const authService = {
     try {
       const accessToken = await storage.getItem(ACCESS_TOKEN_KEY);
       const refreshToken = await storage.getItem(REFRESH_TOKEN_KEY);
+      const tenantId = await storage.getItem(TENANT_ID_KEY);
 
       if (accessToken && refreshToken) {
         api.setTokens(accessToken, refreshToken);
+        if (tenantId) {
+          api.setTenantId(tenantId);
+        }
         return true;
       }
       return false;

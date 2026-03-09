@@ -51,7 +51,7 @@ export default function InventoryScreen() {
   };
 
   const handleAddProduct = () => {
-    // Navigate to add product screen
+    router.push("/product-create");
   };
 
   const handleFilterPress = () => {

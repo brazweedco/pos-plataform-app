@@ -12,6 +12,7 @@ interface RequestOptions extends RequestInit {
 class ApiClient {
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
+  private tenantId: string | null = null;
   private refreshPromise: Promise<boolean> | null = null;
 
   setTokens(accessToken: string, refreshToken: string) {
@@ -19,9 +20,14 @@ class ApiClient {
     this.refreshToken = refreshToken;
   }
 
+  setTenantId(tenantId: string | null) {
+    this.tenantId = tenantId;
+  }
+
   clearTokens() {
     this.accessToken = null;
     this.refreshToken = null;
+    this.tenantId = null;
   }
 
   getAccessToken() {
@@ -30,6 +36,10 @@ class ApiClient {
 
   getRefreshToken() {
     return this.refreshToken;
+  }
+
+  getTenantId() {
+    return this.tenantId;
   }
 
   private async request<T>(
@@ -46,6 +56,11 @@ class ApiClient {
     if (!skipAuth && this.accessToken) {
       (headers as Record<string, string>)["Authorization"] =
         `Bearer ${this.accessToken}`;
+    }
+
+    // Add X-Tenant-ID header if available
+    if (this.tenantId) {
+      (headers as Record<string, string>)["X-Tenant-ID"] = this.tenantId;
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -95,6 +110,9 @@ class ApiClient {
           }
         );
         this.setTokens(response.data.accessToken, response.data.refreshToken);
+        if (response.data.user?.tenantId) {
+          this.setTenantId(response.data.user.tenantId);
+        }
         return true;
       } catch {
         this.clearTokens();
@@ -149,6 +167,8 @@ export interface UserInfo {
   email: string;
   name?: string;
   role?: string;
+  tenantId?: string;
+  tenantName?: string;
 }
 
 export interface LoginResponse {

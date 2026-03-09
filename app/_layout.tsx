@@ -10,6 +10,7 @@ export default function RootLayout() {
         <Stack.Screen name="login" />
         <Stack.Screen name="home" />
         <Stack.Screen name="inventory" />
+        <Stack.Screen name="product-create" />
       </Stack>
       <StatusBar style="dark" />
     </>

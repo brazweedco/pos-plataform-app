@@ -17,7 +17,7 @@ interface InputProps extends Omit<TextInputProps, "style"> {
   isPassword?: boolean;
 }
 
-export function Input({ label, isPassword = false, ...props }: InputProps) {
+export function Input({ label, isPassword = false, multiline, ...props }: InputProps) {
   const { s, sx, sy } = useScale();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,20 +31,28 @@ export function Input({ label, isPassword = false, ...props }: InputProps) {
         style={[
           styles.inputContainer,
           {
-            height: sy(50),
+            minHeight: sy(50),
+            height: multiline ? undefined : sy(50),
             borderRadius: s(12),
             paddingHorizontal: sx(11),
+            paddingVertical: multiline ? sy(11) : 0,
+            alignItems: multiline ? "flex-start" : "center",
           },
           isFocused && styles.inputFocused,
         ]}
       >
         <TextInput
-          style={[styles.input, { fontSize: s(14) }]}
+          style={[
+            styles.input,
+            { fontSize: s(14) },
+            multiline && { minHeight: sy(80), textAlignVertical: "top" },
+          ]}
           placeholderTextColor={COLORS.textMuted}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           secureTextEntry={isPassword && !showPassword}
           autoCapitalize="none"
+          multiline={multiline}
           {...props}
         />
         {isPassword && (
@@ -72,7 +80,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     flexDirection: "row",
-    alignItems: "center",
   },
   inputFocused: {
     borderColor: COLORS.borderFocused,
