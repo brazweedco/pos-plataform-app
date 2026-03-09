@@ -33,6 +33,13 @@ COLORS = {
 }
 ```
 
+### Fonts
+The app uses **system fonts** (SF Pro Display on iOS, Roboto on Android) matching the Figma design. Use `fontWeight` values:
+- `"400"` - Regular text
+- `"500"` - Medium weight
+- `"600"` - Semi-bold (buttons, titles)
+- `"700"` - Bold (prices, emphasis)
+
 ### Responsive Scaling System
 Use the `useScale` hook for proportional sizing:
 ```typescript
@@ -174,6 +181,7 @@ export default function MyScreen() {
 - Use `useScale` helpers for all dimensions
 - Reference Figma coordinates directly (they scale automatically)
 - Use COLORS constant instead of hardcoded colors
+- Use fontWeight with string values ("400", "500", "600", "700")
 
 ## Commands
 

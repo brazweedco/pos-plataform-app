@@ -35,7 +35,7 @@ export function BrazweedLogo({ iconOnly = false }: BrazweedLogoProps) {
         contentFit="contain"
       />
       <Image
-        source={require("@/assets/images/brazweed-logo-text.svg")}
+        source={require("@/assets/images/brazweed-logo-text.png")}
         style={{
           width: sx(187),
           height: sy(29),
