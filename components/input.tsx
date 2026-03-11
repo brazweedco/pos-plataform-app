@@ -12,6 +12,10 @@ import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
+import { EyeOpen } from "@/components/icons/eye-open";
+import { EyeClosed } from "@/components/icons/eye-closed";
+export { EyeOpen, EyeClosed };
+
 interface InputProps extends Omit<TextInputProps, "style"> {
   label: string;
   /** Show password toggle button */
@@ -69,9 +73,11 @@ export function Input({ label, isPassword = false, multiline, ...props }: InputP
             style={{ padding: s(12) }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={{ fontSize: s(18) }}>
-              {showPassword ? "👁" : "👁‍🗨"}
-            </Text>
+            {showPassword ? (
+              <EyeOpen color={COLORS.primary} size={s(20)} />
+            ) : (
+              <EyeClosed color={COLORS.primary} size={s(20)} />
+            )}
           </Pressable>
         )}
       </Pressable>
