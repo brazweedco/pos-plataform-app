@@ -3,8 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
-
-type TabName = "home" | "product" | "orders" | "stock" | "settings";
+import { TabName } from "@/utils/navigation";
 
 interface BottomTabBarProps {
   activeTab: TabName;

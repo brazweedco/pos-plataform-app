@@ -24,7 +24,7 @@ export function FilterTabs<T extends string = string>({
   const { s, sx, sy } = useScale();
 
   const content = (
-    <View style={[styles.container, { gap: sx(15) }]}>
+    <View style={[styles.container, { gap: sx(10) }]}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.key;
         return (
@@ -61,7 +61,7 @@ export function FilterTabs<T extends string = string>({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingHorizontal: sx(20) }]}
       >
         {content}
       </ScrollView>

@@ -3,46 +3,45 @@ import { router } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
+  FlatList,
   Pressable,
-  RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { navigateToTab, TabName } from "@/utils/navigation";
+
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
 import { ChatIcon } from "@/components/icons";
-import { ProductCard } from "@/components/product-card";
+import { ProductGridCard } from "@/components/product-grid-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
+import { useCategories } from "@/hooks/use-categories";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { Product } from "@/types/product";
 
-type ProductFilter = "all" | "active" | "inactive";
-
-const FILTER_TABS: FilterTab<ProductFilter>[] = [
-  { key: "all", label: "All" },
-  { key: "active", label: "Active" },
-  { key: "inactive", label: "Inactive" },
-];
-
 export default function ProductsScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<
-    "home" | "product" | "orders" | "stock" | "settings"
-  >("product");
-  const [activeFilter, setActiveFilter] = useState<ProductFilter>("all");
+  const [activeTab, setActiveTab] = useState<TabName>("product");
+  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch products from API
+  // Fetch categories and products from API
+  const { categories } = useCategories();
   const { products, isLoading, refetch } = useProducts();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Build filter tabs from categories
+  const filterTabs: FilterTab<string>[] = [
+    { key: "all", label: "All" },
+    ...categories.map((cat) => ({ key: cat.id, label: cat.name })),
+  ];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -50,12 +49,10 @@ export default function ProductsScreen() {
     setIsRefreshing(false);
   };
 
-  const handleTabPress = (tab: typeof activeTab) => {
+  const handleTabPress = (tab: TabName) => {
     setActiveTab(tab);
-    if (tab === "home") {
-      router.push("/home");
-    } else if (tab === "stock") {
-      router.push("/inventory");
+    if (tab !== "product") {
+      navigateToTab(tab);
     }
   };
 
@@ -68,25 +65,28 @@ export default function ProductsScreen() {
   };
 
   const handleProductPress = (product: Product) => {
-    // Navigate to product detail
+    router.push(`/product/${product.id}`);
+  };
+
+  const handleAddToCart = (product: Product) => {
+    // TODO: Add to cart logic
   };
 
   // Filter products based on active filter and search query
   const filteredProducts = products.filter((product) => {
+
     // Search filter
     const matchesSearch =
       searchQuery === "" ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.sku.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Status filter
-    if (activeFilter === "active") {
-      return matchesSearch && product.active;
+    // Category filter
+    if (activeFilter === "all") {
+      return matchesSearch;
     }
-    if (activeFilter === "inactive") {
-      return matchesSearch && !product.active;
-    }
-    return matchesSearch;
+
+    return matchesSearch && product.category?.id == activeFilter;
   });
 
   return (
@@ -115,7 +115,7 @@ export default function ProductsScreen() {
             ]}
             onPress={handleAddProduct}
           >
-            <Feather name="plus" size={s(20)} color={COLORS.text} />
+            <Feather name="shopping-cart" size={s(20)} color={COLORS.text} />
           </Pressable>
         </View>
 
@@ -132,59 +132,61 @@ export default function ProductsScreen() {
         {/* Filter Tabs */}
         <View
           style={{
-            paddingHorizontal: sx(20),
             marginTop: sy(18),
             marginBottom: sy(18),
           }}
         >
           <FilterTabs
-            tabs={FILTER_TABS}
+            tabs={filterTabs}
             activeTab={activeFilter}
             onTabPress={setActiveFilter}
+            scrollable
           />
         </View>
 
-        {/* Products List */}
-        <ScrollView
-          style={styles.productsList}
-          contentContainerStyle={[
-            styles.productsContent,
-            {
-              paddingHorizontal: sx(20),
-              paddingBottom: sy(120),
-              gap: sy(11),
-            },
-          ]}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={handleRefresh}
-              tintColor={COLORS.primary}
-              colors={[COLORS.primary]}
+        {/* Products Grid */}
+        <FlatList
+          key="products-grid-2-columns"
+          data={filteredProducts}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <ProductGridCard
+              product={item}
+              onPress={handleProductPress}
+              onAddToCart={handleAddToCart}
             />
-          }
-        >
-          {isLoading ? (
-            <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-              <ActivityIndicator size="large" color={COLORS.primary} />
-            </View>
-          ) : filteredProducts.length === 0 ? (
-            <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-              <Text style={[styles.emptyStateText, { fontSize: s(16) }]}>
-                No products found
-              </Text>
-            </View>
-          ) : (
-            filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onPress={handleProductPress}
-              />
-            ))
           )}
-        </ScrollView>
+          style={styles.productsList}
+          contentContainerStyle={{
+            paddingHorizontal: sx(20),
+            paddingBottom: sy(120),
+            flexGrow: 1,
+          }}
+          columnWrapperStyle={{
+            justifyContent: "space-between",
+            marginBottom: sy(14),
+          }}
+          showsVerticalScrollIndicator={true}
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          ListEmptyComponent={
+            !isLoading ? (
+              <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
+                <Text style={[styles.emptyStateText, { fontSize: s(16) }]}>
+                  No products found
+                </Text>
+              </View>
+            ) : null
+          }
+          ListHeaderComponent={
+            isLoading ? (
+              <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
+                <ActivityIndicator size="large" color={COLORS.primary} />
+              </View>
+            ) : null
+          }
+        />
 
         {/* Floating Action Button */}
         <Pressable
@@ -239,7 +241,9 @@ const styles = StyleSheet.create({
   productsList: {
     flex: 1,
   },
-  productsContent: {},
+  productsContent: {
+    flexGrow: 1,
+  },
   emptyState: {
     alignItems: "center",
     justifyContent: "center",

@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { navigateToTab, TabName } from "@/utils/navigation";
+
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { DeliveryCard } from "@/components/delivery-card";
 import {
@@ -42,9 +44,7 @@ const DELIVERIES: {
 export default function HomeScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<
-    "home" | "product" | "orders" | "stock" | "settings"
-  >("home");
+  const [activeTab, setActiveTab] = useState<TabName>("home");
 
   // Get user from store
   const user = useUserStore((state) => state.user);
@@ -72,13 +72,10 @@ export default function HomeScreen() {
     router.replace("/login");
   };
 
-  const handleTabPress = (tab: typeof activeTab) => {
+  const handleTabPress = (tab: TabName) => {
     setActiveTab(tab);
-    // Handle navigation based on tab
-    if (tab === "stock") {
-      router.push("/inventory");
-    } else if (tab === "product") {
-      router.push("/products");
+    if (tab !== "home") {
+      navigateToTab(tab);
     }
   };
 

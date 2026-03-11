@@ -25,7 +25,7 @@ export function useProducts(params?: UseProductsParams) {
     queryKey: ["products", params],
     queryFn: async () => {
       const response = await productsService.list(params);
-      return response.content.map(mapProductResponseToProduct);
+      return response.data.map(mapProductResponseToProduct);
     },
   });
 

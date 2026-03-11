@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { navigateToTab, TabName } from "@/utils/navigation";
+
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
 import { ChatIcon } from "@/components/icons";
@@ -34,9 +36,7 @@ const FILTER_TABS: FilterTab<StockFilter>[] = [
 export default function InventoryScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState<
-    "home" | "product" | "orders" | "stock" | "settings"
-  >("stock");
+  const [activeTab, setActiveTab] = useState<TabName>("stock");
   const [activeFilter, setActiveFilter] = useState<StockFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -50,12 +50,10 @@ export default function InventoryScreen() {
     setIsRefreshing(false);
   };
 
-  const handleTabPress = (tab: typeof activeTab) => {
+  const handleTabPress = (tab: TabName) => {
     setActiveTab(tab);
-    if (tab === "home") {
-      router.push("/home");
-    } else if (tab === "product") {
-      router.push("/products");
+    if (tab !== "stock") {
+      navigateToTab(tab);
     }
   };
 
@@ -68,7 +66,7 @@ export default function InventoryScreen() {
   };
 
   const handleProductPress = (product: Product) => {
-    // Navigate to product detail
+    router.push(`/product/${product.id}`);
   };
 
   // Filter products based on active filter and search query
