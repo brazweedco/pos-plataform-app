@@ -96,18 +96,22 @@ export default function HomeScreen() {
         >
           {/* User Info */}
           <View style={styles.userInfo}>
-            <Image
-              source={{ uri: `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=E46C45&color=fff&size=128` }}
+            <View
               style={[
-                styles.avatar,
+                styles.avatarContainer,
                 {
                   width: s(52),
                   height: s(52),
                   borderRadius: s(26),
                 },
               ]}
-              contentFit="cover"
-            />
+            >
+              <Image
+                source={{ uri: `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=E46C45&color=fff&size=128` }}
+                style={styles.avatarImage}
+                contentFit="cover"
+              />
+            </View>
             <View style={[styles.userText, { marginLeft: sx(12) }]}>
               <Text style={[styles.userRole, { fontSize: s(15) }]}>
                 {userRole}
@@ -318,8 +322,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  avatar: {
+  avatarContainer: {
     backgroundColor: "#E0E0E0",
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
   },
   userText: {
     flex: 1,

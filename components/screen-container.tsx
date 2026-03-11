@@ -27,7 +27,7 @@ export function ScreenContainer({
   avoidKeyboard = false,
   scrollable = false,
 }: ScreenContainerProps) {
-  const { isWeb, isLargeScreen, screenWidth, maxContentWidth } = useScale();
+  const { isWeb, isLargeScreen, maxContentWidth } = useScale();
 
   const content = (
     <>
@@ -41,6 +41,9 @@ export function ScreenContainer({
       style={styles.scrollView}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
+      automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
     >
       {content}
     </ScrollView>
@@ -53,6 +56,7 @@ export function ScreenContainer({
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       {innerContent}
     </KeyboardAvoidingView>

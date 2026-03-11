@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.brazweed.pos"
+      "package": "com.brazweed.pos",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "output": "static",

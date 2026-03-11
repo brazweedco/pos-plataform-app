@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -22,20 +22,26 @@ export function Input({ label, isPassword = false, multiline, ...props }: InputP
   const { s, sx, sy } = useScale();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const inputRef = useRef<TextInput>(null);
+
+  const handleContainerPress = () => {
+    inputRef.current?.focus();
+  };
 
   return (
     <View style={{ marginBottom: sy(12) }}>
       <Text style={[styles.label, { fontSize: s(15), marginBottom: sy(8) }]}>
         {label}
       </Text>
-      <View
+      <Pressable
+        onPress={handleContainerPress}
         style={[
           styles.inputContainer,
           {
             minHeight: sy(50),
             height: multiline ? undefined : sy(50),
             borderRadius: s(12),
-            paddingHorizontal: sx(11),
+            paddingHorizontal: sx(14),
             paddingVertical: multiline ? sy(11) : 0,
             alignItems: multiline ? "flex-start" : "center",
           },
@@ -43,9 +49,10 @@ export function Input({ label, isPassword = false, multiline, ...props }: InputP
         ]}
       >
         <TextInput
+          ref={inputRef}
           style={[
             styles.input,
-            { fontSize: s(14) },
+            { fontSize: s(14), paddingVertical: sy(12) },
             multiline && { minHeight: sy(80), textAlignVertical: "top" },
           ]}
           placeholderTextColor={COLORS.textMuted}
@@ -59,14 +66,15 @@ export function Input({ label, isPassword = false, multiline, ...props }: InputP
         {isPassword && (
           <Pressable
             onPress={() => setShowPassword(!showPassword)}
-            style={{ padding: s(8) }}
+            style={{ padding: s(12) }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={{ fontSize: s(16) }}>
+            <Text style={{ fontSize: s(18) }}>
               {showPassword ? "👁" : "👁‍🗨"}
             </Text>
           </Pressable>
         )}
-      </View>
+      </Pressable>
     </View>
   );
 }

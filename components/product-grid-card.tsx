@@ -30,7 +30,7 @@ export function ProductGridCard({
         styles.container,
         {
           width: sx(195),
-          height: sy(200),
+          height: sy(190),
           borderRadius: s(12),
         },
       ]}
@@ -81,20 +81,20 @@ export function ProductGridCard({
           styles.info,
           {
             paddingHorizontal: sx(9),
-            paddingTop: sy(6),
-            paddingBottom: sy(7),
+            paddingTop: sy(8),
+            paddingBottom: sy(9),
           },
         ]}
       >
         <Text
-          style={[styles.name, { fontSize: s(15), lineHeight: s(18) }]}
+          style={[styles.name, { fontSize: s(15) }]}
           numberOfLines={2}
           ellipsizeMode="tail"
         >
           {product.name}
         </Text>
 
-        <View style={[styles.priceRow, { marginTop: sy(4) }]}>
+        <View style={styles.priceRow}>
           <Text style={[styles.price, { fontSize: s(15) }]}>
             ${product.price.toFixed(2)}
           </Text>
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 22,
     elevation: 4,
+    overflow: "hidden",
   },
   imageContainer: {
     overflow: "hidden",
