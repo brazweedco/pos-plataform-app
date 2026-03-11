@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import { navigateToTab, TabName } from "@/utils/navigation";
 
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   content: {
     flex: 1,
@@ -83,10 +84,11 @@ const styles = StyleSheet.create({
   },
   comingSoonText: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   comingSoonSubtext: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   tabBarContainer: {
     position: "absolute",

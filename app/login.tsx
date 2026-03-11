@@ -8,6 +8,7 @@ import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import { ApiError, authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
@@ -200,6 +201,7 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     color: COLORS.textLight,
+    fontFamily: FONTS.regular,
   },
   footerContainer: {
     flex: 1,
@@ -209,9 +211,11 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: COLORS.secondary,
+    fontFamily: FONTS.regular,
   },
   footerLink: {
     color: COLORS.primary,
+    fontFamily: FONTS.medium,
     textDecorationLine: "underline",
   },
 });

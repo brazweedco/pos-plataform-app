@@ -21,6 +21,7 @@ import { ProductCard } from "@/components/product-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { LOW_STOCK_THRESHOLD, Product } from "@/types/product";
@@ -112,7 +113,7 @@ export default function InventoryScreen() {
             ]}
             onPress={handleAddProduct}
           >
-            <Feather name="plus" size={s(20)} color={COLORS.text} />
+            <Feather name="plus" size={s(20)} color={COLORS.primary} />
           </Pressable>
         </View>
 
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   addButton: {
     backgroundColor: COLORS.surface,
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   fab: {
     position: "absolute",

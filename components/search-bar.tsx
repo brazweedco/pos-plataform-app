@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 interface SearchBarProps {
@@ -35,7 +36,7 @@ export function SearchBar({
       <Feather
         name="search"
         size={s(22)}
-        color={COLORS.textMuted}
+        color={COLORS.primary}
         style={{ marginRight: sx(10) }}
       />
       <TextInput
@@ -47,7 +48,7 @@ export function SearchBar({
       />
       {showFilter && (
         <Pressable onPress={onFilterPress}>
-          <Feather name="sliders" size={s(24)} color={COLORS.text} />
+          <Feather name="sliders" size={s(24)} color={COLORS.primary} />
         </Pressable>
       )}
     </View>
@@ -70,5 +71,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: COLORS.text,
+    fontFamily: FONTS.regular,
   },
 });

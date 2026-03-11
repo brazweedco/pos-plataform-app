@@ -20,6 +20,7 @@ import { ProductGridCard } from "@/components/product-grid-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useCategories } from "@/hooks/use-categories";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
@@ -115,7 +116,7 @@ export default function ProductsScreen() {
             ]}
             onPress={handleAddProduct}
           >
-            <Feather name="shopping-cart" size={s(20)} color={COLORS.text} />
+            <Feather name="shopping-cart" size={s(20)} color={COLORS.primary} />
           </Pressable>
         </View>
 
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   addButton: {
     backgroundColor: COLORS.surface,
@@ -250,6 +251,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   fab: {
     position: "absolute",

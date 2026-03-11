@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 interface DeliveryCardProps {
@@ -69,14 +70,14 @@ const styles = StyleSheet.create({
   },
   orderId: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   status: {
     color: "#9F9FA9",
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   price: {
     color: COLORS.primary,
-    fontWeight: "700",
+    fontFamily: FONTS.bold,
   },
 });

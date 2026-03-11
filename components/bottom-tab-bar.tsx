@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import { TabName } from "@/utils/navigation";
 
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#B7B7B7",
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   labelActive: {
     color: COLORS.primary,

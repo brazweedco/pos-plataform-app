@@ -20,6 +20,7 @@ import {
 } from "@/components/icons";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { navigateToTab, TabName } from "@/utils/navigation";
@@ -335,6 +336,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   backButtonAlt: {
     backgroundColor: COLORS.primary,
@@ -344,7 +346,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: COLORS.surface,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   scrollView: {
     flex: 1,
@@ -377,23 +379,23 @@ const styles = StyleSheet.create({
   },
   categoryBadgeText: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   typeBadge: {
     backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
   typeBadgeText: {
     color: COLORS.surface,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   content: {},
   brandName: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   productName: {
     color: COLORS.text,
-    fontWeight: "700",
+    fontFamily: FONTS.bold,
   },
   infoPills: {
     flexDirection: "row",
@@ -413,14 +415,15 @@ const styles = StyleSheet.create({
   },
   infoPillText: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   sectionTitle: {
     color: COLORS.text,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   descriptionText: {
     color: "#71717B",
+    fontFamily: FONTS.regular,
   },
   complianceBox: {
     flexDirection: "row",
@@ -434,11 +437,12 @@ const styles = StyleSheet.create({
   },
   complianceTitle: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
     textTransform: "uppercase",
   },
   complianceSubtitle: {
     color: COLORS.primary,
+    fontFamily: FONTS.regular,
   },
   infoRow: {
     flexDirection: "row",
@@ -447,14 +451,15 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     color: "#71717B",
+    fontFamily: FONTS.regular,
   },
   infoValue: {
     color: COLORS.text,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   priceText: {
     color: COLORS.text,
-    fontWeight: "700",
+    fontFamily: FONTS.bold,
   },
   bottomButtonContainer: {
     position: "absolute",

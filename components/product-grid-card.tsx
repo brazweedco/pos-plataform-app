@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import { Product } from "@/types/product";
 
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   thcText: {
     color: COLORS.surface,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   info: {
     flex: 1,
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS.text,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   priceRow: {
     flexDirection: "row",
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   },
   price: {
     color: COLORS.primary,
-    fontWeight: "700",
+    fontFamily: FONTS.bold,
   },
   cartButton: {
     backgroundColor: COLORS.primary,

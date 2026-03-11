@@ -33,12 +33,44 @@ COLORS = {
 }
 ```
 
-### Fonts
-The app uses **system fonts** (SF Pro Display on iOS, Roboto on Android) matching the Figma design. Use `fontWeight` values:
-- `"400"` - Regular text
-- `"500"` - Medium weight
-- `"600"` - Semi-bold (buttons, titles)
-- `"700"` - Bold (prices, emphasis)
+### Fonts (from `constants/fonts.ts`)
+The app uses **Foundry Context** custom fonts loaded via `expo-font`. Use the `FONTS` constant:
+
+```typescript
+import { FONTS } from "@/constants/fonts";
+
+FONTS = {
+  regular: "FoundryContextW03-Regular",   // Body text, placeholders
+  medium: "FoundryContextW03-Demi",       // Product names, labels
+  semiBold: "FoundryContextW03-Demi",     // Titles, button text
+  bold: "FoundryContextW03-Bold",         // Prices, emphasis
+  extraBold: "FoundryContextW03-ExtraBold", // Extra emphasis
+}
+```
+
+**Font usage examples:**
+```typescript
+// In styles
+const styles = StyleSheet.create({
+  title: {
+    fontFamily: FONTS.semiBold,
+    fontSize: s(26),
+  },
+  price: {
+    fontFamily: FONTS.bold,
+    color: COLORS.primary,
+  },
+  body: {
+    fontFamily: FONTS.regular,
+  },
+});
+```
+
+**Font files** (in `assets/fonts/`):
+- `foundry-context-w03-regular.ttf` - Regular weight
+- `foundry-context-w03-demi.ttf` - Semi-bold (Demi) weight
+- `foundry-context-w03-x-bd.ttf` - Bold weight
+- `foundry-context-w03-xb-bd.ttf` - Extra Bold weight
 
 ### Responsive Scaling System
 Use the `useScale` hook for proportional sizing:
@@ -66,10 +98,12 @@ components/             # Reusable UI components
 └── screen-container.tsx # Base screen wrapper
 
 constants/
+├── fonts.ts            # Font family constants
 ├── layout.ts           # Design constants (colors, breakpoints)
 └── theme.ts            # Theme colors
 
 hooks/
+├── use-appfonts.ts     # Font loading hook (Foundry Context)
 └── use-scale.ts        # Responsive scaling hook
 
 services/
@@ -181,7 +215,7 @@ export default function MyScreen() {
 - Use `useScale` helpers for all dimensions
 - Reference Figma coordinates directly (they scale automatically)
 - Use COLORS constant instead of hardcoded colors
-- Use fontWeight with string values ("400", "500", "600", "700")
+- Use `fontFamily: FONTS.xxx` instead of `fontWeight` for consistent typography
 
 ## Commands
 

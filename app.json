@@ -39,6 +39,17 @@
           "resizeMode": "contain",
           "backgroundColor": "#FEF9F3"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/foundry-context-w03-regular.ttf",
+            "./assets/fonts/foundry-context-w03-demi.ttf",
+            "./assets/fonts/foundry-context-w03-x-bd.ttf",
+            "./assets/fonts/foundry-context-w03-xb-bd.ttf"
+          ]
+        }
       ]
     ],
     "experiments": {

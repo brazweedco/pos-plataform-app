@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 export interface AutocompleteItem {
@@ -288,7 +289,7 @@ export function Autocomplete<T extends AutocompleteItem>({
 const styles = StyleSheet.create({
   label: {
     color: COLORS.text,
-    fontWeight: "400",
+    fontFamily: FONTS.regular,
   },
   inputContainer: {
     backgroundColor: COLORS.inputBackground,
@@ -304,6 +305,7 @@ const styles = StyleSheet.create({
   inputText: {
     flex: 1,
     color: COLORS.text,
+    fontFamily: FONTS.regular,
   },
   placeholder: {
     color: COLORS.textMuted,
@@ -319,7 +321,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   closeButton: {
     backgroundColor: COLORS.surface,
@@ -348,6 +350,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     color: COLORS.text,
+    fontFamily: FONTS.regular,
   },
   loadingContainer: {
     flex: 1,
@@ -361,16 +364,18 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   retryText: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   emptyContainer: {
     alignItems: "center",
   },
   emptyText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   itemCard: {
     backgroundColor: COLORS.surface,
@@ -391,7 +396,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
     flex: 1,
   },
   itemTextSelected: {

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 type ButtonVariant = "primary" | "secondary";
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: COLORS.surface,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   iconContainer: {
     backgroundColor: COLORS.surface,

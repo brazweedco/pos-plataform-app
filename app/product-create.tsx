@@ -19,6 +19,7 @@ import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import {
   brandsService,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   form: {
     flex: 1,
@@ -390,7 +391,7 @@ const styles = StyleSheet.create({
   formContent: {},
   sectionTitle: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   row: {
     flexDirection: "row",
@@ -402,5 +403,6 @@ const styles = StyleSheet.create({
     color: "#FF541C",
     marginTop: -8,
     marginBottom: 8,
+    fontFamily: FONTS.regular,
   },
 });

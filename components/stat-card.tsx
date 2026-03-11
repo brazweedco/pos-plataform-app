@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 interface StatCardProps {
@@ -79,11 +80,11 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   value: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
     marginTop: 2,
   },
 });

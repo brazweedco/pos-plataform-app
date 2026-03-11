@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 interface InputProps extends Omit<TextInputProps, "style"> {
@@ -73,7 +74,7 @@ export function Input({ label, isPassword = false, multiline, ...props }: InputP
 const styles = StyleSheet.create({
   label: {
     color: COLORS.text,
-    fontWeight: "400",
+    fontFamily: FONTS.regular,
   },
   inputContainer: {
     backgroundColor: COLORS.inputBackground,
@@ -87,5 +88,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: COLORS.text,
+    fontFamily: FONTS.regular,
   },
 });

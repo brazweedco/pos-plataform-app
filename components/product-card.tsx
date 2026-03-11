@@ -2,6 +2,7 @@ import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 import { getStockStatus, Product } from "@/types/product";
 
@@ -134,16 +135,16 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
     flex: 1,
   },
   price: {
     color: COLORS.text,
-    fontWeight: "700",
+    fontFamily: FONTS.bold,
   },
   sku: {
     color: "#71717B",
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   footer: {
     flexDirection: "row",
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   stockStatus: {
     flexDirection: "row",
@@ -163,6 +164,6 @@ const styles = StyleSheet.create({
   },
   stockDot: {},
   stockText: {
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
 });

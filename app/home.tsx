@@ -26,6 +26,7 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import { StatCard } from "@/components/stat-card";
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
@@ -190,7 +191,7 @@ export default function HomeScreen() {
           <View style={[styles.statsRow, { gap: sx(16) }]}>
             <StatCard
               title="Active Sales"
-              value="$0.00"
+              value="$1.00"
               icon={<DollarIcon size={s(28)} />}
             />
             <StatCard
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   },
   userRole: {
     color: COLORS.primary,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   nameRow: {
     flexDirection: "row",
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   onlineBadge: {
     backgroundColor: "rgba(0, 201, 70, 0.14)",
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   },
   onlineText: {
     color: "#00A53A",
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   logoutButton: {
     backgroundColor: COLORS.surface,
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
   },
   newSaleText: {
     color: COLORS.surface,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   statsGrid: {},
   statsRow: {
@@ -382,11 +383,11 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   statValueBig: {
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
     fontSize: 23,
   },
   statValueSmall: {
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   deliveriesHeader: {
     flexDirection: "row",
@@ -395,11 +396,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: COLORS.text,
-    fontWeight: "600",
+    fontFamily: FONTS.semiBold,
   },
   viewAllText: {
     color: COLORS.secondary,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
     textDecorationLine: "underline",
   },
   deliveriesList: {
@@ -412,6 +413,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
   },
   fab: {
     position: "absolute",

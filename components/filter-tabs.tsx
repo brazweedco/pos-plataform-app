@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
 import { useScale } from "@/hooks/use-scale";
 
 export interface FilterTab<T extends string = string> {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     color: COLORS.text,
-    fontWeight: "500",
+    fontFamily: FONTS.medium,
   },
   tabTextActive: {
     color: COLORS.surface,
