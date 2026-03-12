@@ -8,21 +8,24 @@ import {
   View,
 } from "react-native";
 
-import { COLORS } from "@/constants/layout";
+import { EyeClosed } from "@/components/icons/eye-closed-icon";
+import { EyeOpen } from "@/components/icons/eye-open-icon";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
-
-import { EyeOpen } from "@/components/icons/eye-open";
-import { EyeClosed } from "@/components/icons/eye-closed";
-export { EyeOpen, EyeClosed };
+export { EyeClosed, EyeOpen };
 
 interface InputProps extends Omit<TextInputProps, "style"> {
   label: string;
-  /** Show password toggle button */
   isPassword?: boolean;
 }
 
-export function Input({ label, isPassword = false, multiline, ...props }: InputProps) {
+export function Input({
+  label,
+  isPassword = false,
+  multiline,
+  ...props
+}: InputProps) {
   const { s, sx, sy } = useScale();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

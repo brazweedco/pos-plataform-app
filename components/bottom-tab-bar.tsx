@@ -1,10 +1,14 @@
-import { Feather } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
 import { TabName } from "@/utils/navigation";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { HomeSvg } from "./icons/home-icon";
+import { OrderSvg } from "./icons/order-icon";
+import { ProductSvg } from "./icons/product-icon";
+import { SettingsSvg } from "./icons/settings-icon";
+import { StockSvg } from "./icons/stock-icon";
 
 interface BottomTabBarProps {
   activeTab: TabName;
@@ -18,27 +22,27 @@ interface TabIconProps {
 
 function HomeIcon({ active, size }: TabIconProps) {
   const color = active ? COLORS.primary : "#B7B7B7";
-  return <Feather name="home" size={size} color={color} />;
+  return <HomeSvg size={size} color={color} />;
 }
 
 function ProductIcon({ active, size }: TabIconProps) {
   const color = active ? COLORS.primary : "#B7B7B7";
-  return <Feather name="shopping-bag" size={size} color={color} />;
+  return <ProductSvg size={size} color={color} />;
 }
 
 function OrdersIcon({ active, size }: TabIconProps) {
   const color = active ? COLORS.primary : "#B7B7B7";
-  return <Feather name="clipboard" size={size} color={color} />;
+  return <OrderSvg size={size} color={color} />;
 }
 
 function StockIcon({ active, size }: TabIconProps) {
   const color = active ? COLORS.primary : "#B7B7B7";
-  return <Feather name="package" size={size} color={color} />;
+  return <StockSvg size={size} color={color} />;
 }
 
 function SettingsIcon({ active, size }: TabIconProps) {
   const color = active ? COLORS.primary : "#B7B7B7";
-  return <Feather name="settings" size={size} color={color} />;
+  return <SettingsSvg size={size} color={color} />;
 }
 
 const TABS: { key: TabName; label: string; Icon: typeof HomeIcon }[] = [
@@ -55,11 +59,7 @@ export function BottomTabBar({ activeTab, onTabPress }: BottomTabBarProps) {
   return (
     <View style={[styles.container, { height: sy(76) }]}>
       {TABS.map(({ key, label, Icon }) => (
-        <Pressable
-          key={key}
-          style={styles.tab}
-          onPress={() => onTabPress(key)}
-        >
+        <Pressable key={key} style={styles.tab} onPress={() => onTabPress(key)}>
           <Icon active={activeTab === key} size={s(24)} />
           <Text
             style={[
