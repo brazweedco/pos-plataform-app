@@ -1,8 +1,8 @@
 import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
 import { getStockStatus, Product } from "@/types/product";
 
@@ -44,10 +44,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
       <View style={[styles.info, { marginLeft: sx(12) }]}>
         {/* Name and Price Row */}
         <View style={styles.header}>
-          <Text
-            style={[styles.name, { fontSize: s(17) }]}
-            numberOfLines={1}
-          >
+          <Text style={[styles.name, { fontSize: s(17) }]} numberOfLines={1}>
             {product.name}
           </Text>
           <Text style={[styles.price, { fontSize: s(17) }]}>
@@ -56,12 +53,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
         </View>
 
         {/* SKU */}
-        <Text
-          style={[
-            styles.sku,
-            { fontSize: s(14), marginTop: sy(4) },
-          ]}
-        >
+        <Text style={[styles.sku, { fontSize: s(14), marginTop: sy(4) }]}>
           SKU: {product.sku}
         </Text>
 

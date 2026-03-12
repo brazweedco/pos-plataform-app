@@ -2,13 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { navigateToTab, TabName } from "@/utils/navigation";
@@ -25,8 +19,8 @@ import {
 } from "@/components/icons";
 import { ScreenContainer } from "@/components/screen-container";
 import { StatCard } from "@/components/stat-card";
-import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
@@ -55,9 +49,11 @@ export default function HomeScreen() {
   // Fetch products to calculate low stock count
   const { products } = useProducts();
   const lowStockCount = products.filter(
-    (p) => p.stock > 0 && p.stock <= LOW_STOCK_THRESHOLD
+    (p: { stock: number }) => p.stock > 0 && p.stock <= LOW_STOCK_THRESHOLD,
   ).length;
-  const outOfStockCount = products.filter((p) => p.stock === 0).length;
+  const outOfStockCount = products.filter(
+    (p: { stock: number }) => p.stock === 0,
+  ).length;
 
   // Extract user name (use name or email prefix)
   const userName = user?.name || user?.email?.split("@")[0] || "User";
@@ -107,7 +103,9 @@ export default function HomeScreen() {
               ]}
             >
               <Image
-                source={{ uri: `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=E46C45&color=fff&size=128` }}
+                source={{
+                  uri: `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=E46C45&color=fff&size=128`,
+                }}
                 style={styles.avatarImage}
                 contentFit="cover"
               />
@@ -209,8 +207,7 @@ export default function HomeScreen() {
               title="Deliveries"
               value={
                 <Text style={[styles.statValue, { fontSize: s(23) }]}>
-                  <Text style={styles.statValueBig}>0</Text>
-                  {" "}
+                  <Text style={styles.statValueBig}>0</Text>{" "}
                   <Text style={[styles.statValueSmall, { fontSize: s(15) }]}>
                     Pending
                   </Text>

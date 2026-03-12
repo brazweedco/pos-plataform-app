@@ -15,13 +15,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { navigateToTab, TabName } from "@/utils/navigation";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
-import { FilterTabs, FilterTab } from "@/components/filter-tabs";
+import { FilterTab, FilterTabs } from "@/components/filter-tabs";
 import { ChatIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
-import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { LOW_STOCK_THRESHOLD, Product } from "@/types/product";
@@ -71,21 +71,27 @@ export default function InventoryScreen() {
   };
 
   // Filter products based on active filter and search query
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProducts = products.filter(
+    (product: { name: string; sku: string; stock: number }) => {
+      const matchesSearch =
+        searchQuery === "" ||
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.sku.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Stock filter
-    if (activeFilter === "low") {
-      return matchesSearch && product.stock > 0 && product.stock <= LOW_STOCK_THRESHOLD;
-    }
-    if (activeFilter === "out") {
-      return matchesSearch && product.stock === 0;
-    }
-    return matchesSearch;
-  });
+      // Stock filter
+      if (activeFilter === "low") {
+        return (
+          matchesSearch &&
+          product.stock > 0 &&
+          product.stock <= LOW_STOCK_THRESHOLD
+        );
+      }
+      if (activeFilter === "out") {
+        return matchesSearch && product.stock === 0;
+      }
+      return matchesSearch;
+    },
+  );
 
   return (
     <ScreenContainer showPattern={false}>
@@ -174,7 +180,7 @@ export default function InventoryScreen() {
               </Text>
             </View>
           ) : (
-            filteredProducts.map((product) => (
+            filteredProducts.map((product: Product) => (
               <ProductCard
                 key={product.id}
                 product={product}
