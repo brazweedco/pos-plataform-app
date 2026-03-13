@@ -22,6 +22,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
+import { FONT_SIZES } from "@/constants/typography";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { LOW_STOCK_THRESHOLD, Product } from "@/types/product";
@@ -107,7 +108,7 @@ export default function InventoryScreen() {
             },
           ]}
         >
-          <Text style={[styles.title, { fontSize: s(26) }]}>Inventory</Text>
+          <Text style={[styles.title, { fontSize: s(FONT_SIZES["3xl"]) }]}>Inventory</Text>
           <Pressable
             style={[
               styles.addButton,
@@ -175,7 +176,7 @@ export default function InventoryScreen() {
             </View>
           ) : filteredProducts.length === 0 ? (
             <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-              <Text style={[styles.emptyStateText, { fontSize: s(16) }]}>
+              <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.lg) }]}>
                 No products found
               </Text>
             </View>

@@ -2,6 +2,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES, TAB_HEIGHT } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 export interface FilterTab<T extends string = string> {
@@ -35,9 +36,9 @@ export function FilterTabs<T extends string = string>({
               styles.tab,
               isActive && styles.tabActive,
               {
-                height: sy(40),
-                borderRadius: s(8),
-                paddingHorizontal: sx(20),
+                height: sy(TAB_HEIGHT),
+                borderRadius: s(10),
+                paddingHorizontal: sx(22),
               },
             ]}
             onPress={() => onTabPress(tab.key)}
@@ -46,7 +47,7 @@ export function FilterTabs<T extends string = string>({
               style={[
                 styles.tabText,
                 isActive && styles.tabTextActive,
-                { fontSize: s(16) },
+                { fontSize: s(FONT_SIZES.md) },
               ]}
             >
               {tab.label}

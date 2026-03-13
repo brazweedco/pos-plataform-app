@@ -9,6 +9,7 @@ import {
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES, BUTTON_HEIGHT } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 type ButtonVariant = "primary" | "secondary";
@@ -39,8 +40,8 @@ export function Button({
         styles.button,
         isPrimary ? styles.primaryButton : styles.secondaryButton,
         {
-          height: sy(50),
-          borderRadius: s(12),
+          height: sy(BUTTON_HEIGHT),
+          borderRadius: s(14),
           gap: sx(12),
         },
         disabled && styles.disabled,
@@ -53,23 +54,23 @@ export function Button({
           style={[
             styles.iconContainer,
             {
-              width: s(26),
-              height: s(26),
-              borderRadius: s(6),
+              width: s(28),
+              height: s(28),
+              borderRadius: s(7),
             },
           ]}
         >
           <Image
             source={icon}
             style={{
-              width: s(19.5),
-              height: s(19.5),
+              width: s(20),
+              height: s(20),
             }}
             contentFit="contain"
           />
         </View>
       )}
-      <Text style={[styles.buttonText, { fontSize: s(17) }]}>{title}</Text>
+      <Text style={[styles.buttonText, { fontSize: s(FONT_SIZES.lg) }]}>{title}</Text>
     </Pressable>
   );
 }

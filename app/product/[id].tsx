@@ -1,3 +1,4 @@
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -39,6 +40,10 @@ export default function ProductDetailScreen() {
 
   const handleTabPress = (tab: TabName) => {
     navigateToTab(tab);
+  };
+
+  const handleEdit = () => {
+    router.push(`/product-edit/${id}`);
   };
 
   const handleAddToCart = () => {
@@ -108,6 +113,23 @@ export default function ProductDetailScreen() {
               <ChevronLeftIcon size={s(24)} color={COLORS.text} />
             </Pressable>
 
+            {/* Edit Button */}
+            <Pressable
+              style={[
+                styles.editButton,
+                {
+                  width: s(42),
+                  height: s(42),
+                  borderRadius: s(21),
+                  top: insets.top + sy(10),
+                  right: sx(20),
+                },
+              ]}
+              onPress={handleEdit}
+            >
+              <Feather name="edit-2" size={s(20)} color={COLORS.text} />
+            </Pressable>
+
             {/* Category Badges - Bottom Right */}
             <View
               style={[
@@ -170,7 +192,7 @@ export default function ProductDetailScreen() {
 
             {/* Product Name */}
             <Text
-              style={[styles.productName, { fontSize: s(25), marginTop: sy(5) }]}
+              style={[styles.productName, { fontSize: s(28), marginTop: sy(5) }]}
             >
               {product.name}
             </Text>
@@ -182,15 +204,15 @@ export default function ProductDetailScreen() {
                   style={[
                     styles.infoPill,
                     {
-                      height: sy(47),
-                      paddingHorizontal: sx(20),
-                      borderRadius: s(8),
+                      height: sy(50),
+                      paddingHorizontal: sx(22),
+                      borderRadius: s(10),
                       gap: sx(10),
                     },
                   ]}
                 >
-                  <DropletIcon size={s(14)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(14) }]}>
+                  <DropletIcon size={s(16)} color={COLORS.primary} />
+                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
                     {product.thcPercentage}% THC
                   </Text>
                 </View>
@@ -200,15 +222,15 @@ export default function ProductDetailScreen() {
                   style={[
                     styles.infoPill,
                     {
-                      height: sy(47),
-                      paddingHorizontal: sx(20),
-                      borderRadius: s(8),
+                      height: sy(50),
+                      paddingHorizontal: sx(22),
+                      borderRadius: s(10),
                       gap: sx(10),
                     },
                   ]}
                 >
-                  <DropletIcon size={s(14)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(14) }]}>
+                  <DropletIcon size={s(16)} color={COLORS.primary} />
+                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
                     {product.cbdPercentage}% CBD
                   </Text>
                 </View>
@@ -218,15 +240,15 @@ export default function ProductDetailScreen() {
                   style={[
                     styles.infoPill,
                     {
-                      height: sy(47),
-                      paddingHorizontal: sx(20),
-                      borderRadius: s(8),
+                      height: sy(50),
+                      paddingHorizontal: sx(22),
+                      borderRadius: s(10),
                       gap: sx(10),
                     },
                   ]}
                 >
-                  <PackageIcon size={s(14)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(14) }]}>
+                  <PackageIcon size={s(16)} color={COLORS.primary} />
+                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
                     {product.weightGrams}g
                   </Text>
                 </View>
@@ -237,7 +259,7 @@ export default function ProductDetailScreen() {
             <Text
               style={[
                 styles.sectionTitle,
-                { fontSize: s(17), marginTop: sy(26) },
+                { fontSize: s(19), marginTop: sy(26) },
               ]}
             >
               Description
@@ -245,7 +267,7 @@ export default function ProductDetailScreen() {
             <Text
               style={[
                 styles.descriptionText,
-                { fontSize: s(15), marginTop: sy(10), lineHeight: s(19) },
+                { fontSize: s(16), marginTop: sy(10), lineHeight: s(24) },
               ]}
             >
               {product.description || "No description available."}
@@ -264,15 +286,15 @@ export default function ProductDetailScreen() {
                 },
               ]}
             >
-              <CheckCircleIcon size={s(18)} color={COLORS.primary} />
+              <CheckCircleIcon size={s(20)} color={COLORS.primary} />
               <View style={styles.complianceContent}>
-                <Text style={[styles.complianceTitle, { fontSize: s(14) }]}>
+                <Text style={[styles.complianceTitle, { fontSize: s(15) }]}>
                   COMPLIANCE VERIFIED
                 </Text>
                 <Text
                   style={[
                     styles.complianceSubtitle,
-                    { fontSize: s(12), marginTop: sy(4) },
+                    { fontSize: s(14), marginTop: sy(4) },
                   ]}
                 >
                   SKU: {product.sku}
@@ -282,20 +304,20 @@ export default function ProductDetailScreen() {
 
             {/* Stock Level */}
             <View style={[styles.infoRow, { marginTop: sy(20) }]}>
-              <Text style={[styles.infoLabel, { fontSize: s(15) }]}>
+              <Text style={[styles.infoLabel, { fontSize: s(16) }]}>
                 Stock Level
               </Text>
-              <Text style={[styles.infoValue, { fontSize: s(16) }]}>
+              <Text style={[styles.infoValue, { fontSize: s(17) }]}>
                 {product.stock} Units Available
               </Text>
             </View>
 
             {/* Price */}
             <View style={[styles.infoRow, { marginTop: sy(16) }]}>
-              <Text style={[styles.infoLabel, { fontSize: s(15) }]}>
+              <Text style={[styles.infoLabel, { fontSize: s(16) }]}>
                 Tax included in final calc
               </Text>
-              <Text style={[styles.priceText, { fontSize: s(23) }]}>
+              <Text style={[styles.priceText, { fontSize: s(26) }]}>
                 ${product.price.toFixed(2)}
               </Text>
             </View>
@@ -360,6 +382,17 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   backButton: {
+    position: "absolute",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  editButton: {
     position: "absolute",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     justifyContent: "center",

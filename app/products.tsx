@@ -21,6 +21,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useCategories } from "@/hooks/use-categories";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
@@ -104,7 +105,7 @@ export default function ProductsScreen() {
             },
           ]}
         >
-          <Text style={[styles.title, { fontSize: s(26) }]}>Products</Text>
+          <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>Products</Text>
           <Pressable
             style={[
               styles.addButton,
@@ -174,7 +175,7 @@ export default function ProductsScreen() {
           ListEmptyComponent={
             !isLoading ? (
               <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-                <Text style={[styles.emptyStateText, { fontSize: s(16) }]}>
+                <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.md) }]}>
                   No products found
                 </Text>
               </View>

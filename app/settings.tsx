@@ -11,6 +11,7 @@ import { ChatIcon } from "@/components/icons";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
@@ -37,7 +38,7 @@ function SettingsItem({ icon, label, onPress }: SettingsItemProps) {
     >
       <View style={[styles.settingsItemLeft, { gap: sx(12) }]}>
         {icon}
-        <Text style={[styles.settingsItemText, { fontSize: s(16) }]}>
+        <Text style={[styles.settingsItemText, { fontSize: s(FONT_SIZES.md) }]}>
           {label}
         </Text>
       </View>
@@ -81,7 +82,7 @@ export default function SettingsScreen() {
             },
           ]}
         >
-          <Text style={[styles.title, { fontSize: s(26) }]}>More</Text>
+          <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>More</Text>
         </View>
 
         <ScrollView
@@ -97,7 +98,7 @@ export default function SettingsScreen() {
           <Text
             style={[
               styles.sectionTitle,
-              { fontSize: s(18), marginBottom: sy(12) },
+              { fontSize: s(FONT_SIZES.lg), marginBottom: sy(12) },
             ]}
           >
             Settings
@@ -136,7 +137,7 @@ export default function SettingsScreen() {
           <Text
             style={[
               styles.sectionTitle,
-              { fontSize: s(18), marginBottom: sy(12) },
+              { fontSize: s(FONT_SIZES.lg), marginBottom: sy(12) },
             ]}
           >
             Support
@@ -179,7 +180,7 @@ export default function SettingsScreen() {
             <Text
               style={[
                 styles.logoutText,
-                { fontSize: s(16), marginLeft: sx(8) },
+                { fontSize: s(FONT_SIZES.md), marginLeft: sx(8) },
               ]}
             >
               Log Out

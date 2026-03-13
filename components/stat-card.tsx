@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 interface StatCardProps {
@@ -39,9 +40,9 @@ export function StatCard({ title, value, icon }: StatCardProps) {
         {icon}
       </View>
       <View style={styles.content}>
-        <Text style={[styles.title, { fontSize: s(15) }]}>{title}</Text>
+        <Text style={[styles.title, { fontSize: s(FONT_SIZES.md) }]}>{title}</Text>
         {typeof value === "string" ? (
-          <Text style={[styles.value, { fontSize: s(23) }]}>{value}</Text>
+          <Text style={[styles.value, { fontSize: s(FONT_SIZES["2xl"]) }]}>{value}</Text>
         ) : (
           value
         )}

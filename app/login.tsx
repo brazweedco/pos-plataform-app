@@ -119,19 +119,19 @@ export default function LoginScreen() {
           },
         ]}
       >
-        <View style={[styles.dividerLine, { width: sx(127) }]} />
+        <View style={[styles.dividerLine, { width: sx(115) }]} />
         <Text
           style={[
             styles.dividerText,
             {
-              fontSize: s(16),
-              marginHorizontal: sx(12),
+              fontSize: s(17),
+              marginHorizontal: sx(14),
             },
           ]}
         >
           Or continue with
         </Text>
-        <View style={[styles.dividerLine, { width: sx(127) }]} />
+        <View style={[styles.dividerLine, { width: sx(115) }]} />
       </View>
 
       {/* Biometric Button */}
@@ -157,7 +157,7 @@ export default function LoginScreen() {
           { paddingBottom: isWeb ? sy(40) : insets.bottom + 20 },
         ]}
       >
-        <Text style={[styles.footerText, { fontSize: s(16) }]}>
+        <Text style={[styles.footerText, { fontSize: s(17) }]}>
           Having trouble?{" "}
           <Text style={styles.footerLink}>Contact your manager</Text>
         </Text>

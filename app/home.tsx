@@ -21,6 +21,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { StatCard } from "@/components/stat-card";
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
+import { FONT_SIZES } from "@/constants/typography";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
@@ -111,11 +112,11 @@ export default function HomeScreen() {
               />
             </View>
             <View style={[styles.userText, { marginLeft: sx(12) }]}>
-              <Text style={[styles.userRole, { fontSize: s(15) }]}>
+              <Text style={[styles.userRole, { fontSize: s(FONT_SIZES.md) }]}>
                 {userRole}
               </Text>
               <View style={styles.nameRow}>
-                <Text style={[styles.userName, { fontSize: s(26) }]}>
+                <Text style={[styles.userName, { fontSize: s(FONT_SIZES["3xl"]) }]}>
                   {userName}
                 </Text>
                 {isOnline && (
@@ -123,14 +124,14 @@ export default function HomeScreen() {
                     style={[
                       styles.onlineBadge,
                       {
-                        height: sy(28),
+                        height: sy(30),
                         borderRadius: s(12),
-                        paddingHorizontal: sx(12),
+                        paddingHorizontal: sx(14),
                         marginLeft: sx(10),
                       },
                     ]}
                   >
-                    <Text style={[styles.onlineText, { fontSize: s(15) }]}>
+                    <Text style={[styles.onlineText, { fontSize: s(FONT_SIZES.md) }]}>
                       Online
                     </Text>
                   </View>
@@ -171,7 +172,7 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.newSaleText,
-                { fontSize: s(17), marginLeft: sx(8) },
+                { fontSize: s(FONT_SIZES.lg), marginLeft: sx(8) },
               ]}
             >
               New Sale
@@ -206,9 +207,9 @@ export default function HomeScreen() {
             <StatCard
               title="Deliveries"
               value={
-                <Text style={[styles.statValue, { fontSize: s(23) }]}>
+                <Text style={[styles.statValue, { fontSize: s(FONT_SIZES["2xl"]) }]}>
                   <Text style={styles.statValueBig}>0</Text>{" "}
-                  <Text style={[styles.statValueSmall, { fontSize: s(15) }]}>
+                  <Text style={[styles.statValueSmall, { fontSize: s(FONT_SIZES.md) }]}>
                     Pending
                   </Text>
                 </Text>
@@ -238,11 +239,11 @@ export default function HomeScreen() {
             },
           ]}
         >
-          <Text style={[styles.sectionTitle, { fontSize: s(22) }]}>
+          <Text style={[styles.sectionTitle, { fontSize: s(FONT_SIZES["2xl"]) }]}>
             Active Deliveries
           </Text>
           <Pressable>
-            <Text style={[styles.viewAllText, { fontSize: s(14) }]}>
+            <Text style={[styles.viewAllText, { fontSize: s(FONT_SIZES.md) }]}>
               View All
             </Text>
           </Pressable>
@@ -263,7 +264,7 @@ export default function HomeScreen() {
         >
           {DELIVERIES.length === 0 ? (
             <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-              <Text style={[styles.emptyStateText, { fontSize: s(16) }]}>
+              <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.lg) }]}>
                 No active deliveries
               </Text>
             </View>

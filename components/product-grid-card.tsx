@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { Product } from "@/types/product";
 
@@ -68,7 +69,7 @@ export function ProductGridCard({
               },
             ]}
           >
-            <Text style={[styles.thcText, { fontSize: s(10) }]}>
+            <Text style={[styles.thcText, { fontSize: s(FONT_SIZES.xs) }]}>
               {product.thcPercentage}% THC
             </Text>
           </View>
@@ -87,7 +88,7 @@ export function ProductGridCard({
         ]}
       >
         <Text
-          style={[styles.name, { fontSize: s(15) }]}
+          style={[styles.name, { fontSize: s(FONT_SIZES.sm) }]}
           numberOfLines={2}
           ellipsizeMode="tail"
         >
@@ -95,7 +96,7 @@ export function ProductGridCard({
         </Text>
 
         <View style={styles.priceRow}>
-          <Text style={[styles.price, { fontSize: s(15) }]}>
+          <Text style={[styles.price, { fontSize: s(FONT_SIZES.sm) }]}>
             ${product.price.toFixed(2)}
           </Text>
 

@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { getStockStatus, Product } from "@/types/product";
 
@@ -44,16 +45,16 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
       <View style={[styles.info, { marginLeft: sx(12) }]}>
         {/* Name and Price Row */}
         <View style={styles.header}>
-          <Text style={[styles.name, { fontSize: s(17) }]} numberOfLines={1}>
+          <Text style={[styles.name, { fontSize: s(FONT_SIZES.lg) }]} numberOfLines={1}>
             {product.name}
           </Text>
-          <Text style={[styles.price, { fontSize: s(17) }]}>
+          <Text style={[styles.price, { fontSize: s(FONT_SIZES.lg) }]}>
             ${product.price.toFixed(2)}
           </Text>
         </View>
 
         {/* SKU */}
-        <Text style={[styles.sku, { fontSize: s(14), marginTop: sy(4) }]}>
+        <Text style={[styles.sku, { fontSize: s(FONT_SIZES.sm), marginTop: sy(4) }]}>
           SKU: {product.sku}
         </Text>
 
@@ -69,7 +70,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
               },
             ]}
           >
-            <Text style={[styles.categoryText, { fontSize: s(10) }]}>
+            <Text style={[styles.categoryText, { fontSize: s(FONT_SIZES.xs) }]}>
               {product.category?.name ?? "Uncategorized"}
             </Text>
           </View>
@@ -78,18 +79,18 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
               style={[
                 styles.stockDot,
                 {
-                  width: s(6),
-                  height: s(6),
-                  borderRadius: s(3),
+                  width: s(7),
+                  height: s(7),
+                  borderRadius: s(4),
                   backgroundColor: stockStatus.color,
-                  marginRight: sx(5),
+                  marginRight: sx(6),
                 },
               ]}
             />
             <Text
               style={[
                 styles.stockText,
-                { fontSize: s(14), color: stockStatus.color },
+                { fontSize: s(FONT_SIZES.sm), color: stockStatus.color },
               ]}
             >
               {stockStatus.text}

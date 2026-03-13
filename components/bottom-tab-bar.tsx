@@ -1,5 +1,6 @@
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { TabName } from "@/utils/navigation";
 import React from "react";
@@ -64,7 +65,7 @@ export function BottomTabBar({ activeTab, onTabPress }: BottomTabBarProps) {
           <Text
             style={[
               styles.label,
-              { fontSize: s(13), marginTop: sy(4) },
+              { fontSize: s(FONT_SIZES.xs), marginTop: sy(4) },
               activeTab === key && styles.labelActive,
             ]}
           >

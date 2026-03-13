@@ -6,6 +6,7 @@ import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { navigateToTab, TabName } from "@/utils/navigation";
 
@@ -37,18 +38,18 @@ export default function OrdersScreen() {
             },
           ]}
         >
-          <Text style={[styles.title, { fontSize: s(26) }]}>Orders</Text>
+          <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>Orders</Text>
         </View>
 
         {/* Coming Soon Content */}
         <View style={styles.content}>
-          <Text style={[styles.comingSoonText, { fontSize: s(18) }]}>
+          <Text style={[styles.comingSoonText, { fontSize: s(FONT_SIZES.lg) }]}>
             Coming Soon
           </Text>
           <Text
             style={[
               styles.comingSoonSubtext,
-              { fontSize: s(14), marginTop: sy(8) },
+              { fontSize: s(FONT_SIZES.sm), marginTop: sy(8) },
             ]}
           >
             This feature is under development

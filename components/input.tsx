@@ -12,6 +12,7 @@ import { EyeClosed } from "@/components/icons/eye-closed-icon";
 import { EyeOpen } from "@/components/icons/eye-open-icon";
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
+import { FONT_SIZES, INPUT_HEIGHT } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 export { EyeClosed, EyeOpen };
 
@@ -36,8 +37,8 @@ export function Input({
   };
 
   return (
-    <View style={{ marginBottom: sy(12) }}>
-      <Text style={[styles.label, { fontSize: s(15), marginBottom: sy(8) }]}>
+    <View style={{ marginBottom: sy(14) }}>
+      <Text style={[styles.label, { fontSize: s(FONT_SIZES.md), marginBottom: sy(10) }]}>
         {label}
       </Text>
       <Pressable
@@ -45,11 +46,11 @@ export function Input({
         style={[
           styles.inputContainer,
           {
-            minHeight: sy(50),
-            height: multiline ? undefined : sy(50),
+            minHeight: sy(INPUT_HEIGHT),
+            height: multiline ? undefined : sy(INPUT_HEIGHT),
             borderRadius: s(12),
-            paddingHorizontal: sx(14),
-            paddingVertical: multiline ? sy(11) : 0,
+            paddingHorizontal: sx(16),
+            paddingVertical: multiline ? sy(14) : 0,
             alignItems: multiline ? "flex-start" : "center",
           },
           isFocused && styles.inputFocused,
@@ -59,8 +60,8 @@ export function Input({
           ref={inputRef}
           style={[
             styles.input,
-            { fontSize: s(14), paddingVertical: sy(12) },
-            multiline && { minHeight: sy(80), textAlignVertical: "top" },
+            { fontSize: s(FONT_SIZES.md), paddingVertical: sy(14) },
+            multiline && { minHeight: sy(100), textAlignVertical: "top" },
           ]}
           placeholderTextColor={COLORS.textMuted}
           onFocus={() => setIsFocused(true)}

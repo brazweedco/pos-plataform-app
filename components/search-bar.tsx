@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES, SEARCH_HEIGHT } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 interface SearchBarProps {
@@ -27,9 +28,9 @@ export function SearchBar({
       style={[
         styles.container,
         {
-          height: sy(50),
+          height: sy(SEARCH_HEIGHT),
           borderRadius: s(12),
-          paddingHorizontal: sx(11),
+          paddingHorizontal: sx(14),
         },
       ]}
     >
@@ -40,7 +41,7 @@ export function SearchBar({
         style={{ marginRight: sx(10) }}
       />
       <TextInput
-        style={[styles.input, { fontSize: s(15) }]}
+        style={[styles.input, { fontSize: s(FONT_SIZES.md) }]}
         placeholder={placeholder}
         placeholderTextColor="#71717B"
         value={value}

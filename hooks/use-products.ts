@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { productsService } from "@/services/products";
@@ -92,7 +92,6 @@ export function useProduct(id: string) {
 }
 
 export function useDeleteProduct() {
-  const queryClient = useQueryClient();
   const removeProduct = useProductStore((state) => state.removeProduct);
 
   return useMutation({
@@ -102,7 +101,6 @@ export function useDeleteProduct() {
     },
     onSuccess: (id) => {
       removeProduct(id);
-      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 }

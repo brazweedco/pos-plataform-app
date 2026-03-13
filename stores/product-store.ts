@@ -8,7 +8,7 @@ interface ProductState {
   error: string | null;
   setProducts: (products: Product[]) => void;
   addProduct: (product: Product) => void;
-  updateProduct: (id: string, product: Partial<Product>) => void;
+  updateProduct: (product: Product) => void;
   removeProduct: (id: string) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -22,10 +22,10 @@ export const useProductStore = create<ProductState>((set) => ({
   setProducts: (products) => set({ products, error: null }),
   addProduct: (product) =>
     set((state) => ({ products: [...state.products, product] })),
-  updateProduct: (id, updates) =>
+  updateProduct: (product) =>
     set((state) => ({
       products: state.products.map((p) =>
-        p.id === id ? { ...p, ...updates } : p
+        p.id === product.id ? product : p
       ),
     })),
   removeProduct: (id) =>

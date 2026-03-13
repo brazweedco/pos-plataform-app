@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES, INPUT_HEIGHT, SEARCH_HEIGHT } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 export interface AutocompleteItem {
@@ -96,17 +97,17 @@ export function Autocomplete<T extends AutocompleteItem>({
   };
 
   return (
-    <View style={{ marginBottom: sy(12) }}>
-      <Text style={[styles.label, { fontSize: s(15), marginBottom: sy(8) }]}>
+    <View style={{ marginBottom: sy(14) }}>
+      <Text style={[styles.label, { fontSize: s(FONT_SIZES.md), marginBottom: sy(10) }]}>
         {label}
       </Text>
       <Pressable
         style={[
           styles.inputContainer,
           {
-            height: sy(50),
+            height: sy(INPUT_HEIGHT),
             borderRadius: s(12),
-            paddingHorizontal: sx(11),
+            paddingHorizontal: sx(14),
           },
           disabled && styles.inputDisabled,
         ]}
@@ -115,7 +116,7 @@ export function Autocomplete<T extends AutocompleteItem>({
         <Text
           style={[
             styles.inputText,
-            { fontSize: s(14) },
+            { fontSize: s(FONT_SIZES.md) },
             !value && styles.placeholder,
           ]}
           numberOfLines={1}
@@ -171,7 +172,7 @@ export function Autocomplete<T extends AutocompleteItem>({
             >
               <Feather name="arrow-left" size={s(22)} color={COLORS.text} />
             </Pressable>
-            <Text style={[styles.modalTitle, { fontSize: s(20) }]}>
+            <Text style={[styles.modalTitle, { fontSize: s(FONT_SIZES.xl) }]}>
               {label}
             </Text>
             <View style={{ width: s(46) }} />
@@ -183,9 +184,9 @@ export function Autocomplete<T extends AutocompleteItem>({
               style={[
                 styles.searchBar,
                 {
-                  height: sy(50),
+                  height: sy(SEARCH_HEIGHT),
                   borderRadius: s(12),
-                  paddingHorizontal: sx(11),
+                  paddingHorizontal: sx(14),
                 },
               ]}
             >
@@ -196,7 +197,7 @@ export function Autocomplete<T extends AutocompleteItem>({
                 style={{ marginRight: sx(10) }}
               />
               <TextInput
-                style={[styles.searchInput, { fontSize: s(15) }]}
+                style={[styles.searchInput, { fontSize: s(FONT_SIZES.md) }]}
                 placeholder="Search..."
                 placeholderTextColor="#71717B"
                 value={searchQuery}
@@ -221,11 +222,11 @@ export function Autocomplete<T extends AutocompleteItem>({
             </View>
           ) : error ? (
             <View style={[styles.errorContainer, { paddingVertical: sy(40) }]}>
-              <Text style={[styles.errorText, { fontSize: s(14) }]}>
+              <Text style={[styles.errorText, { fontSize: s(FONT_SIZES.md) }]}>
                 {error}
               </Text>
               <Pressable onPress={loadItems} style={{ marginTop: sy(8) }}>
-                <Text style={[styles.retryText, { fontSize: s(14) }]}>
+                <Text style={[styles.retryText, { fontSize: s(FONT_SIZES.md) }]}>
                   Tap to retry
                 </Text>
               </Pressable>
@@ -242,7 +243,7 @@ export function Autocomplete<T extends AutocompleteItem>({
               ItemSeparatorComponent={() => <View style={{ height: sy(11) }} />}
               ListEmptyComponent={
                 <View style={[styles.emptyContainer, { paddingVertical: sy(40) }]}>
-                  <Text style={[styles.emptyText, { fontSize: s(16) }]}>
+                  <Text style={[styles.emptyText, { fontSize: s(FONT_SIZES.lg) }]}>
                     No items found
                   </Text>
                 </View>
@@ -255,8 +256,8 @@ export function Autocomplete<T extends AutocompleteItem>({
                       styles.itemCard,
                       {
                         borderRadius: s(12),
-                        paddingHorizontal: sx(16),
-                        paddingVertical: sy(16),
+                        paddingHorizontal: sx(18),
+                        paddingVertical: sy(18),
                       },
                       isSelected && styles.itemCardSelected,
                     ]}
@@ -265,7 +266,7 @@ export function Autocomplete<T extends AutocompleteItem>({
                     <Text
                       style={[
                         styles.itemText,
-                        { fontSize: s(17) },
+                        { fontSize: s(FONT_SIZES.lg) },
                         isSelected && styles.itemTextSelected,
                       ]}
                       numberOfLines={1}

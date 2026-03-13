@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 interface DeliveryCardProps {
@@ -38,12 +39,12 @@ export function DeliveryCard({
         <Feather name="truck" size={s(24)} color={COLORS.primary} />
       </View>
       <View style={[styles.content, { marginLeft: sx(26) }]}>
-        <Text style={[styles.orderId, { fontSize: s(18) }]}>{orderId}</Text>
-        <Text style={[styles.status, { fontSize: s(14), marginTop: sy(2) }]}>
+        <Text style={[styles.orderId, { fontSize: s(FONT_SIZES.lg) }]}>{orderId}</Text>
+        <Text style={[styles.status, { fontSize: s(FONT_SIZES.sm), marginTop: sy(2) }]}>
           {status} • {time}
         </Text>
       </View>
-      <Text style={[styles.price, { fontSize: s(17) }]}>{price}</Text>
+      <Text style={[styles.price, { fontSize: s(FONT_SIZES.lg) }]}>{price}</Text>
     </Pressable>
   );
 }
