@@ -1,4 +1,5 @@
 import { Image, ImageSource } from "expo-image";
+import { ReactNode } from "react";
 import {
   Pressable,
   PressableProps,
@@ -17,8 +18,10 @@ type ButtonVariant = "primary" | "secondary";
 interface ButtonProps extends Omit<PressableProps, "style"> {
   title: string;
   variant?: ButtonVariant;
-  /** Icon to show on the left side */
+  /** Icon image source (for expo-image) */
   icon?: ImageSource;
+  /** Custom icon component (ActivityIndicator, etc.) */
+  iconComponent?: ReactNode;
   /** Disable the button */
   disabled?: boolean;
 }
@@ -27,6 +30,7 @@ export function Button({
   title,
   variant = "primary",
   icon,
+  iconComponent,
   disabled,
   ...props
 }: ButtonProps) {
@@ -34,22 +38,15 @@ export function Button({
 
   const isPrimary = variant === "primary";
 
-  return (
-    <Pressable
-      style={[
-        styles.button,
-        isPrimary ? styles.primaryButton : styles.secondaryButton,
-        {
-          height: sy(BUTTON_HEIGHT),
-          borderRadius: s(14),
-          gap: sx(12),
-        },
-        disabled && styles.disabled,
-      ]}
-      disabled={disabled}
-      {...props}
-    >
-      {icon && (
+  const renderIcon = () => {
+    // Custom component takes priority
+    if (iconComponent) {
+      return iconComponent;
+    }
+
+    // Image icon
+    if (icon) {
+      return (
         <View
           style={[
             styles.iconContainer,
@@ -69,7 +66,28 @@ export function Button({
             contentFit="contain"
           />
         </View>
-      )}
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <Pressable
+      style={[
+        styles.button,
+        isPrimary ? styles.primaryButton : styles.secondaryButton,
+        {
+          height: sy(BUTTON_HEIGHT),
+          borderRadius: s(14),
+          gap: sx(12),
+        },
+        disabled && styles.disabled,
+      ]}
+      disabled={disabled}
+      {...props}
+    >
+      {renderIcon()}
       <Text style={[styles.buttonText, { fontSize: s(FONT_SIZES.lg) }]}>{title}</Text>
     </Pressable>
   );

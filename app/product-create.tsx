@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -18,10 +19,11 @@ import { mapProductResponseToProduct, ProductRequest } from "@/types/product";
 
 export default function ProductCreateScreen() {
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
   const { showWarning } = useToast();
   const addProduct = useProductStore((state) => state.addProduct);
 
-  const { execute, isLoading } = useAsyncHandler({
+  const { execute } = useAsyncHandler({
     showSuccessToast: true,
     successMessage: "Product created successfully!",
     showErrorToast: true,
@@ -46,9 +48,10 @@ export default function ProductCreateScreen() {
     });
 
     if (result) {
+      // Invalidate products cache to refresh list
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       router.back();
     } else {
-      // Re-throw to let ProductForm know submission failed
       throw new Error("Product creation failed");
     }
   };

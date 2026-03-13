@@ -43,13 +43,18 @@ export const productsService = {
 
     const filename = imageUri.split("/").pop() || "image.jpg";
     const match = /\.(\w+)$/.exec(filename);
-    const type = match ? `image/${match[1]}` : "image/jpeg";
+    const mimeType = match ? `image/${match[1].toLowerCase()}` : "image/jpeg";
 
-    formData.append("image", {
+    // Create a plain object for React Native FormData
+    // This format is required for iOS compatibility with Hermes
+    const file = {
       uri: imageUri,
+      type: mimeType,
       name: filename,
-      type,
-    } as unknown as Blob);
+    };
+
+    // @ts-expect-error - React Native FormData accepts this format
+    formData.append("image", file);
 
     return api.postFormData<ProductResponse>(`/api/v1/products/${productId}/image`, formData);
   },

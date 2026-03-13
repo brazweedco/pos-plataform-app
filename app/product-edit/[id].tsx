@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -28,6 +29,7 @@ export default function ProductEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { s, sy } = useScale();
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
   const { showWarning } = useToast();
   const updateProductStore = useProductStore((state) => state.updateProduct);
 
@@ -61,9 +63,10 @@ export default function ProductEditScreen() {
     });
 
     if (result) {
+      // Invalidate products cache to refresh list
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       router.back();
     } else {
-      // Re-throw to let ProductForm know submission failed
       throw new Error("Product update failed");
     }
   };

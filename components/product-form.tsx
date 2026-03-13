@@ -114,14 +114,16 @@ export function ProductForm({
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
       });
 
       if (!result.canceled && result.assets[0]) {
-        setImageUri(result.assets[0].uri);
+        // Extract URI as plain string to avoid Symbol issues on iOS
+        const uri = String(result.assets[0].uri);
+        setImageUri(uri);
       }
     } catch (error) {
       showError("Failed to open photo library.");
@@ -145,7 +147,9 @@ export function ProductForm({
       });
 
       if (!result.canceled && result.assets[0]) {
-        setImageUri(result.assets[0].uri);
+        // Extract URI as plain string to avoid Symbol issues on iOS
+        const uri = String(result.assets[0].uri);
+        setImageUri(uri);
       }
     } catch (error) {
       showError("Failed to open camera.");
@@ -436,7 +440,7 @@ export function ProductForm({
           title={isSubmitting ? submittingLabel : submitLabel}
           onPress={handleSubmit}
           disabled={isSubmitting}
-          icon={
+          iconComponent={
             isSubmitting ? (
               <ActivityIndicator size="small" color={COLORS.surface} />
             ) : undefined
