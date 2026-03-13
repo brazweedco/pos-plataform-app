@@ -10,7 +10,6 @@ import { navigateToTab, TabName } from "@/utils/navigation";
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { DeliveryCard } from "@/components/delivery-card";
 import {
-  ChatIcon,
   DollarIcon,
   PackageIcon,
   PlusIcon,
@@ -207,8 +206,10 @@ export default function HomeScreen() {
             <StatCard
               title="Deliveries"
               value={
-                <Text style={[styles.statValue, { fontSize: s(FONT_SIZES["2xl"]) }]}>
-                  <Text style={styles.statValueBig}>0</Text>{" "}
+                <Text style={styles.statValue}>
+                  <Text style={[styles.statValueBig, { fontSize: s(FONT_SIZES["2xl"]) }]}>
+                    0
+                  </Text>{" "}
                   <Text style={[styles.statValueSmall, { fontSize: s(FONT_SIZES.md) }]}>
                     Pending
                   </Text>
@@ -280,22 +281,6 @@ export default function HomeScreen() {
             ))
           )}
         </ScrollView>
-
-        {/* Floating Action Button */}
-        <Pressable
-          style={[
-            styles.fab,
-            {
-              width: s(48),
-              height: s(48),
-              borderRadius: s(24),
-              right: sx(20),
-              bottom: sy(96),
-            },
-          ]}
-        >
-          <ChatIcon size={s(20)} />
-        </Pressable>
 
         {/* Bottom Tab Bar */}
         <View style={styles.tabBarContainer}>
@@ -393,10 +378,9 @@ const styles = StyleSheet.create({
   },
   statValueBig: {
     fontFamily: FONTS.semiBold,
-    fontSize: 23,
   },
   statValueSmall: {
-    fontFamily: FONTS.medium,
+    fontFamily: FONTS.semiBold,
   },
   deliveriesHeader: {
     flexDirection: "row",
@@ -423,17 +407,6 @@ const styles = StyleSheet.create({
   emptyStateText: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
-  },
-  fab: {
-    position: "absolute",
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 8,
   },
   tabBarContainer: {
     position: "absolute",

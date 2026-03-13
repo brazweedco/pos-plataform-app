@@ -15,21 +15,24 @@ import { navigateToTab, TabName } from "@/utils/navigation";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
-import { ChatIcon } from "@/components/icons";
 import { ProductGridCard } from "@/components/product-grid-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
 import { FONT_SIZES } from "@/constants/typography";
+import { useToast } from "@/contexts/toast-context";
 import { useCategories } from "@/hooks/use-categories";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
+import { useCartStore } from "@/stores/cart-store";
 import { Product } from "@/types/product";
 
 export default function ProductsScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
+  const { showSuccess } = useToast();
+  const addItem = useCartStore((state) => state.addItem);
   const [activeTab, setActiveTab] = useState<TabName>("product");
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +74,8 @@ export default function ProductsScreen() {
   };
 
   const handleAddToCart = (product: Product) => {
-    // TODO: Add to cart logic
+    addItem(product);
+    showSuccess(`${product.name} added to cart`);
   };
 
   // Filter products based on active filter and search query
@@ -117,7 +121,7 @@ export default function ProductsScreen() {
             ]}
             onPress={handleAddProduct}
           >
-            <Feather name="shopping-cart" size={s(20)} color={COLORS.primary} />
+            <Feather name="plus" size={s(20)} color={COLORS.primary} />
           </Pressable>
         </View>
 
@@ -190,22 +194,6 @@ export default function ProductsScreen() {
           }
         />
 
-        {/* Floating Action Button */}
-        <Pressable
-          style={[
-            styles.fab,
-            {
-              width: s(48),
-              height: s(48),
-              borderRadius: s(24),
-              right: sx(20),
-              bottom: sy(96),
-            },
-          ]}
-        >
-          <ChatIcon size={s(20)} />
-        </Pressable>
-
         {/* Bottom Tab Bar */}
         <View style={styles.tabBarContainer}>
           <BottomTabBar activeTab={activeTab} onTabPress={handleTabPress} />
@@ -253,17 +241,6 @@ const styles = StyleSheet.create({
   emptyStateText: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
-  },
-  fab: {
-    position: "absolute",
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 8,
   },
   tabBarContainer: {
     position: "absolute",

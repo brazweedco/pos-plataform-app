@@ -21,7 +21,8 @@ export function ProductGridCard({
 }: ProductGridCardProps) {
   const { s, sx, sy } = useScale();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
     onAddToCart?.(product);
   };
 

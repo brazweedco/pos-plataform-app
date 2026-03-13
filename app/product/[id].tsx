@@ -23,14 +23,18 @@ import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
 import { FONT_SIZES } from "@/constants/typography";
+import { useToast } from "@/contexts/toast-context";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
+import { useCartStore } from "@/stores/cart-store";
 import { navigateToTab, TabName } from "@/utils/navigation";
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
+  const { showSuccess } = useToast();
+  const addItem = useCartStore((state) => state.addItem);
 
   const { products, isLoading } = useProducts();
   const product = products.find((p) => p.id === id);
@@ -48,7 +52,9 @@ export default function ProductDetailScreen() {
   };
 
   const handleAddToCart = () => {
-    // TODO: Implement add to cart
+    if (!product) return;
+    addItem(product);
+    showSuccess(`${product.name} added to cart`);
   };
 
   if (isLoading) {

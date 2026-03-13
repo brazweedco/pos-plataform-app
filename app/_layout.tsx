@@ -1,16 +1,41 @@
-import * as SplashScreen from "expo-splash-screen";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
+import { FloatingCartButton } from "@/components/floating-cart-button";
 import { ToastProvider } from "@/contexts/toast-context";
 import { useAppFonts } from "@/hooks/use-appfonts";
+import { useSession } from "@/hooks/use-session";
 import { QueryProvider } from "@/providers/query-provider";
 
 // Keep splash screen visible while loading fonts
 SplashScreen.preventAutoHideAsync();
+
+function AppContent() {
+  // Initialize session management (handles expired sessions)
+  useSession();
+
+  return (
+    <View style={styles.container}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="home" />
+        <Stack.Screen name="inventory" />
+        <Stack.Screen name="products" />
+        <Stack.Screen name="product-create" />
+        <Stack.Screen name="orders" />
+        <Stack.Screen name="product/[id]" />
+        <Stack.Screen name="cart" />
+      </Stack>
+      <FloatingCartButton />
+      <StatusBar style="dark" />
+    </View>
+  );
+}
 
 export default function RootLayout() {
   const { fontsLoaded, fontError } = useAppFonts();

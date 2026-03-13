@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { navigateToTab, TabName } from "@/utils/navigation";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
-import { ChatIcon } from "@/components/icons";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
@@ -188,22 +187,6 @@ export default function SettingsScreen() {
           </Pressable>
         </ScrollView>
 
-        {/* Floating Action Button */}
-        <Pressable
-          style={[
-            styles.fab,
-            {
-              width: s(48),
-              height: s(48),
-              borderRadius: s(24),
-              right: sx(20),
-              bottom: sy(96),
-            },
-          ]}
-        >
-          <ChatIcon size={s(20)} />
-        </Pressable>
-
         {/* Bottom Tab Bar */}
         <View style={styles.tabBarContainer}>
           <BottomTabBar activeTab={activeTab} onTabPress={handleTabPress} />
@@ -276,17 +259,6 @@ const styles = StyleSheet.create({
   logoutText: {
     color: COLORS.text,
     fontFamily: FONTS.medium,
-  },
-  fab: {
-    position: "absolute",
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 8,
   },
   tabBarContainer: {
     position: "absolute",

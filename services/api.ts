@@ -14,6 +14,11 @@ class ApiClient {
   private refreshToken: string | null = null;
   private tenantId: string | null = null;
   private refreshPromise: Promise<boolean> | null = null;
+  private onSessionExpired: (() => void) | null = null;
+
+  setOnSessionExpired(callback: () => void) {
+    this.onSessionExpired = callback;
+  }
 
   setTokens(accessToken: string, refreshToken: string) {
     this.accessToken = accessToken;
@@ -116,6 +121,10 @@ class ApiClient {
         return true;
       } catch {
         this.clearTokens();
+        // Notify that session expired
+        if (this.onSessionExpired) {
+          this.onSessionExpired();
+        }
         return false;
       } finally {
         this.refreshPromise = null;

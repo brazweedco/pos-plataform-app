@@ -31,9 +31,10 @@ export const TEXT_SIZES = {
   bodySmall: FONT_SIZES.sm,
 
   // Headings
-  pageTitle: FONT_SIZES["3xl"],
-  sectionTitle: FONT_SIZES.xl,
+  pageTitle: FONT_SIZES["2xl"],
+  sectionTitle: FONT_SIZES.lg,
   cardTitle: FONT_SIZES.lg,
+  screenHeader: FONT_SIZES.xl,
 
   // Form
   input: FONT_SIZES.md,
@@ -48,9 +49,16 @@ export const TEXT_SIZES = {
   productPrice: FONT_SIZES.lg,
   productSku: FONT_SIZES.sm,
 
+  // Payment/Cart
+  totalAmount: FONT_SIZES["2xl"],
+  subtotalAmount: FONT_SIZES.lg,
+  summaryLabel: FONT_SIZES.md,
+
   // Misc
   badge: FONT_SIZES.xs,
   emptyState: FONT_SIZES.lg,
+  emptyTitle: FONT_SIZES["2xl"],
+  emptySubtitle: FONT_SIZES.md,
 } as const;
 
 // Input/Button heights

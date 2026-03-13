@@ -1,0 +1,278 @@
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Button } from "@/components/button";
+import { CartItem } from "@/components/cart-item";
+import { ScreenContainer } from "@/components/screen-container";
+import { ScreenHeader } from "@/components/ui";
+import { COLORS } from "@/constants/layout";
+import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES, TEXT_SIZES } from "@/constants/typography";
+import { useScale } from "@/hooks/use-scale";
+import { useCartStore } from "@/stores/cart-store";
+import { LEGAL_LIMIT_GRAMS } from "@/types/cart";
+
+export default function CartScreen() {
+  const { s, sx, sy } = useScale();
+  const insets = useSafeAreaInsets();
+  const items = useCartStore((state) => state.items);
+  const getSubtotal = useCartStore((state) => state.getSubtotal);
+  const getTotal = useCartStore((state) => state.getTotal);
+  const getTotalWeight = useCartStore((state) => state.getTotalWeight);
+  const getLegalLimitPercentage = useCartStore(
+    (state) => state.getLegalLimitPercentage
+  );
+
+  const subtotal = getSubtotal();
+  const total = getTotal();
+  const totalWeight = getTotalWeight();
+  const legalPercentage = getLegalLimitPercentage();
+
+  const handleCheckout = () => {
+    // TODO: Implement checkout
+    router.push("/checkout");
+  };
+
+  const renderEmptyCart = () => (
+    <View style={styles.emptyContainer}>
+      {/* Empty Cart Icon */}
+      <View
+        style={[
+          styles.emptyIconContainer,
+          {
+            width: s(120),
+            height: s(120),
+            borderRadius: s(60),
+            marginBottom: sy(24),
+          },
+        ]}
+      >
+        <Feather name="shopping-cart" size={s(48)} color={COLORS.primary} />
+      </View>
+
+      {/* Empty State Text */}
+      <Text style={[styles.emptyTitle, { fontSize: s(TEXT_SIZES.emptyTitle) }]}>
+        Your cart is empty
+      </Text>
+      <Text
+        style={[
+          styles.emptySubtitle,
+          { fontSize: s(TEXT_SIZES.emptySubtitle), marginTop: sy(8), maxWidth: sx(280) },
+        ]}
+      >
+        Looks like you haven't added any products yet. Start shopping to fill your cart!
+      </Text>
+
+      {/* Browse Button */}
+      <View style={{ marginTop: sy(32), width: "100%" }}>
+        <Button title="Browse Products" onPress={() => router.push("/products")} />
+      </View>
+    </View>
+  );
+
+  return (
+    <ScreenContainer showPattern={false}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <ScreenHeader title="Current Cart" />
+
+          {/* Legal Limit Bar */}
+          {items.length > 0 && (
+            <View style={[styles.legalLimitContainer, { marginTop: sy(16) }]}>
+              <View style={styles.legalLimitHeader}>
+                <Text style={[styles.legalLimitLabel, { fontSize: s(TEXT_SIZES.body) }]}>
+                  Legal Limit
+                </Text>
+                <Text style={[styles.legalLimitValue, { fontSize: s(TEXT_SIZES.body) }]}>
+                  {(totalWeight / 1000).toFixed(1)}g / {LEGAL_LIMIT_GRAMS}g
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.progressBar,
+                  { height: sy(8), borderRadius: s(10), marginTop: sy(8) },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      width: `${legalPercentage}%`,
+                      borderRadius: s(10),
+                      backgroundColor:
+                        legalPercentage >= 100 ? "#FF541C" : COLORS.primary,
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+          )}
+        </View>
+
+        {/* Cart Items */}
+        {items.length === 0 ? (
+          renderEmptyCart()
+        ) : (
+          <FlatList
+            data={items}
+            keyExtractor={(item) => item.product.id}
+            renderItem={({ item }) => <CartItem item={item} />}
+            contentContainerStyle={[
+              styles.listContent,
+              { paddingHorizontal: sx(20), paddingTop: sy(20) },
+            ]}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+
+        {/* Summary Footer */}
+        {items.length > 0 && (
+          <View
+            style={[
+              styles.footer,
+              {
+                paddingHorizontal: sx(20),
+                paddingTop: sy(16),
+                paddingBottom: insets.bottom + sy(20),
+                borderRadius: s(12),
+              },
+            ]}
+          >
+            {/* Subtotal */}
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
+                Subtotal
+              </Text>
+              <Text style={[styles.summaryValue, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
+                ${subtotal.toFixed(2)}
+              </Text>
+            </View>
+
+            {/* Divider */}
+            <View style={[styles.divider, { marginVertical: sy(12) }]} />
+
+            {/* Total */}
+            <View style={styles.summaryRow}>
+              <Text style={[styles.totalLabel, { fontSize: s(TEXT_SIZES.subtotalAmount) }]}>
+                Total
+              </Text>
+              <Text style={[styles.totalValue, { fontSize: s(TEXT_SIZES.subtotalAmount) }]}>
+                ${total.toFixed(2)}
+              </Text>
+            </View>
+
+            {/* Checkout Button */}
+            <View style={{ marginTop: sy(16) }}>
+              <Button title="Proceed to Checkout" onPress={handleCheckout} />
+            </View>
+          </View>
+        )}
+      </View>
+    </ScreenContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  headerContainer: {
+    backgroundColor: COLORS.surface,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    shadowColor: COLORS.primaryDark,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.28,
+    shadowRadius: 22,
+    elevation: 8,
+    paddingBottom: 20,
+  },
+  legalLimitContainer: {
+    paddingHorizontal: 20,
+  },
+  legalLimitHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  legalLimitLabel: {
+    color: COLORS.text,
+    fontFamily: FONTS.medium,
+  },
+  legalLimitValue: {
+    color: COLORS.text,
+    fontFamily: FONTS.medium,
+  },
+  progressBar: {
+    backgroundColor: "#E4E4E7",
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 40,
+    paddingBottom: 60,
+  },
+  emptyIconContainer: {
+    backgroundColor: "rgba(228, 108, 69, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyTitle: {
+    color: COLORS.text,
+    fontFamily: FONTS.semiBold,
+    textAlign: "center",
+  },
+  emptySubtitle: {
+    color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
+    textAlign: "center",
+    lineHeight: 22,
+  },
+  listContent: {
+    paddingBottom: 200,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 20,
+    right: 20,
+    backgroundColor: COLORS.surface,
+    shadowColor: COLORS.primaryDark,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.28,
+    shadowRadius: 22,
+    elevation: 8,
+  },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  summaryLabel: {
+    color: "#71717B",
+    fontFamily: FONTS.regular,
+  },
+  summaryValue: {
+    color: "#71717B",
+    fontFamily: FONTS.regular,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#E4E4E7",
+  },
+  totalLabel: {
+    color: COLORS.text,
+    fontFamily: FONTS.bold,
+  },
+  totalValue: {
+    color: COLORS.primary,
+    fontFamily: FONTS.bold,
+  },
+});

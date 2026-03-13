@@ -16,7 +16,6 @@ import { navigateToTab, TabName } from "@/utils/navigation";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { FilterTab, FilterTabs } from "@/components/filter-tabs";
-import { ChatIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
@@ -191,22 +190,6 @@ export default function InventoryScreen() {
           )}
         </ScrollView>
 
-        {/* Floating Action Button */}
-        <Pressable
-          style={[
-            styles.fab,
-            {
-              width: s(48),
-              height: s(48),
-              borderRadius: s(24),
-              right: sx(20),
-              bottom: sy(96),
-            },
-          ]}
-        >
-          <ChatIcon size={s(20)} />
-        </Pressable>
-
         {/* Bottom Tab Bar */}
         <View style={styles.tabBarContainer}>
           <BottomTabBar activeTab={activeTab} onTabPress={handleTabPress} />
@@ -252,17 +235,6 @@ const styles = StyleSheet.create({
   emptyStateText: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
-  },
-  fab: {
-    position: "absolute",
-    backgroundColor: COLORS.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 8,
   },
   tabBarContainer: {
     position: "absolute",
