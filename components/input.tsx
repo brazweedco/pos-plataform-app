@@ -19,12 +19,14 @@ export { EyeClosed, EyeOpen };
 interface InputProps extends Omit<TextInputProps, "style"> {
   label: string;
   isPassword?: boolean;
+  error?: string;
 }
 
 export function Input({
   label,
   isPassword = false,
   multiline,
+  error,
   ...props
 }: InputProps) {
   const { s, sx, sy } = useScale();
@@ -54,6 +56,7 @@ export function Input({
             alignItems: multiline ? "flex-start" : "center",
           },
           isFocused && styles.inputFocused,
+          !!error && styles.inputError,
         ]}
       >
         <TextInput
@@ -85,6 +88,11 @@ export function Input({
           </Pressable>
         )}
       </Pressable>
+      {error && (
+        <Text style={[styles.errorText, { fontSize: s(FONT_SIZES.sm), marginTop: sy(6) }]}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 }
@@ -103,9 +111,16 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: COLORS.borderFocused,
   },
+  inputError: {
+    borderColor: "#FF541C",
+  },
   input: {
     flex: 1,
     color: COLORS.text,
+    fontFamily: FONTS.regular,
+  },
+  errorText: {
+    color: "#FF541C",
     fontFamily: FONTS.regular,
   },
 });

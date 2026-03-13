@@ -11,41 +11,58 @@ import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
 import { FONT_SIZES } from "@/constants/typography";
 import { useToast } from "@/contexts/toast-context";
+import { useAsyncHandler } from "@/hooks/use-async-handler";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
-import { getErrorMessage } from "@/utils/error-handler";
+import { validateLoginForm } from "@/utils/validation";
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const { s, sx, sy, isWeb, isLargeScreen } = useScale();
-  const { showError, showWarning } = useToast();
+  const { showWarning } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const setUser = useUserStore((state) => state.setUser);
+
+  const { execute, isLoading } = useAsyncHandler({
+    showErrorToast: true,
+  });
+
+  const handleEmailBlur = () => {
+    // Clear error on blur if there's content
+    if (email.trim()) {
+      setEmailError("");
+    }
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (emailError) {
+      setEmailError("");
+    }
+  };
 
   // Adjust top margin for web large screens
   const topMargin = isWeb && isLargeScreen ? sy(180) : sy(221) + insets.top;
 
   const handleSignIn = async () => {
-    if (!email || !password) {
-      showWarning("Please fill in all fields");
+    // Validate form fields
+    const validation = validateLoginForm(email, password);
+    if (!validation.isValid) {
+      showWarning(validation.message || "Please check your input");
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const response = await authService.login({ email, password });
-      console.log("Login successful:", response.user);
+    const result = await execute(async () => {
+      const response = await authService.login({ email: email.trim(), password });
       setUser(response.user);
+      return response;
+    });
+
+    if (result) {
       router.replace("/home");
-    } catch (error) {
-      console.error("Login failed:", error);
-      showError(getErrorMessage(error));
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -86,10 +103,12 @@ export default function LoginScreen() {
           label="Email"
           placeholder="Your email"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={handleEmailChange}
+          onBlur={handleEmailBlur}
           keyboardType="email-address"
           autoCorrect={false}
           editable={!isLoading}
+          error={emailError}
         />
 
         <Input

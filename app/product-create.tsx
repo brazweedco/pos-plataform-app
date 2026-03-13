@@ -11,39 +11,46 @@ import { ProductForm } from "@/components/product-form";
 import { ScreenContainer } from "@/components/screen-container";
 import { ScreenHeader } from "@/components/ui";
 import { useToast } from "@/contexts/toast-context";
+import { useAsyncHandler } from "@/hooks/use-async-handler";
 import { productsService } from "@/services/products";
 import { useProductStore } from "@/stores/product-store";
 import { mapProductResponseToProduct, ProductRequest } from "@/types/product";
-import { getErrorMessage } from "@/utils/error-handler";
 
 export default function ProductCreateScreen() {
   const insets = useSafeAreaInsets();
-  const { showSuccess, showError, showWarning } = useToast();
+  const { showWarning } = useToast();
   const addProduct = useProductStore((state) => state.addProduct);
 
+  const { execute, isLoading } = useAsyncHandler({
+    showSuccessToast: true,
+    successMessage: "Product created successfully!",
+    showErrorToast: true,
+  });
+
   const handleSubmit = async (data: ProductRequest, imageUri: string | null) => {
-    let response;
-    try {
-      response = await productsService.create(data);
-    } catch (err) {
-      showError(getErrorMessage(err));
-      throw err;
-    }
+    const result = await execute(async () => {
+      const response = await productsService.create(data);
+      let product = mapProductResponseToProduct(response.data);
 
-    let product = mapProductResponseToProduct(response.data);
-
-    if (imageUri) {
-      try {
-        const imageResponse = await productsService.uploadImage(product.id, imageUri);
-        product = mapProductResponseToProduct(imageResponse.data);
-      } catch {
-        showWarning("Product created, but image upload failed.");
+      if (imageUri) {
+        try {
+          const imageResponse = await productsService.uploadImage(product.id, imageUri);
+          product = mapProductResponseToProduct(imageResponse.data);
+        } catch {
+          showWarning("Product created, but image upload failed.");
+        }
       }
-    }
 
-    addProduct(product);
-    showSuccess("Product created successfully!");
-    router.back();
+      addProduct(product);
+      return product;
+    });
+
+    if (result) {
+      router.back();
+    } else {
+      // Re-throw to let ProductForm know submission failed
+      throw new Error("Product creation failed");
+    }
   };
 
   return (

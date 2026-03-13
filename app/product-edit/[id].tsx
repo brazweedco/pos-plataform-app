@@ -17,51 +17,58 @@ import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
 import { FONT_SIZES } from "@/constants/typography";
 import { useToast } from "@/contexts/toast-context";
+import { useAsyncHandler } from "@/hooks/use-async-handler";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { productsService } from "@/services/products";
 import { useProductStore } from "@/stores/product-store";
 import { mapProductResponseToProduct, ProductRequest } from "@/types/product";
-import { getErrorMessage } from "@/utils/error-handler";
 
 export default function ProductEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { s, sy } = useScale();
   const insets = useSafeAreaInsets();
-  const { showSuccess, showError, showWarning } = useToast();
-  const updateProduct = useProductStore((state) => state.updateProduct);
+  const { showWarning } = useToast();
+  const updateProductStore = useProductStore((state) => state.updateProduct);
 
-  const { products, isLoading } = useProducts();
+  const { products, isLoading: isLoadingProducts } = useProducts();
   const product = products.find((p) => p.id === id);
+
+  const { execute } = useAsyncHandler({
+    showSuccessToast: true,
+    successMessage: "Product updated successfully!",
+    showErrorToast: true,
+  });
 
   const handleSubmit = async (data: ProductRequest, imageUri: string | null) => {
     if (!id) return;
 
-    let response;
-    try {
-      response = await productsService.update(id, data);
-    } catch (err) {
-      showError(getErrorMessage(err));
-      throw err;
-    }
+    const result = await execute(async () => {
+      const response = await productsService.update(id, data);
+      let updatedProduct = mapProductResponseToProduct(response.data);
 
-    let updatedProduct = mapProductResponseToProduct(response.data);
-
-    if (imageUri) {
-      try {
-        const imageResponse = await productsService.uploadImage(id, imageUri);
-        updatedProduct = mapProductResponseToProduct(imageResponse.data);
-      } catch {
-        showWarning("Product updated, but image upload failed.");
+      if (imageUri) {
+        try {
+          const imageResponse = await productsService.uploadImage(id, imageUri);
+          updatedProduct = mapProductResponseToProduct(imageResponse.data);
+        } catch {
+          showWarning("Product updated, but image upload failed.");
+        }
       }
-    }
 
-    updateProduct(updatedProduct);
-    showSuccess("Product updated successfully!");
-    router.back();
+      updateProductStore(updatedProduct);
+      return updatedProduct;
+    });
+
+    if (result) {
+      router.back();
+    } else {
+      // Re-throw to let ProductForm know submission failed
+      throw new Error("Product update failed");
+    }
   };
 
-  if (isLoading) {
+  if (isLoadingProducts) {
     return (
       <ScreenContainer showPattern={false}>
         <View style={styles.loadingContainer}>
