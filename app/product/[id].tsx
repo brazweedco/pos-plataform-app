@@ -22,6 +22,7 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { navigateToTab, TabName } from "@/utils/navigation";
@@ -64,14 +65,14 @@ export default function ProductDetailScreen() {
     return (
       <ScreenContainer showPattern={false}>
         <View style={styles.loadingContainer}>
-          <Text style={[styles.errorText, { fontSize: s(16) }]}>
+          <Text style={[styles.errorText, { fontSize: s(FONT_SIZES.md) }]}>
             Product not found
           </Text>
           <Pressable
             style={[styles.backButtonAlt, { marginTop: sy(20) }]}
             onPress={handleBack}
           >
-            <Text style={[styles.backButtonText, { fontSize: s(16) }]}>
+            <Text style={[styles.backButtonText, { fontSize: s(FONT_SIZES.md) }]}>
               Go Back
             </Text>
           </Pressable>
@@ -152,7 +153,7 @@ export default function ProductDetailScreen() {
                     },
                   ]}
                 >
-                  <Text style={[styles.categoryBadgeText, { fontSize: s(15) }]}>
+                  <Text style={[styles.categoryBadgeText, { fontSize: s(FONT_SIZES.sm) }]}>
                     {product.category.name}
                   </Text>
                 </View>
@@ -168,7 +169,7 @@ export default function ProductDetailScreen() {
                     },
                   ]}
                 >
-                  <Text style={[styles.typeBadgeText, { fontSize: s(15) }]}>
+                  <Text style={[styles.typeBadgeText, { fontSize: s(FONT_SIZES.sm) }]}>
                     {product.productType.name}
                   </Text>
                 </View>
@@ -183,7 +184,7 @@ export default function ProductDetailScreen() {
               <Text
                 style={[
                   styles.brandName,
-                  { fontSize: s(18), marginTop: sy(20) },
+                  { fontSize: s(FONT_SIZES.lg), marginTop: sy(20) },
                 ]}
               >
                 {product.brand.name.toUpperCase()}
@@ -192,7 +193,7 @@ export default function ProductDetailScreen() {
 
             {/* Product Name */}
             <Text
-              style={[styles.productName, { fontSize: s(28), marginTop: sy(5) }]}
+              style={[styles.productName, { fontSize: s(FONT_SIZES["3xl"]), marginTop: sy(5) }]}
             >
               {product.name}
             </Text>
@@ -212,7 +213,7 @@ export default function ProductDetailScreen() {
                   ]}
                 >
                   <DropletIcon size={s(16)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
+                  <Text style={[styles.infoPillText, { fontSize: s(FONT_SIZES.md) }]}>
                     {product.thcPercentage}% THC
                   </Text>
                 </View>
@@ -230,7 +231,7 @@ export default function ProductDetailScreen() {
                   ]}
                 >
                   <DropletIcon size={s(16)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
+                  <Text style={[styles.infoPillText, { fontSize: s(FONT_SIZES.md) }]}>
                     {product.cbdPercentage}% CBD
                   </Text>
                 </View>
@@ -248,7 +249,7 @@ export default function ProductDetailScreen() {
                   ]}
                 >
                   <PackageIcon size={s(16)} color={COLORS.primary} />
-                  <Text style={[styles.infoPillText, { fontSize: s(16) }]}>
+                  <Text style={[styles.infoPillText, { fontSize: s(FONT_SIZES.md) }]}>
                     {product.weightGrams}g
                   </Text>
                 </View>
@@ -259,7 +260,7 @@ export default function ProductDetailScreen() {
             <Text
               style={[
                 styles.sectionTitle,
-                { fontSize: s(19), marginTop: sy(26) },
+                { fontSize: s(FONT_SIZES.lg), marginTop: sy(26) },
               ]}
             >
               Description
@@ -267,7 +268,7 @@ export default function ProductDetailScreen() {
             <Text
               style={[
                 styles.descriptionText,
-                { fontSize: s(16), marginTop: sy(10), lineHeight: s(24) },
+                { fontSize: s(FONT_SIZES.md), marginTop: sy(10), lineHeight: s(FONT_SIZES["2xl"]) },
               ]}
             >
               {product.description || "No description available."}
@@ -288,13 +289,13 @@ export default function ProductDetailScreen() {
             >
               <CheckCircleIcon size={s(20)} color={COLORS.primary} />
               <View style={styles.complianceContent}>
-                <Text style={[styles.complianceTitle, { fontSize: s(15) }]}>
+                <Text style={[styles.complianceTitle, { fontSize: s(FONT_SIZES.sm) }]}>
                   COMPLIANCE VERIFIED
                 </Text>
                 <Text
                   style={[
                     styles.complianceSubtitle,
-                    { fontSize: s(14), marginTop: sy(4) },
+                    { fontSize: s(FONT_SIZES.sm), marginTop: sy(4) },
                   ]}
                 >
                   SKU: {product.sku}
@@ -304,20 +305,20 @@ export default function ProductDetailScreen() {
 
             {/* Stock Level */}
             <View style={[styles.infoRow, { marginTop: sy(20) }]}>
-              <Text style={[styles.infoLabel, { fontSize: s(16) }]}>
+              <Text style={[styles.infoLabel, { fontSize: s(FONT_SIZES.md) }]}>
                 Stock Level
               </Text>
-              <Text style={[styles.infoValue, { fontSize: s(17) }]}>
+              <Text style={[styles.infoValue, { fontSize: s(FONT_SIZES.lg) }]}>
                 {product.stock} Units Available
               </Text>
             </View>
 
             {/* Price */}
             <View style={[styles.infoRow, { marginTop: sy(16) }]}>
-              <Text style={[styles.infoLabel, { fontSize: s(16) }]}>
+              <Text style={[styles.infoLabel, { fontSize: s(FONT_SIZES.md) }]}>
                 Tax included in final calc
               </Text>
-              <Text style={[styles.priceText, { fontSize: s(26) }]}>
+              <Text style={[styles.priceText, { fontSize: s(FONT_SIZES.xl) }]}>
                 ${product.price.toFixed(2)}
               </Text>
             </View>

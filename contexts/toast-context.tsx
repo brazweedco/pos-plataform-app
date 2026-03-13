@@ -12,6 +12,7 @@ import { Feather } from "@expo/vector-icons";
 
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 
 type ToastType = "success" | "error" | "warning" | "info";
@@ -114,7 +115,7 @@ function ToastComponent({ toast, onDismiss }: { toast: Toast; onDismiss: () => v
         <Text
           style={[
             styles.message,
-            { fontSize: s(14), marginLeft: sx(12), flex: 1 },
+            { fontSize: s(FONT_SIZES.sm), marginLeft: sx(12), flex: 1 },
           ]}
           numberOfLines={3}
         >

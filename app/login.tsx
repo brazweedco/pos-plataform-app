@@ -9,6 +9,7 @@ import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { FONT_SIZES } from "@/constants/typography";
 import { useToast } from "@/contexts/toast-context";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
@@ -124,7 +125,7 @@ export default function LoginScreen() {
           style={[
             styles.dividerText,
             {
-              fontSize: s(17),
+              fontSize: s(FONT_SIZES.lg),
               marginHorizontal: sx(14),
             },
           ]}
@@ -157,7 +158,7 @@ export default function LoginScreen() {
           { paddingBottom: isWeb ? sy(40) : insets.bottom + 20 },
         ]}
       >
-        <Text style={[styles.footerText, { fontSize: s(17) }]}>
+        <Text style={[styles.footerText, { fontSize: s(FONT_SIZES.lg) }]}>
           Having trouble?{" "}
           <Text style={styles.footerLink}>Contact your manager</Text>
         </Text>
