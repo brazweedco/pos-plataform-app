@@ -2,8 +2,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import "react-native-reanimated";
 
+import { ToastProvider } from "@/contexts/toast-context";
 import { useAppFonts } from "@/hooks/use-appfonts";
 import { QueryProvider } from "@/providers/query-provider";
 
@@ -26,17 +28,27 @@ export default function RootLayout() {
 
   return (
     <QueryProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="home" />
-        <Stack.Screen name="inventory" />
-        <Stack.Screen name="products" />
-        <Stack.Screen name="product-create" />
-        <Stack.Screen name="orders" />
-        <Stack.Screen name="product/[id]" />
-      </Stack>
-      <StatusBar style="dark" />
+      <ToastProvider>
+        <View style={styles.container}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="home" />
+            <Stack.Screen name="inventory" />
+            <Stack.Screen name="products" />
+            <Stack.Screen name="product-create" />
+            <Stack.Screen name="orders" />
+            <Stack.Screen name="product/[id]" />
+          </Stack>
+          <StatusBar style="dark" />
+        </View>
+      </ToastProvider>
     </QueryProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

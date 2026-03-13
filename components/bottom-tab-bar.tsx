@@ -57,10 +57,10 @@ export function BottomTabBar({ activeTab, onTabPress }: BottomTabBarProps) {
   const { s, sy } = useScale();
 
   return (
-    <View style={[styles.container, { height: sy(76) }]}>
+    <View style={[styles.container, { height: sy(82) }]}>
       {TABS.map(({ key, label, Icon }) => (
         <Pressable key={key} style={styles.tab} onPress={() => onTabPress(key)}>
-          <Icon active={activeTab === key} size={s(24)} />
+          <Icon active={activeTab === key} size={s(30)} />
           <Text
             style={[
               styles.label,

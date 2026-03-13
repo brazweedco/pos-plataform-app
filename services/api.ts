@@ -149,6 +149,58 @@ class ApiClient {
   async delete<T>(endpoint: string, options?: RequestOptions) {
     return this.request<T>(endpoint, { ...options, method: "DELETE" });
   }
+
+  async postFormData<T>(
+    endpoint: string,
+    formData: FormData,
+    options?: Omit<RequestOptions, "body">
+  ): Promise<ApiResponse<T>> {
+    const { skipAuth = false, ...fetchOptions } = options || {};
+
+    const headers: HeadersInit = {
+      ...(fetchOptions.headers || {}),
+    };
+
+    if (!skipAuth && this.accessToken) {
+      (headers as Record<string, string>)["Authorization"] =
+        `Bearer ${this.accessToken}`;
+    }
+
+    if (this.tenantId) {
+      (headers as Record<string, string>)["X-Tenant-ID"] = this.tenantId;
+    }
+
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...fetchOptions,
+      method: "POST",
+      headers,
+      body: formData,
+    });
+
+    if (response.status === 401 && this.refreshToken && !skipAuth) {
+      const refreshed = await this.tryRefreshToken();
+      if (refreshed) {
+        (headers as Record<string, string>)["Authorization"] =
+          `Bearer ${this.accessToken}`;
+        const retryResponse = await fetch(`${API_BASE_URL}${endpoint}`, {
+          ...fetchOptions,
+          method: "POST",
+          headers,
+          body: formData,
+        });
+        if (!retryResponse.ok) {
+          throw new ApiError(retryResponse.status, await retryResponse.text());
+        }
+        return retryResponse.json();
+      }
+    }
+
+    if (!response.ok) {
+      throw new ApiError(response.status, await response.text());
+    }
+
+    return response.json();
+  }
 }
 
 export class ApiError extends Error {

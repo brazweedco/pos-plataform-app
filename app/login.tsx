@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BrazweedLogo } from "@/components/brazweed-logo";
@@ -9,13 +9,16 @@ import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { useToast } from "@/contexts/toast-context";
 import { useScale } from "@/hooks/use-scale";
-import { ApiError, authService } from "@/services/auth";
+import { authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
+import { getErrorMessage } from "@/utils/error-handler";
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const { s, sx, sy, isWeb, isLargeScreen } = useScale();
+  const { showError, showWarning } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,11 +29,7 @@ export default function LoginScreen() {
 
   const handleSignIn = async () => {
     if (!email || !password) {
-      if (Platform.OS === "web") {
-        alert("Please fill in all fields");
-      } else {
-        Alert.alert("Error", "Please fill in all fields");
-      }
+      showWarning("Please fill in all fields");
       return;
     }
 
@@ -43,17 +42,7 @@ export default function LoginScreen() {
       router.replace("/home");
     } catch (error) {
       console.error("Login failed:", error);
-
-      const message =
-        error instanceof ApiError && error.status === 401
-          ? "Invalid email or password"
-          : "An error occurred. Please try again.";
-
-      if (Platform.OS === "web") {
-        alert(message);
-      } else {
-        Alert.alert("Error", message);
-      }
+      showError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }

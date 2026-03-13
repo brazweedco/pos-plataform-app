@@ -1,5 +1,8 @@
 import { Feather } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import { Image } from "expo-image";
 import { useState, useCallback } from "react";
 import {
   ActivityIndicator,
@@ -20,6 +23,7 @@ import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/screen-container";
 import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { useToast } from "@/contexts/toast-context";
 import { useScale } from "@/hooks/use-scale";
 import {
   brandsService,
@@ -32,10 +36,13 @@ import { Brand } from "@/types/brand";
 import { Category } from "@/types/category";
 import { ProductType } from "@/types/product-type";
 import { mapProductResponseToProduct, ProductRequest } from "@/types/product";
+import { getErrorMessage } from "@/utils/error-handler";
 
 export default function ProductCreateScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
+  const { showSuccess, showError, showWarning } = useToast();
   const addProduct = useProductStore((state) => state.addProduct);
 
   // Form state
@@ -46,7 +53,7 @@ export default function ProductCreateScreen() {
   const [weightGrams, setWeightGrams] = useState("");
   const [thcPercentage, setThcPercentage] = useState("");
   const [cbdPercentage, setCbdPercentage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const [brand, setBrand] = useState<Brand | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const [productType, setProductType] = useState<ProductType | null>(null);
@@ -72,6 +79,61 @@ export default function ProductCreateScreen() {
     const response = await productTypesService.listActive();
     return response.data;
   }, []);
+
+  const pickImage = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        showWarning("Please allow access to your photo library in settings.");
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        setImageUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      showError("Failed to open photo library.");
+    }
+  };
+
+  const takePhoto = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        showWarning("Please allow camera access in settings.");
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        setImageUri(result.assets[0].uri);
+      }
+    } catch (error) {
+      showError("Failed to open camera.");
+    }
+  };
+
+  const showImageOptions = () => {
+    Alert.alert("Add Product Image", "Choose an option", [
+      { text: "Take Photo", onPress: takePhoto },
+      { text: "Choose from Library", onPress: pickImage },
+      { text: "Cancel", style: "cancel" },
+    ]);
+  };
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -123,19 +185,37 @@ export default function ProductCreateScreen() {
         weightGrams: weightGrams ? Number(weightGrams) : undefined,
         thcPercentage: thcPercentage ? Number(thcPercentage) : undefined,
         cbdPercentage: cbdPercentage ? Number(cbdPercentage) : undefined,
-        imageUrl: imageUrl.trim() || undefined,
       };
 
+      // Step 1: Create product
       const response = await productsService.create(productData);
-      const product = mapProductResponseToProduct(response.data);
+      let product = mapProductResponseToProduct(response.data);
+
+      // Step 2: Upload image if selected
+      if (imageUri) {
+        try {
+          const imageResponse = await productsService.uploadImage(product.id, imageUri);
+          product = mapProductResponseToProduct(imageResponse.data);
+        } catch (imageError) {
+          console.warn("Failed to upload image:", imageError);
+          showWarning("Product created, but image upload failed.");
+        }
+      }
+
       addProduct(product);
 
-      Alert.alert("Success", "Product created successfully", [
-        { text: "OK", onPress: () => router.back() },
-      ]);
+      // Invalidate products query to refresh the list
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+
+      showSuccess("Product created successfully!");
+
+      // Delay navigation to ensure layout is mounted
+      setTimeout(() => {
+        router.back();
+      }, 100);
     } catch (error) {
       console.error("Failed to create product:", error);
-      Alert.alert("Error", "Failed to create product. Please try again.");
+      showError(getErrorMessage(error));
     } finally {
       setIsSubmitting(false);
     }
@@ -240,14 +320,47 @@ export default function ProductCreateScreen() {
               </Text>
             )}
 
-            <Input
-              label="Image URL"
-              placeholder="https://example.com/image.jpg"
-              value={imageUrl}
-              onChangeText={setImageUrl}
-              keyboardType="url"
-              autoCapitalize="none"
-            />
+            {/* Image Upload */}
+            <Text style={[styles.inputLabel, { fontSize: s(14), marginBottom: sy(8) }]}>
+              Product Image
+            </Text>
+            <Pressable
+              style={[
+                styles.imagePickerContainer,
+                {
+                  height: sy(150),
+                  borderRadius: s(12),
+                  marginBottom: sy(16),
+                },
+              ]}
+              onPress={showImageOptions}
+            >
+              {imageUri ? (
+                <View style={styles.imagePreviewContainer}>
+                  <Image
+                    source={{ uri: imageUri }}
+                    style={[styles.imagePreview, { borderRadius: s(12) }]}
+                    contentFit="cover"
+                  />
+                  <Pressable
+                    style={[
+                      styles.removeImageButton,
+                      { width: s(28), height: s(28), borderRadius: s(14) },
+                    ]}
+                    onPress={() => setImageUri(null)}
+                  >
+                    <Feather name="x" size={s(16)} color={COLORS.surface} />
+                  </Pressable>
+                </View>
+              ) : (
+                <View style={styles.imagePickerPlaceholder}>
+                  <Feather name="camera" size={s(32)} color={COLORS.textMuted} />
+                  <Text style={[styles.imagePickerText, { fontSize: s(14), marginTop: sy(8) }]}>
+                    Tap to add image
+                  </Text>
+                </View>
+              )}
+            </Pressable>
 
             {/* Classification Section */}
             <Text
@@ -404,5 +517,43 @@ const styles = StyleSheet.create({
     marginTop: -8,
     marginBottom: 8,
     fontFamily: FONTS.regular,
+  },
+  inputLabel: {
+    color: COLORS.text,
+    fontFamily: FONTS.medium,
+  },
+  imagePickerContainer: {
+    backgroundColor: COLORS.inputBackground,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderStyle: "dashed",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  imagePickerPlaceholder: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imagePickerText: {
+    color: COLORS.textMuted,
+    fontFamily: FONTS.regular,
+  },
+  imagePreviewContainer: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+  },
+  imagePreview: {
+    width: "100%",
+    height: "100%",
+  },
+  removeImageButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

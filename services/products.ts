@@ -38,6 +38,22 @@ export const productsService = {
     return api.post<ProductResponse>("/api/v1/products", data);
   },
 
+  async uploadImage(productId: string, imageUri: string) {
+    const formData = new FormData();
+
+    const filename = imageUri.split("/").pop() || "image.jpg";
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : "image/jpeg";
+
+    formData.append("image", {
+      uri: imageUri,
+      name: filename,
+      type,
+    } as unknown as Blob);
+
+    return api.postFormData<ProductResponse>(`/api/v1/products/${productId}/image`, formData);
+  },
+
   async update(id: string, data: ProductRequest) {
     return api.put<ProductResponse>(`/api/v1/products/${id}`, data);
   },
