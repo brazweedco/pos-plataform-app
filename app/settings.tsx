@@ -13,6 +13,7 @@ import { FONTS } from "@/constants/fonts";
 import { FONT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
+import { useCartStore } from "@/stores/cart-store";
 import { useUserStore } from "@/stores/user-store";
 
 interface SettingsItemProps {
@@ -51,6 +52,7 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabName>("settings");
   const clearUser = useUserStore((state) => state.clear);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const handleTabPress = (tab: TabName) => {
     setActiveTab(tab);
@@ -61,6 +63,7 @@ export default function SettingsScreen() {
 
   const handleLogout = async () => {
     await authService.logout();
+    clearCart();
     clearUser();
     router.replace("/login");
   };

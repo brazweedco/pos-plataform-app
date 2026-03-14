@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://192.168.18.67:8080";
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL || "http://192.168.18.67:8080";
 
 interface ApiResponse<T> {
   data: T;
@@ -13,6 +14,7 @@ class ApiClient {
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
   private tenantId: string | null = null;
+  private employeeId: string | null = null;
   private refreshPromise: Promise<boolean> | null = null;
   private onSessionExpired: (() => void) | null = null;
 
@@ -29,10 +31,15 @@ class ApiClient {
     this.tenantId = tenantId;
   }
 
+  setEmployeeId(employeeId: string | null) {
+    this.employeeId = employeeId;
+  }
+
   clearTokens() {
     this.accessToken = null;
     this.refreshToken = null;
     this.tenantId = null;
+    this.employeeId = null;
   }
 
   getAccessToken() {
@@ -45,6 +52,10 @@ class ApiClient {
 
   getTenantId() {
     return this.tenantId;
+  }
+
+  getEmployeeId() {
+    return this.employeeId;
   }
 
   private async request<T>(
@@ -66,6 +77,11 @@ class ApiClient {
     // Add X-Tenant-ID header if available
     if (this.tenantId) {
       (headers as Record<string, string>)["X-Tenant-ID"] = this.tenantId;
+    }
+
+    // Add X-Employee-Id header if available
+    if (this.employeeId) {
+      (headers as Record<string, string>)["X-Employee-Id"] = this.employeeId;
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -177,6 +193,10 @@ class ApiClient {
 
     if (this.tenantId) {
       (headers as Record<string, string>)["X-Tenant-ID"] = this.tenantId;
+    }
+
+    if (this.employeeId) {
+      (headers as Record<string, string>)["X-Employee-Id"] = this.employeeId;
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {

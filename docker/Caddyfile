@@ -1,0 +1,22 @@
+{
+    # Local development - use internal CA
+    local_certs
+}
+
+# HTTPS proxy for Expo Web (default port 8081)
+# Change 8081 to your Expo web port if different
+https://localhost:3000 {
+    reverse_proxy host.docker.internal:8081 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-Proto https
+    }
+}
+
+https://localhost {
+    reverse_proxy host.docker.internal:8081 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-Proto https
+    }
+}

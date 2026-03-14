@@ -5,6 +5,7 @@ const ACCESS_TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
 const USER_KEY = "user";
 const TENANT_ID_KEY = "tenant_id";
+const EMPLOYEE_ID_KEY = "employee_id";
 
 export const authService = {
   /**
@@ -28,6 +29,12 @@ export const authService = {
     if (user.tenantId) {
       await storage.setItem(TENANT_ID_KEY, user.tenantId);
       api.setTenantId(user.tenantId);
+    }
+
+    // Store and set employee ID (user.id)
+    if (user.id) {
+      await storage.setItem(EMPLOYEE_ID_KEY, user.id);
+      api.setEmployeeId(user.id);
     }
 
     // Set tokens in API client
@@ -65,6 +72,12 @@ export const authService = {
       api.setTenantId(user.tenantId);
     }
 
+    // Update employee ID
+    if (user.id) {
+      await storage.setItem(EMPLOYEE_ID_KEY, user.id);
+      api.setEmployeeId(user.id);
+    }
+
     // Update API client
     api.setTokens(accessToken, newRefreshToken);
 
@@ -79,6 +92,7 @@ export const authService = {
     await storage.removeItem(REFRESH_TOKEN_KEY);
     await storage.removeItem(USER_KEY);
     await storage.removeItem(TENANT_ID_KEY);
+    await storage.removeItem(EMPLOYEE_ID_KEY);
     api.clearTokens();
   },
 
@@ -111,11 +125,31 @@ export const authService = {
       const accessToken = await storage.getItem(ACCESS_TOKEN_KEY);
       const refreshToken = await storage.getItem(REFRESH_TOKEN_KEY);
       const tenantId = await storage.getItem(TENANT_ID_KEY);
+      let employeeId = await storage.getItem(EMPLOYEE_ID_KEY);
+
+      // Fallback: get employee ID from stored user if not separately stored
+      if (!employeeId) {
+        const userJson = await storage.getItem(USER_KEY);
+        if (userJson) {
+          try {
+            const user = JSON.parse(userJson);
+            if (user.id) {
+              employeeId = user.id;
+              await storage.setItem(EMPLOYEE_ID_KEY, employeeId);
+            }
+          } catch {
+            // Ignore parse errors
+          }
+        }
+      }
 
       if (accessToken && refreshToken) {
         api.setTokens(accessToken, refreshToken);
         if (tenantId) {
           api.setTenantId(tenantId);
+        }
+        if (employeeId) {
+          api.setEmployeeId(employeeId);
         }
         return true;
       }

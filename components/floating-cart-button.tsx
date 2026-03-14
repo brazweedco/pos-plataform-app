@@ -9,7 +9,7 @@ import { useScale } from "@/hooks/use-scale";
 import { useCartStore } from "@/stores/cart-store";
 
 // Screens where the cart button should be hidden
-const HIDDEN_SCREENS = ["/cart", "/login", "/"];
+const HIDDEN_SCREENS = ["/cart", "/login", "/", "/checkout", "/checkout-success"];
 
 // Screens that have bottom tab bar
 const SCREENS_WITH_TAB_BAR = [
@@ -27,9 +27,10 @@ export function FloatingCartButton() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const getTotalItems = useCartStore((state) => state.getTotalItems);
 
-  const totalItems = getTotalItems();
+  // Subscribe directly to items array to ensure re-render on changes
+  const items = useCartStore((state) => state.items);
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   // Hide on specific screens
   if (HIDDEN_SCREENS.includes(pathname)) {

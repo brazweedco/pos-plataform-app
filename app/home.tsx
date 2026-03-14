@@ -24,6 +24,7 @@ import { FONT_SIZES } from "@/constants/typography";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { authService } from "@/services/auth";
+import { useCartStore } from "@/stores/cart-store";
 import { useUserStore } from "@/stores/user-store";
 import { LOW_STOCK_THRESHOLD } from "@/types/product";
 import { formatRole } from "@/utils/format-role";
@@ -45,6 +46,7 @@ export default function HomeScreen() {
   const user = useUserStore((state) => state.user);
   const isOnline = useUserStore((state) => state.isOnline);
   const clearUser = useUserStore((state) => state.clear);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   // Fetch products to calculate low stock count
   const { products } = useProducts();
@@ -65,6 +67,7 @@ export default function HomeScreen() {
 
   const handleLogout = async () => {
     await authService.logout();
+    clearCart();
     clearUser();
     router.replace("/login");
   };

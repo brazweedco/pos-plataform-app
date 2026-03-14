@@ -87,7 +87,7 @@ export default function CartScreen() {
                   Legal Limit
                 </Text>
                 <Text style={[styles.legalLimitValue, { fontSize: s(TEXT_SIZES.body) }]}>
-                  {(totalWeight / 1000).toFixed(1)}g / {LEGAL_LIMIT_GRAMS}g
+                  {totalWeight.toFixed(1)}g / {LEGAL_LIMIT_GRAMS}g
                 </Text>
               </View>
               <View

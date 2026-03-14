@@ -64,7 +64,11 @@ export default function RootLayout() {
             <Stack.Screen name="product-create" />
             <Stack.Screen name="orders" />
             <Stack.Screen name="product/[id]" />
+            <Stack.Screen name="cart" />
+            <Stack.Screen name="checkout" />
+            <Stack.Screen name="checkout-success" />
           </Stack>
+          <FloatingCartButton />
           <StatusBar style="dark" />
         </View>
       </ToastProvider>
