@@ -39,17 +39,17 @@ export function ScreenHeader({ title, onBack, rightAction }: ScreenHeaderProps) 
         style={[
           styles.backButton,
           {
-            width: s(46),
-            height: s(46),
-            borderRadius: s(7),
+            width: s(42),
+            height: s(42),
+            borderRadius: s(21),
           },
         ]}
         onPress={handleBack}
       >
-        <Feather name="arrow-left" size={s(22)} color={COLORS.text} />
+        <Feather name="chevron-left" size={s(24)} color={COLORS.text} />
       </Pressable>
       <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>{title}</Text>
-      <View style={{ width: s(46) }}>
+      <View style={{ width: s(42) }}>
         {rightAction}
       </View>
     </View>

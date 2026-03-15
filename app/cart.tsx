@@ -79,9 +79,9 @@ export default function CartScreen() {
         <View style={styles.headerContainer}>
           <ScreenHeader title="Current Cart" />
 
-          {/* Legal Limit Bar */}
+          {/* Legal Limit Bar - always show when there are items */}
           {items.length > 0 && (
-            <View style={[styles.legalLimitContainer, { marginTop: sy(16) }]}>
+            <View style={[styles.legalLimitContainer, { marginTop: sy(8) }]}>
               <View style={styles.legalLimitHeader}>
                 <Text style={[styles.legalLimitLabel, { fontSize: s(TEXT_SIZES.body) }]}>
                   Legal Limit
@@ -134,38 +134,38 @@ export default function CartScreen() {
             style={[
               styles.footer,
               {
-                paddingHorizontal: sx(20),
+                paddingHorizontal: sx(16),
                 paddingTop: sy(16),
-                paddingBottom: insets.bottom + sy(20),
+                paddingBottom: Math.max(insets.bottom, sy(16)) + sy(8),
                 borderRadius: s(12),
               },
             ]}
           >
             {/* Subtotal */}
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
+              <Text style={[styles.summaryLabel, { fontSize: s(14) }]}>
                 Subtotal
               </Text>
-              <Text style={[styles.summaryValue, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
+              <Text style={[styles.summaryValue, { fontSize: s(14) }]}>
                 ${subtotal.toFixed(2)}
               </Text>
             </View>
 
             {/* Divider */}
-            <View style={[styles.divider, { marginVertical: sy(12) }]} />
+            <View style={[styles.divider, { marginVertical: sy(16) }]} />
 
             {/* Total */}
             <View style={styles.summaryRow}>
-              <Text style={[styles.totalLabel, { fontSize: s(TEXT_SIZES.subtotalAmount) }]}>
+              <Text style={[styles.totalLabel, { fontSize: s(20) }]}>
                 Total
               </Text>
-              <Text style={[styles.totalValue, { fontSize: s(TEXT_SIZES.subtotalAmount) }]}>
+              <Text style={[styles.totalValue, { fontSize: s(20) }]}>
                 ${total.toFixed(2)}
               </Text>
             </View>
 
             {/* Checkout Button */}
-            <View style={{ marginTop: sy(16) }}>
+            <View style={{ marginTop: sy(17) }}>
               <Button title="Proceed to Checkout" onPress={handleCheckout} />
             </View>
           </View>
