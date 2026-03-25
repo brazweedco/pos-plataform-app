@@ -3,7 +3,7 @@
 # ============================================
 #
 # Build Web Production:
-#   docker build -t brazweed-app .
+#   docker build --no-cache -t brazweed-app .
 #   docker run -p 3000:3000 brazweed-app
 #
 # ============================================
@@ -15,22 +15,24 @@ WORKDIR /app
 # Install build dependencies
 RUN apk add --no-cache git python3 make g++
 
-# Copy package files and install dependencies
+# Copy package files
 COPY package.json package-lock.json ./
-RUN npm ci
+
+# Install dependencies
+RUN npm ci --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
-# Clear cache
-RUN rm -rf .expo node_modules/.cache
-
 # Set environment for build
 ENV NODE_ENV=production
-ENV EXPO_USE_FAST_RESOLVER=1
+ENV CI=true
 
-# Build web (static export)
-RUN npx expo export --platform web
+# Clear any existing cache
+RUN rm -rf .expo dist node_modules/.cache
+
+# Build web
+RUN npx expo export --platform web --output-dir dist
 
 # ============================================
 # Production - serve with lightweight server
