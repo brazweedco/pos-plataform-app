@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarContainer: {
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.backgroundDark,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",

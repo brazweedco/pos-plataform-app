@@ -143,10 +143,10 @@ export default function CartScreen() {
           >
             {/* Subtotal */}
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { fontSize: s(14) }]}>
+              <Text style={[styles.summaryLabel, { fontSize: s(FONT_SIZES.sm) }]}>
                 Subtotal
               </Text>
-              <Text style={[styles.summaryValue, { fontSize: s(14) }]}>
+              <Text style={[styles.summaryValue, { fontSize: s(FONT_SIZES.sm) }]}>
                 ${subtotal.toFixed(2)}
               </Text>
             </View>
@@ -156,10 +156,10 @@ export default function CartScreen() {
 
             {/* Total */}
             <View style={styles.summaryRow}>
-              <Text style={[styles.totalLabel, { fontSize: s(20) }]}>
+              <Text style={[styles.totalLabel, { fontSize: s(TEXT_SIZES.totalAmount) }]}>
                 Total
               </Text>
-              <Text style={[styles.totalValue, { fontSize: s(20) }]}>
+              <Text style={[styles.totalValue, { fontSize: s(TEXT_SIZES.totalAmount) }]}>
                 ${total.toFixed(2)}
               </Text>
             </View>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.medium,
   },
   progressBar: {
-    backgroundColor: "#E4E4E7",
+    backgroundColor: COLORS.backgroundDark,
     overflow: "hidden",
   },
   progressFill: {
@@ -256,16 +256,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   summaryLabel: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   summaryValue: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   divider: {
     height: 1,
-    backgroundColor: "#E4E4E7",
+    backgroundColor: COLORS.backgroundDark,
   },
   totalLabel: {
     color: COLORS.text,

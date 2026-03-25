@@ -107,7 +107,7 @@ export default function InventoryScreen() {
             },
           ]}
         >
-          <Text style={[styles.title, { fontSize: s(FONT_SIZES["3xl"]) }]}>Inventory</Text>
+          <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>Inventory</Text>
           <Pressable
             style={[
               styles.addButton,

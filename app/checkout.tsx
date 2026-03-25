@@ -16,8 +16,8 @@ import { Button } from "@/components/button";
 import { ScreenContainer } from "@/components/screen-container";
 import { ScreenHeader } from "@/components/ui";
 import { SquarePaymentForm } from "@/components/square-payment-form";
-import { COLORS } from "@/constants/layout";
 import { FONTS } from "@/constants/fonts";
+import { COLORS } from "@/constants/layout";
 import { TEXT_SIZES } from "@/constants/typography";
 import { useScale } from "@/hooks/use-scale";
 import { useCheckout } from "@/hooks/use-checkout";
@@ -111,7 +111,7 @@ export default function CheckoutScreen() {
         {
           paddingVertical: sy(12),
           borderBottomWidth: 1,
-          borderBottomColor: "#E4E4E7",
+          borderBottomColor: COLORS.backgroundDark,
         },
       ]}
     >
@@ -212,7 +212,7 @@ export default function CheckoutScreen() {
                     borderColor:
                       selectedPayment === option.id
                         ? COLORS.primary
-                        : "#E4E4E7",
+                        : COLORS.backgroundDark,
                   },
                 ]}
                 onPress={() => setSelectedPayment(option.id)}
@@ -227,7 +227,7 @@ export default function CheckoutScreen() {
                       backgroundColor:
                         selectedPayment === option.id
                           ? "rgba(228, 108, 69, 0.1)"
-                          : "#F7F5F3",
+                          : COLORS.inputBackground,
                     },
                   ]}
                 >
@@ -270,7 +270,7 @@ export default function CheckoutScreen() {
                       borderColor:
                         selectedPayment === option.id
                           ? COLORS.primary
-                          : "#E4E4E7",
+                          : COLORS.backgroundDark,
                     },
                   ]}
                 >
@@ -507,16 +507,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   summaryLabel: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   summaryValue: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   divider: {
     height: 1,
-    backgroundColor: "#E4E4E7",
+    backgroundColor: COLORS.backgroundDark,
   },
   totalLabel: {
     color: COLORS.text,

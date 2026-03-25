@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "#E4E4E7",
+    backgroundColor: COLORS.backgroundDark,
   },
   totalLabel: {
     color: COLORS.text,

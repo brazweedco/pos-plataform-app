@@ -78,9 +78,7 @@ export default function SettingsScreen() {
             {
               paddingHorizontal: sx(20),
               paddingTop: sy(20),
-              paddingBottom: sy(22),
-              borderBottomLeftRadius: s(25),
-              borderBottomRightRadius: s(25),
+              marginBottom: sy(22),
             },
           ]}
         >
@@ -204,12 +202,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: COLORS.surface,
-    shadowColor: COLORS.primaryDark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.28,
-    shadowRadius: 22,
-    elevation: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   title: {
     color: COLORS.text,

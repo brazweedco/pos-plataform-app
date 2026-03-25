@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.medium,
   },
   descriptionText: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   complianceBox: {
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoLabel: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
   },
   infoValue: {
