@@ -22,9 +22,6 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Fix React 19 SSR compatibility - change to SPA mode
-RUN sed -i 's/"output": "static"/"output": "single"/' app.json
-
 # Clear cache
 RUN rm -rf .expo node_modules/.cache
 
@@ -32,7 +29,7 @@ RUN rm -rf .expo node_modules/.cache
 ENV NODE_ENV=production
 ENV EXPO_USE_FAST_RESOLVER=1
 
-# Build web
+# Build web (static export)
 RUN npx expo export --platform web
 
 # ============================================
@@ -50,5 +47,5 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
-# Serve the static files
+# Serve the static files with SPA fallback
 CMD ["serve", "-s", "dist", "-l", "3000"]
