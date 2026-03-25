@@ -40,21 +40,30 @@ export const productsService = {
 
   async uploadImage(productId: string, imageUri: string) {
     const formData = new FormData();
+    const isWeb = typeof window !== "undefined" && typeof document !== "undefined";
 
-    const filename = imageUri.split("/").pop() || "image.jpg";
-    const match = /\.(\w+)$/.exec(filename);
-    const mimeType = match ? `image/${match[1].toLowerCase()}` : "image/jpeg";
+    if (isWeb && imageUri.startsWith("blob:")) {
+      // Web: fetch blob URL and create real File
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const filename = `image-${Date.now()}.jpg`;
+      const file = new File([blob], filename, { type: blob.type || "image/jpeg" });
+      formData.append("image", file);
+    } else {
+      // React Native: use URI object format
+      const filename = imageUri.split("/").pop() || "image.jpg";
+      const match = /\.(\w+)$/.exec(filename);
+      const mimeType = match ? `image/${match[1].toLowerCase()}` : "image/jpeg";
 
-    // Create a plain object for React Native FormData
-    // This format is required for iOS compatibility with Hermes
-    const file = {
-      uri: imageUri,
-      type: mimeType,
-      name: filename,
-    };
+      const file = {
+        uri: imageUri,
+        type: mimeType,
+        name: filename,
+      };
 
-    // @ts-expect-error - React Native FormData accepts this format
-    formData.append("image", file);
+      // @ts-expect-error - React Native FormData accepts this format
+      formData.append("image", file);
+    }
 
     return api.postFormData<ProductResponse>(`/api/v1/products/${productId}/image`, formData);
   },
