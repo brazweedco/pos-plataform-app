@@ -1,10 +1,11 @@
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -88,6 +89,9 @@ export function ProductForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Web file input ref
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const fetchBrands = useCallback(async (): Promise<AutocompleteItem[]> => {
     const response = await brandsService.listActive();
     return response.data;
@@ -156,7 +160,29 @@ export function ProductForm({
     }
   };
 
+  // Web-specific image picker
+  const pickImageWeb = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleWebFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const uri = URL.createObjectURL(file);
+      setImageUri(uri);
+    }
+    // Reset input so same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const showImageOptions = () => {
+    if (Platform.OS === "web") {
+      pickImageWeb();
+      return;
+    }
+
     Alert.alert("Product Image", "Choose an option", [
       { text: "Take Photo", onPress: takePhoto },
       { text: "Choose from Library", onPress: pickImage },
@@ -447,6 +473,17 @@ export function ProductForm({
           }
         />
       </View>
+
+      {/* Hidden file input for web */}
+      {Platform.OS === "web" && (
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleWebFileChange}
+          style={{ display: "none" }}
+        />
+      )}
     </ScrollView>
   );
 }
