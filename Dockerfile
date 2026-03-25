@@ -18,12 +18,13 @@
 # ============================================
 FROM node:20-alpine AS base
 
-# Install dependencies required for native modules
+# Install dependencies required for native modules and utilities
 RUN apk add --no-cache \
     git \
     python3 \
     make \
     g++ \
+    sed \
     && rm -rf /var/cache/apk/*
 
 WORKDIR /app
@@ -42,6 +43,12 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Clear Metro cache
+RUN rm -rf /app/.expo /app/node_modules/.cache
+
+# Change web output to "single" (SPA mode) to avoid SSR issues with React 19
+RUN sed -i 's/"output": "static"/"output": "single"/' app.json
+
 # Expo ports:
 # 8081  - Metro bundler
 # 19000 - Expo dev tools
@@ -52,9 +59,11 @@ EXPOSE 8081 19000 19001 19002
 # Environment variables for Expo
 ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
 ENV REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
+# Fix for React 19 JSX runtime issues
+ENV EXPO_USE_FAST_RESOLVER=1
 
-# Start Expo development server
-CMD ["npx", "expo", "start", "--tunnel"]
+# Start Expo development server with cache reset
+CMD ["npx", "expo", "start", "--clear", "--lan"]
 
 # ============================================
 # Stage 3: Build for production (web)
@@ -67,7 +76,14 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the web version
+# Clear cache and set environment
+RUN rm -rf /app/.expo /app/node_modules/.cache
+ENV EXPO_USE_FAST_RESOLVER=1
+
+# Change web output to "single" (SPA mode) to avoid SSR issues with React 19
+RUN sed -i 's/"output": "static"/"output": "single"/' app.json
+
+# Build the web version (single-page app mode)
 RUN npx expo export --platform web
 
 # ============================================
