@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL || "http://192.168.18.67:8080";
+  process.env.EXPO_PUBLIC_API_URL || "https://pos-plataform-service-production.up.railway.app";
 
 interface ApiResponse<T> {
   data: T;
