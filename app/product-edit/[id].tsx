@@ -42,7 +42,7 @@ export default function ProductEditScreen() {
     showErrorToast: true,
   });
 
-  const handleSubmit = async (data: ProductRequest, imageUri: string | null) => {
+  const handleSubmit = async (data: ProductRequest, imageUri: string | null, stockQuantity: number | null) => {
     if (!id) return;
 
     const result = await execute(async () => {
@@ -58,6 +58,16 @@ export default function ProductEditScreen() {
         }
       }
 
+      // Update stock quantity if provided
+      if (stockQuantity !== null && stockQuantity >= 0) {
+        try {
+          await productsService.updateStock(id, stockQuantity);
+          updatedProduct.stock = stockQuantity;
+        } catch {
+          showWarning("Product updated, but stock update failed.");
+        }
+      }
+
       updateProductStore(updatedProduct);
       return updatedProduct;
     });
@@ -65,7 +75,7 @@ export default function ProductEditScreen() {
     if (result) {
       // Invalidate products cache to refresh list
       await queryClient.invalidateQueries({ queryKey: ["products"] });
-      router.back();
+      router.replace("/products");
     } else {
       throw new Error("Product update failed");
     }

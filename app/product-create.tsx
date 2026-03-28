@@ -29,7 +29,7 @@ export default function ProductCreateScreen() {
     showErrorToast: true,
   });
 
-  const handleSubmit = async (data: ProductRequest, imageUri: string | null) => {
+  const handleSubmit = async (data: ProductRequest, imageUri: string | null, stockQuantity: number | null) => {
     const result = await execute(async () => {
       const response = await productsService.create(data);
       let product = mapProductResponseToProduct(response.data);
@@ -40,6 +40,16 @@ export default function ProductCreateScreen() {
           product = mapProductResponseToProduct(imageResponse.data);
         } catch {
           showWarning("Product created, but image upload failed.");
+        }
+      }
+
+      // Update stock quantity if provided
+      if (stockQuantity !== null && stockQuantity >= 0) {
+        try {
+          await productsService.updateStock(product.id, stockQuantity);
+          product.stock = stockQuantity;
+        } catch {
+          showWarning("Product created, but stock update failed.");
         }
       }
 

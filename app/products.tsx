@@ -15,6 +15,7 @@ import { navigateToTab, TabName } from "@/utils/navigation";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
+import { ProductFilterModal, ProductFilters } from "@/components/product-filter-modal";
 import { ProductGridCard } from "@/components/product-grid-card";
 import { ScreenContainer } from "@/components/screen-container";
 import { SearchBar } from "@/components/search-bar";
@@ -26,7 +27,7 @@ import { useCategories } from "@/hooks/use-categories";
 import { useProducts } from "@/hooks/use-products";
 import { useScale } from "@/hooks/use-scale";
 import { useCartStore } from "@/stores/cart-store";
-import { Product } from "@/types/product";
+import { Product, LOW_STOCK_THRESHOLD } from "@/types/product";
 
 export default function ProductsScreen() {
   const { s, sx, sy } = useScale();
@@ -36,6 +37,8 @@ export default function ProductsScreen() {
   const [activeTab, setActiveTab] = useState<TabName>("product");
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState<ProductFilters>({});
 
   // Fetch categories and products from API
   const { categories } = useCategories();
@@ -66,7 +69,15 @@ export default function ProductsScreen() {
   };
 
   const handleFilterPress = () => {
-    // Open filter modal
+    setShowFilterModal(true);
+  };
+
+  const handleApplyFilters = (filters: ProductFilters) => {
+    setAdvancedFilters(filters);
+    // If a category filter is applied, also update the category tab
+    if (filters.categoryId) {
+      setActiveFilter(filters.categoryId);
+    }
   };
 
   const handleProductPress = (product: Product) => {
@@ -78,21 +89,43 @@ export default function ProductsScreen() {
     showSuccess(`${product.name} added to cart`);
   };
 
-  // Filter products based on active filter and search query
+  // Filter products based on active filter, search query, and advanced filters
   const filteredProducts = products.filter((product) => {
-
     // Search filter
     const matchesSearch =
       searchQuery === "" ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.sku.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // Category filter
-    if (activeFilter === "all") {
-      return matchesSearch;
+    if (!matchesSearch) return false;
+
+    // Category filter (from tabs or advanced filters)
+    if (activeFilter !== "all" && product.category?.id !== activeFilter) {
+      return false;
     }
 
-    return matchesSearch && product.category?.id == activeFilter;
+    // Advanced filters
+    if (advancedFilters.brandId && product.brand?.id !== advancedFilters.brandId) {
+      return false;
+    }
+
+    if (advancedFilters.minPrice && product.price < advancedFilters.minPrice) {
+      return false;
+    }
+
+    if (advancedFilters.maxPrice && product.price > advancedFilters.maxPrice) {
+      return false;
+    }
+
+    if (advancedFilters.inStock && product.stock <= 0) {
+      return false;
+    }
+
+    if (advancedFilters.lowStock && product.stock > LOW_STOCK_THRESHOLD) {
+      return false;
+    }
+
+    return true;
   });
 
   return (
@@ -199,6 +232,14 @@ export default function ProductsScreen() {
           <BottomTabBar activeTab={activeTab} onTabPress={handleTabPress} />
         </View>
       </View>
+
+      {/* Filter Modal */}
+      <ProductFilterModal
+        visible={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={handleApplyFilters}
+        initialFilters={advancedFilters}
+      />
     </ScreenContainer>
   );
 }

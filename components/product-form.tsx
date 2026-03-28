@@ -39,6 +39,7 @@ export interface ProductFormData {
   weightGrams: string;
   thcPercentage: string;
   cbdPercentage: string;
+  stockQuantity: string;
   imageUri: string | null;
   brand: Brand | null;
   category: Category | null;
@@ -47,7 +48,7 @@ export interface ProductFormData {
 
 interface ProductFormProps {
   initialData?: Product;
-  onSubmit: (data: ProductRequest, imageUri: string | null) => Promise<void>;
+  onSubmit: (data: ProductRequest, imageUri: string | null, stockQuantity: number | null) => Promise<void>;
   submitLabel: string;
   submittingLabel: string;
 }
@@ -84,6 +85,9 @@ export function ProductForm({
   );
   const [productType, setProductType] = useState<ProductType | null>(
     initialData?.productType ?? null
+  );
+  const [stockQuantity, setStockQuantity] = useState(
+    initialData?.stock?.toString() ?? ""
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -229,6 +233,10 @@ export function ProductForm({
       newErrors.cbdPercentage = "CBD must be between 0 and 100";
     }
 
+    if (stockQuantity && (isNaN(Number(stockQuantity)) || Number(stockQuantity) < 0)) {
+      newErrors.stockQuantity = "Stock quantity must be a valid positive number";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -254,8 +262,11 @@ export function ProductForm({
     // Check if imageUri is a new local file (not an existing URL)
     const isNewImage = imageUri && !imageUri.startsWith("http");
 
+    // Parse stock quantity
+    const stockQty = stockQuantity ? Number(stockQuantity) : null;
+
     try {
-      await onSubmit(productData, isNewImage ? imageUri : null);
+      await onSubmit(productData, isNewImage ? imageUri : null, stockQty);
     } catch (err) {
       // Error handling is done in parent
     } finally {
@@ -308,9 +319,15 @@ export function ProductForm({
         label="Description"
         placeholder="Enter product description"
         value={description}
-        onChangeText={setDescription}
+        onChangeText={(text) => setDescription(text.slice(0, 255))}
         multiline
+        maxLength={255}
       />
+      {description.length > 0 && (
+        <Text style={[styles.charCount, { fontSize: s(FONT_SIZES.sm) }]}>
+          {description.length}/255
+        </Text>
+      )}
 
       <Input
         label="Price *"
@@ -321,6 +338,21 @@ export function ProductForm({
       />
       {errors.price && (
         <Text style={[styles.errorText, { fontSize: s(FONT_SIZES.sm) }]}>{errors.price}</Text>
+      )}
+
+      <Input
+        label="Stock Quantity"
+        placeholder="0"
+        value={stockQuantity}
+        onChangeText={(text) => {
+          // Block "." and "," - only allow integers for stock quantity
+          const sanitized = text.replace(/[.,]/g, "");
+          setStockQuantity(sanitized);
+        }}
+        keyboardType="number-pad"
+      />
+      {errors.stockQuantity && (
+        <Text style={[styles.errorText, { fontSize: s(FONT_SIZES.sm) }]}>{errors.stockQuantity}</Text>
       )}
 
       {/* Image Upload */}
@@ -506,6 +538,13 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#FF541C",
     marginTop: -8,
+    marginBottom: 8,
+    fontFamily: FONTS.regular,
+  },
+  charCount: {
+    color: COLORS.textMuted,
+    textAlign: "right",
+    marginTop: -10,
     marginBottom: 8,
     fontFamily: FONTS.regular,
   },

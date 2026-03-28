@@ -79,6 +79,13 @@ export const productsService = {
   async getLowStock() {
     return api.get<ProductResponse[]>("/api/v1/products/low-stock");
   },
+
+  async updateStock(productId: string, quantity: number) {
+    return api.put<{ quantity: number; unit: string }>(`/api/v1/stocks/product/${productId}`, {
+      operation: "SET",
+      amount: quantity,
+    });
+  },
 };
 
 // Brands API

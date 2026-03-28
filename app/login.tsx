@@ -113,7 +113,7 @@ export default function LoginScreen() {
 
         <Input
           label="Password"
-          placeholder="***********"
+          placeholder="••••••••••"
           value={password}
           onChangeText={setPassword}
           isPassword
