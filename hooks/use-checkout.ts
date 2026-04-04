@@ -257,24 +257,17 @@ export function useCheckout(): UseCheckoutReturn {
 
   /**
    * Cancel the payment without completing the sale
-   * Clears the cart and creates a new one for the next customer
+   * Cart remains intact so user can retry or choose another payment method
    */
   const cancelPaymentForm = useCallback(() => {
-    clearCart();
-    // Create a new cart for the next sale
-    ensureCart().catch(() => {
-      // Ignore errors - cart will be created when needed
-    });
     setState((prev) => ({
       ...prev,
-      step: "error",
-      error: "Payment cancelled. Cart has been reset.",
+      step: "idle",
+      error: null,
+      saleId: null,
+      saleNumber: null,
     }));
-    // Navigate back to products after a short delay
-    setTimeout(() => {
-      router.replace("/(tabs)/products");
-    }, 1500);
-  }, [clearCart, ensureCart]);
+  }, []);
 
   const reset = useCallback(() => {
     setState({
