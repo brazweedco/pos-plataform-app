@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderWidth: 1,
     borderColor: "rgba(241, 112, 73, 0.25)",
-    shadowColor: "#CF4A22",
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 22,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     overflow: "hidden",
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.backgroundDark,
   },
   image: {
     width: "100%",

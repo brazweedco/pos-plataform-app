@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(241, 112, 73, 0.25)",
     flexDirection: "row",
-    shadowColor: "#CF4A22",
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 22,
     elevation: 4,
   },
   image: {
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.backgroundDark,
   },
   info: {
     flex: 1,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.bold,
   },
   sku: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.medium,
   },
   footer: {

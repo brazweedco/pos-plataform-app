@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 
+import { COLORS } from "@/constants/layout";
 import { useScale } from "@/hooks/use-scale";
 
 import { DecorativePattern } from "./decorative-pattern";
@@ -92,17 +93,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#FEF9F3",
+    backgroundColor: COLORS.background,
   },
   webContainer: {
     flex: 1,
-    backgroundColor: "#E8E0D8",
+    backgroundColor: COLORS.backgroundDark,
     alignItems: "center",
     justifyContent: "center",
   },
   mobileFrame: {
     flex: 1,
-    backgroundColor: "#FEF9F3",
+    backgroundColor: COLORS.background,
     overflow: "hidden",
     // Shadow for the mobile frame on web
     shadowColor: "#000",

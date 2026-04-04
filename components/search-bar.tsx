@@ -43,7 +43,7 @@ export function SearchBar({
       <TextInput
         style={[styles.input, { fontSize: s(FONT_SIZES.md) }]}
         placeholder={placeholder}
-        placeholderTextColor="#71717B"
+        placeholderTextColor={COLORS.textMuted}
         value={value}
         onChangeText={onChangeText}
       />
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(241, 112, 73, 0.25)",
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#CF4A22",
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 22,

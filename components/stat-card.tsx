@@ -39,10 +39,10 @@ export function StatCard({ title, value, icon }: StatCardProps) {
       >
         {icon}
       </View>
-      <View style={styles.content}>
+      <View style={[styles.content, { marginLeft: sx(12) }]}>
         <Text style={[styles.title, { fontSize: s(FONT_SIZES.md) }]}>{title}</Text>
         {typeof value === "string" ? (
-          <Text style={[styles.value, { fontSize: s(FONT_SIZES["2xl"]) }]}>{value}</Text>
+          <Text style={[styles.value, { fontSize: s(FONT_SIZES["2xl"]), marginTop: sy(2) }]}>{value}</Text>
         ) : (
           value
         )}
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   content: {
-    marginLeft: 12,
     flex: 1,
   },
   title: {
@@ -86,6 +85,5 @@ const styles = StyleSheet.create({
   value: {
     color: COLORS.text,
     fontFamily: FONTS.semiBold,
-    marginTop: 2,
   },
 });

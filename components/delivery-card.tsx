@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.semiBold,
   },
   status: {
-    color: "#9F9FA9",
+    color: COLORS.textMuted,
     fontFamily: FONTS.medium,
   },
   price: {

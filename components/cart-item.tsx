@@ -57,13 +57,13 @@ export function CartItem({ item }: CartItemProps) {
           >
             {product.name}
           </Text>
-          <Text style={[styles.price, { fontSize: s(FONT_SIZES.md) }]}>
+          <Text style={[styles.price, { fontSize: s(FONT_SIZES.md), marginLeft: sx(8) }]}>
             ${totalPrice.toFixed(2)}
           </Text>
         </View>
 
         {weightDisplay && (
-          <Text style={[styles.weight, { fontSize: s(FONT_SIZES.sm) }]}>
+          <Text style={[styles.weight, { fontSize: s(FONT_SIZES.sm), marginTop: sy(2) }]}>
             {weightDisplay}
           </Text>
         )}
@@ -160,12 +160,10 @@ const styles = StyleSheet.create({
   price: {
     color: COLORS.primary,
     fontFamily: FONTS.bold,
-    marginLeft: 8,
   },
   weight: {
     color: COLORS.text,
     fontFamily: FONTS.medium,
-    marginTop: 2,
   },
   thcBadge: {
     alignSelf: "flex-start",
@@ -182,9 +180,9 @@ const styles = StyleSheet.create({
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#EFEFEF",
+    backgroundColor: COLORS.inputBackground,
     borderWidth: 0.7,
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    borderColor: COLORS.divider,
   },
   quantityButton: {
     height: "100%",
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantity: {
-    color: "#71717B",
+    color: COLORS.textMuted,
     fontFamily: FONTS.medium,
     minWidth: 24,
     textAlign: "center",
