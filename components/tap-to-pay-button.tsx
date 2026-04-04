@@ -45,7 +45,7 @@ type TapToPayStatus =
 export function TapToPayButton({
   saleId,
   amount,
-  currency = "usd",
+  currency = "cad",
   onSuccess,
   onError,
   disabled = false,
@@ -83,9 +83,11 @@ export function TapToPayButton({
           return;
         }
 
-        // Discover and connect to local mobile reader (Tap to Pay)
+        // Discover and connect to Tap to Pay reader
+        // iOS uses "localMobile", Android uses "tapToPay"
+        const discoveryMethod = Platform.OS === "ios" ? "localMobile" : "tapToPay";
         const { readers, error: discoverError } = await discoverReaders({
-          discoveryMethod: "localMobile",
+          discoveryMethod,
           simulated: __DEV__, // Use simulated reader in development
         });
 

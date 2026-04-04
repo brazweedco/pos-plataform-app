@@ -394,7 +394,7 @@ export default function CheckoutScreen() {
               <TapToPayButton
                 saleId={checkoutState.saleId}
                 amount={checkoutState.total}
-                currency="usd"
+                currency="cad"
                 onSuccess={handleTapToPaySuccess}
                 onError={handleTapToPayError}
                 disabled={isProcessing}

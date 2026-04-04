@@ -27,7 +27,7 @@ export const stripePaymentApi = {
   createPaymentIntent: async (
     saleId: string,
     amount: number,
-    currency: string = "brl"
+    currency: string = "cad"
   ): Promise<PaymentIntentResponse> => {
     return api.post<PaymentIntentResponse>(
       "/api/v1/stripe/payment-intent",
