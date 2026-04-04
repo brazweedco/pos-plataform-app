@@ -36,7 +36,7 @@ export default function CartScreen() {
   };
 
   const renderEmptyCart = () => (
-    <View style={styles.emptyContainer}>
+    <View style={[styles.emptyContainer, { paddingHorizontal: sx(40), paddingBottom: sy(60) }]}>
       {/* Empty Cart Icon */}
       <View
         style={[
@@ -62,7 +62,7 @@ export default function CartScreen() {
           { fontSize: s(TEXT_SIZES.emptySubtitle), marginTop: sy(8), maxWidth: sx(280) },
         ]}
       >
-        Looks like you haven't added any products yet. Start shopping to fill your cart!
+        Your cart is waiting. Browse products to get started.
       </Text>
 
       {/* Browse Button */}
@@ -76,12 +76,12 @@ export default function CartScreen() {
     <ScreenContainer showPattern={false}>
       <View style={[styles.container, { paddingTop: insets.top }]}>
         {/* Header */}
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer, { paddingBottom: sy(20) }]}>
           <ScreenHeader title="Current Cart" />
 
           {/* Legal Limit Bar - always show when there are items */}
           {items.length > 0 && (
-            <View style={[styles.legalLimitContainer, { marginTop: sy(8) }]}>
+            <View style={[styles.legalLimitContainer, { marginTop: sy(8), paddingHorizontal: sx(20) }]}>
               <View style={styles.legalLimitHeader}>
                 <Text style={[styles.legalLimitLabel, { fontSize: s(TEXT_SIZES.body) }]}>
                   Legal Limit
@@ -103,7 +103,7 @@ export default function CartScreen() {
                       width: `${legalPercentage}%`,
                       borderRadius: s(10),
                       backgroundColor:
-                        legalPercentage >= 100 ? "#FF541C" : COLORS.primary,
+                        legalPercentage >= 100 ? COLORS.error : COLORS.primary,
                     },
                   ]}
                 />
@@ -122,7 +122,11 @@ export default function CartScreen() {
             renderItem={({ item }) => <CartItem item={item} />}
             contentContainerStyle={[
               styles.listContent,
-              { paddingHorizontal: sx(20), paddingTop: sy(20) },
+              {
+                paddingHorizontal: sx(20),
+                paddingTop: sy(20),
+                paddingBottom: sy(220),
+              },
             ]}
             showsVerticalScrollIndicator={false}
           />
@@ -166,7 +170,7 @@ export default function CartScreen() {
 
             {/* Checkout Button */}
             <View style={{ marginTop: sy(17) }}>
-              <Button title="Proceed to Checkout" onPress={handleCheckout} />
+              <Button title="Go to Checkout" onPress={handleCheckout} />
             </View>
           </View>
         )}
@@ -188,11 +192,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.28,
     shadowRadius: 22,
     elevation: 8,
-    paddingBottom: 20,
   },
-  legalLimitContainer: {
-    paddingHorizontal: 20,
-  },
+  legalLimitContainer: {},
   legalLimitHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -216,8 +217,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 40,
-    paddingBottom: 60,
   },
   emptyIconContainer: {
     backgroundColor: "rgba(228, 108, 69, 0.1)",
@@ -235,14 +234,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 22,
   },
-  listContent: {
-    paddingBottom: 200,
-  },
+  listContent: {},
   footer: {
     position: "absolute",
     bottom: 0,
-    left: 20,
-    right: 20,
+    left: 0,
+    right: 0,
     backgroundColor: COLORS.surface,
     shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: -4 },

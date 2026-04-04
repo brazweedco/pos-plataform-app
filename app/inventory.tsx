@@ -176,7 +176,7 @@ export default function InventoryScreen() {
           ) : filteredProducts.length === 0 ? (
             <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
               <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.lg) }]}>
-                No products found
+                No items match your filter
               </Text>
             </View>
           ) : (

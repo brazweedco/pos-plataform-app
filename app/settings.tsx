@@ -243,8 +243,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "rgba(241, 112, 73, 0.15)",
-    marginHorizontal: 20,
+    backgroundColor: COLORS.border,
   },
   logoutButton: {
     backgroundColor: COLORS.surface,

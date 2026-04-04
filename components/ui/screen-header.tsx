@@ -36,20 +36,24 @@ export function ScreenHeader({ title, onBack, rightAction }: ScreenHeaderProps) 
       ]}
     >
       <Pressable
-        style={[
+        style={({ pressed }) => [
           styles.backButton,
           {
-            width: s(42),
-            height: s(42),
-            borderRadius: s(21),
+            width: s(44),
+            height: s(44),
+            borderRadius: s(22),
+            opacity: pressed ? 0.7 : 1,
           },
         ]}
         onPress={handleBack}
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
+        hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
       >
         <Feather name="chevron-left" size={s(24)} color={COLORS.text} />
       </Pressable>
       <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>{title}</Text>
-      <View style={{ width: s(42) }}>
+      <View style={{ width: s(44) }}>
         {rightAction}
       </View>
     </View>

@@ -72,13 +72,16 @@ export function Input({
           secureTextEntry={isPassword && !showPassword}
           autoCapitalize="none"
           multiline={multiline}
+          accessibilityLabel={label}
           {...props}
         />
         {isPassword && (
           <Pressable
             onPress={() => setShowPassword(!showPassword)}
-            style={{ padding: s(12) }}
+            style={({ pressed }) => [{ padding: s(12), opacity: pressed ? 0.6 : 1 }]}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            accessibilityRole="button"
+            accessibilityLabel={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
               <EyeOpen color={COLORS.primary} size={s(20)} />
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderFocused,
   },
   inputError: {
-    borderColor: "#FF541C",
+    borderColor: COLORS.error,
   },
   input: {
     flex: 1,
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
   },
   errorText: {
-    color: "#FF541C",
+    color: COLORS.error,
     fontFamily: FONTS.regular,
   },
 });

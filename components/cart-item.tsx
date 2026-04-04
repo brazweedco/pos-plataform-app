@@ -93,22 +93,28 @@ export function CartItem({ item }: CartItemProps) {
               styles.quantityControls,
               {
                 borderRadius: s(4),
-                height: sy(30),
+                height: sy(36),
               },
             ]}
           >
             <Pressable
-              style={[styles.quantityButton, { width: s(32) }]}
+              style={({ pressed }) => [
+                styles.quantityButton,
+                { width: s(36), opacity: pressed ? 0.6 : 1 },
+              ]}
               onPress={() =>
                 quantity === 1
                   ? removeItem(product.id)
                   : decrementQuantity(product.id)
               }
+              hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
+              accessibilityRole="button"
+              accessibilityLabel={quantity === 1 ? `Remove ${product.name} from cart` : `Decrease quantity of ${product.name}`}
             >
               <Feather
                 name={quantity === 1 ? "trash-2" : "minus"}
-                size={s(14)}
-                color={COLORS.textMuted}
+                size={s(15)}
+                color={quantity === 1 ? COLORS.error : COLORS.textMuted}
               />
             </Pressable>
 
@@ -117,10 +123,16 @@ export function CartItem({ item }: CartItemProps) {
             </Text>
 
             <Pressable
-              style={[styles.quantityButton, { width: s(32) }]}
+              style={({ pressed }) => [
+                styles.quantityButton,
+                { width: s(36), opacity: pressed ? 0.6 : 1 },
+              ]}
               onPress={() => incrementQuantity(product.id)}
+              hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
+              accessibilityRole="button"
+              accessibilityLabel={`Increase quantity of ${product.name}`}
             >
-              <Feather name="plus" size={s(14)} color={COLORS.textMuted} />
+              <Feather name="plus" size={s(15)} color={COLORS.primary} />
             </Pressable>
           </View>
         </View>
@@ -190,9 +202,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantity: {
-    color: COLORS.textMuted,
-    fontFamily: FONTS.medium,
-    minWidth: 24,
+    color: COLORS.text,
+    fontFamily: FONTS.semiBold,
+    minWidth: 28,
     textAlign: "center",
   },
 });

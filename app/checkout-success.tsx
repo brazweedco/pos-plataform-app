@@ -96,7 +96,7 @@ export default function CheckoutSuccessScreen() {
               { fontSize: s(TEXT_SIZES.body), marginTop: sy(12) },
             ]}
           >
-            The transaction has been completed successfully
+            Your payment was processed successfully
           </Text>
         </View>
 
@@ -179,15 +179,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconInnerRing: {
-    backgroundColor: "rgba(34, 197, 94, 0.2)",
+    backgroundColor: "rgba(34, 197, 94, 0.18)",
     justifyContent: "center",
     alignItems: "center",
   },
   iconContainer: {
-    backgroundColor: "#22C55E",
+    backgroundColor: COLORS.success,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#22C55E",
+    shadowColor: COLORS.success,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.semiBold,
   },
   totalValue: {
-    color: "#22C55E",
+    color: COLORS.success,
     fontFamily: FONTS.bold,
   },
   buttonSection: {

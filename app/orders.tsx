@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BottomTabBar } from "@/components/bottom-tab-bar";
@@ -13,10 +12,6 @@ import { navigateToTab, TabName } from "@/utils/navigation";
 export default function OrdersScreen() {
   const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    Alert.alert("Coming Soon", "Orders feature is under development.");
-  }, []);
 
   const handleTabPress = (tab: TabName) => {
     if (tab !== "orders") {
@@ -41,18 +36,18 @@ export default function OrdersScreen() {
           <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>Orders</Text>
         </View>
 
-        {/* Coming Soon Content */}
-        <View style={styles.content}>
-          <Text style={[styles.comingSoonText, { fontSize: s(FONT_SIZES.lg) }]}>
-            Coming Soon
+        {/* Empty State */}
+        <View style={[styles.content, { paddingHorizontal: sx(32) }]}>
+          <Text style={[styles.emptyTitle, { fontSize: s(FONT_SIZES.lg) }]}>
+            No orders yet
           </Text>
           <Text
             style={[
-              styles.comingSoonSubtext,
-              { fontSize: s(FONT_SIZES.sm), marginTop: sy(8) },
+              styles.emptySubtext,
+              { fontSize: s(FONT_SIZES.sm), marginTop: sy(8), maxWidth: sx(280) },
             ]}
           >
-            This feature is under development
+            Completed sales and order history will appear here
           </Text>
         </View>
 
@@ -83,13 +78,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  comingSoonText: {
+  emptyTitle: {
     color: COLORS.text,
     fontFamily: FONTS.semiBold,
+    textAlign: "center",
   },
-  comingSoonSubtext: {
+  emptySubtext: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
+    textAlign: "center",
+    lineHeight: 22,
   },
   tabBarContainer: {
     position: "absolute",

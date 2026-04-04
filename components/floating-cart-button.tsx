@@ -60,7 +60,7 @@ export function FloatingCartButton() {
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.container,
         {
           width: s(56),
@@ -68,9 +68,13 @@ export function FloatingCartButton() {
           borderRadius: s(28),
           bottom: getBottomPosition(),
           right: sx(20),
+          transform: [{ scale: pressed ? 0.94 : 1 }],
+          opacity: pressed ? 0.88 : 1,
         },
       ]}
       onPress={() => router.push("/cart")}
+      accessibilityRole="button"
+      accessibilityLabel={`View cart, ${totalItems} ${totalItems === 1 ? "item" : "items"}`}
     >
       <Feather name="shopping-cart" size={s(24)} color={COLORS.surface} />
 

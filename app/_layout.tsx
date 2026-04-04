@@ -7,6 +7,7 @@ import { Platform, StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 import { FloatingCartButton } from "@/components/floating-cart-button";
+import { TapToPayProvider } from "@/components/tap-to-pay-button";
 import { ToastProvider } from "@/contexts/toast-context";
 import { useAppFonts } from "@/hooks/use-appfonts";
 import { useSession } from "@/hooks/use-session";
@@ -118,7 +119,9 @@ export default function RootLayout() {
       urlScheme="brazweedpos"
       merchantIdentifier="merchant.com.brazweed.pos"
     >
-      {content}
+      <TapToPayProvider>
+        {content}
+      </TapToPayProvider>
     </StripeProvider>
   );
 }

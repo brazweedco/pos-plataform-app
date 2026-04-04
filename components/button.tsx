@@ -74,17 +74,22 @@ export function Button({
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.button,
         isPrimary ? styles.primaryButton : styles.secondaryButton,
         {
           height: sy(BUTTON_HEIGHT),
           borderRadius: s(14),
           gap: sx(12),
+          opacity: pressed && !disabled ? 0.82 : 1,
+          transform: [{ scale: pressed && !disabled ? 0.98 : 1 }],
         },
         disabled && styles.disabled,
       ]}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!disabled }}
       {...props}
     >
       {renderIcon()}

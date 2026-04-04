@@ -31,6 +31,11 @@ export const COLORS = {
 
   // Border
   border: "rgba(241, 112, 73, 0.16)",
+  borderStrong: "rgba(241, 112, 73, 0.25)",
   borderFocused: "#E46C45",
   divider: "rgba(0, 36, 48, 0.15)",
+
+  // Status
+  error: "#FF541C",
+  success: "#22C55E",
 } as const;

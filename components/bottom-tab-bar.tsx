@@ -21,28 +21,30 @@ interface TabIconProps {
   size: number;
 }
 
+const TAB_ICON_INACTIVE = COLORS.textMuted;
+
 function HomeIcon({ active, size }: TabIconProps) {
-  const color = active ? COLORS.primary : "#B7B7B7";
+  const color = active ? COLORS.primary : TAB_ICON_INACTIVE;
   return <HomeSvg size={size} color={color} />;
 }
 
 function ProductIcon({ active, size }: TabIconProps) {
-  const color = active ? COLORS.primary : "#B7B7B7";
+  const color = active ? COLORS.primary : TAB_ICON_INACTIVE;
   return <ProductSvg size={size} color={color} />;
 }
 
 function OrdersIcon({ active, size }: TabIconProps) {
-  const color = active ? COLORS.primary : "#B7B7B7";
+  const color = active ? COLORS.primary : TAB_ICON_INACTIVE;
   return <OrderSvg size={size} color={color} />;
 }
 
 function StockIcon({ active, size }: TabIconProps) {
-  const color = active ? COLORS.primary : "#B7B7B7";
+  const color = active ? COLORS.primary : TAB_ICON_INACTIVE;
   return <StockSvg size={size} color={color} />;
 }
 
 function SettingsIcon({ active, size }: TabIconProps) {
-  const color = active ? COLORS.primary : "#B7B7B7";
+  const color = active ? COLORS.primary : TAB_ICON_INACTIVE;
   return <SettingsSvg size={size} color={color} />;
 }
 
@@ -58,21 +60,37 @@ export function BottomTabBar({ activeTab, onTabPress }: BottomTabBarProps) {
   const { s, sy } = useScale();
 
   return (
-    <View style={[styles.container, { height: sy(82) }]}>
-      {TABS.map(({ key, label, Icon }) => (
-        <Pressable key={key} style={styles.tab} onPress={() => onTabPress(key)}>
-          <Icon active={activeTab === key} size={s(30)} />
-          <Text
-            style={[
-              styles.label,
-              { fontSize: s(FONT_SIZES.xs), marginTop: sy(4) },
-              activeTab === key && styles.labelActive,
+    <View
+      style={[styles.container, { height: sy(82) }]}
+      accessibilityRole="tablist"
+    >
+      {TABS.map(({ key, label, Icon }) => {
+        const isActive = activeTab === key;
+        return (
+          <Pressable
+            key={key}
+            style={({ pressed }) => [
+              styles.tab,
+              { opacity: pressed && !isActive ? 0.65 : 1 },
             ]}
+            onPress={() => onTabPress(key)}
+            accessibilityRole="tab"
+            accessibilityLabel={label}
+            accessibilityState={{ selected: isActive }}
           >
-            {label}
-          </Text>
-        </Pressable>
-      ))}
+            <Icon active={isActive} size={s(30)} />
+            <Text
+              style={[
+                styles.label,
+                { fontSize: s(FONT_SIZES.xs), marginTop: sy(4) },
+                isActive && styles.labelActive,
+              ]}
+            >
+              {label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -95,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   label: {
-    color: "#B7B7B7",
+    color: COLORS.textMuted,
     fontFamily: FONTS.medium,
   },
   labelActive: {

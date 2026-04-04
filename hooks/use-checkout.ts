@@ -1,7 +1,7 @@
 /**
  * useCheckout Hook
  * Encapsulates checkout logic for cart -> sale conversion
- * Supports CASH and GOOGLE_PAY (NFC tap-to-pay via Stripe)
+ * Supports CASH and TAP_TO_PAY (NFC card payments via Stripe Terminal)
  */
 
 import { useState, useCallback } from "react";
@@ -37,7 +37,7 @@ export interface CheckoutState {
 export interface UseCheckoutReturn {
   state: CheckoutState;
   startCheckout: (paymentMethod: PaymentMethod, tip?: number) => Promise<void>;
-  processGooglePaySuccess: (paymentIntentId: string) => Promise<void>;
+  processTapToPaySuccess: (paymentIntentId: string) => Promise<void>;
   cancelPaymentForm: () => void;
   reset: () => void;
   isProcessing: boolean;
@@ -106,10 +106,10 @@ export function useCheckout(): UseCheckoutReturn {
         }));
 
         // Step 2: Process payment based on method
-        if (paymentMethod === "GOOGLE_PAY") {
-          // Google Pay - show the Google Pay button
-          // The actual payment is handled by GooglePayButton component
-          // which calls processGooglePaySuccess on completion
+        if (paymentMethod === "TAP_TO_PAY") {
+          // Tap to Pay - show the TapToPayButton
+          // The actual payment is handled by TapToPayButton component
+          // which calls processTapToPaySuccess on completion
           setState((prev) => ({
             ...prev,
             step: "awaiting_payment",
@@ -148,10 +148,10 @@ export function useCheckout(): UseCheckoutReturn {
   );
 
   /**
-   * Process Google Pay payment success
-   * Called by GooglePayButton when payment is confirmed via Stripe
+   * Process Tap to Pay payment success
+   * Called by TapToPayButton when payment is confirmed via Stripe Terminal
    */
-  const processGooglePaySuccess = useCallback(
+  const processTapToPaySuccess = useCallback(
     async (paymentIntentId: string) => {
       if (!state.saleId) {
         setState((prev) => ({
@@ -175,7 +175,7 @@ export function useCheckout(): UseCheckoutReturn {
           // Complete the sale on backend
           setState((prev) => ({ ...prev, step: "completing" }));
 
-          await salesService.complete(state.saleId, "GOOGLE_PAY", {
+          await salesService.complete(state.saleId, "TAP_TO_PAY", {
             tipAmount: state.tipAmount > 0 ? state.tipAmount : undefined,
             paymentReference: paymentIntentId,
           });
@@ -194,7 +194,7 @@ export function useCheckout(): UseCheckoutReturn {
               saleId: state.saleId,
               saleNumber: state.saleNumber || "",
               total: state.total.toString(),
-              paymentMethod: "Google Pay",
+              paymentMethod: "Tap to Pay",
             },
           });
         } else {
@@ -247,7 +247,7 @@ export function useCheckout(): UseCheckoutReturn {
   return {
     state,
     startCheckout,
-    processGooglePaySuccess,
+    processTapToPaySuccess,
     cancelPaymentForm,
     reset,
     isProcessing,

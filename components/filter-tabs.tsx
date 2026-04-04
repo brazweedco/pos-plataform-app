@@ -32,16 +32,20 @@ export function FilterTabs<T extends string = string>({
         return (
           <Pressable
             key={tab.key}
-            style={[
+            style={({ pressed }) => [
               styles.tab,
               isActive && styles.tabActive,
               {
                 height: sy(TAB_HEIGHT),
                 borderRadius: s(10),
                 paddingHorizontal: sx(22),
+                opacity: pressed && !isActive ? 0.7 : 1,
               },
             ]}
             onPress={() => onTabPress(tab.key)}
+            accessibilityRole="tab"
+            accessibilityLabel={tab.label}
+            accessibilityState={{ selected: isActive }}
           >
             <Text
               style={[

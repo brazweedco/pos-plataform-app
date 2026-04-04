@@ -25,15 +25,18 @@ export function DeliveryCard({
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.card,
         {
           height: sy(77),
           borderRadius: s(12),
           paddingHorizontal: sx(19),
+          opacity: pressed ? 0.82 : 1,
         },
       ]}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${orderId}, ${status}, ${time}, ${price}`}
     >
       <View style={[styles.iconContainer, { width: s(24), height: s(24) }]}>
         <Feather name="truck" size={s(24)} color={COLORS.primary} />

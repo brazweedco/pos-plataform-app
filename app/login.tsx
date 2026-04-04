@@ -101,7 +101,7 @@ export default function LoginScreen() {
       >
         <Input
           label="Email"
-          placeholder="Your email"
+          placeholder="name@example.com"
           value={email}
           onChangeText={handleEmailChange}
           onBlur={handleEmailBlur}
@@ -149,7 +149,7 @@ export default function LoginScreen() {
             },
           ]}
         >
-          Or continue with
+          Or use
         </Text>
         <View style={[styles.dividerLine, { width: sx(115) }]} />
       </View>
@@ -178,7 +178,7 @@ export default function LoginScreen() {
         ]}
       >
         <Text style={[styles.footerText, { fontSize: s(FONT_SIZES.lg) }]}>
-          Having trouble?{" "}
+          Need help?{" "}
           <Text style={styles.footerLink}>Contact your manager</Text>
         </Text>
       </View>

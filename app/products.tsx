@@ -144,15 +144,18 @@ export default function ProductsScreen() {
         >
           <Text style={[styles.title, { fontSize: s(FONT_SIZES.xl) }]}>Products</Text>
           <Pressable
-            style={[
+            style={({ pressed }) => [
               styles.addButton,
               {
                 width: s(46),
                 height: s(46),
                 borderRadius: s(7),
+                opacity: pressed ? 0.7 : 1,
               },
             ]}
             onPress={handleAddProduct}
+            accessibilityRole="button"
+            accessibilityLabel="Add new product"
           >
             <Feather name="plus" size={s(20)} color={COLORS.primary} />
           </Pressable>
@@ -211,9 +214,21 @@ export default function ProductsScreen() {
           onRefresh={handleRefresh}
           ListEmptyComponent={
             !isLoading ? (
-              <View style={[styles.emptyState, { paddingVertical: sy(40) }]}>
-                <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.md) }]}>
-                  No products found
+              <View style={[styles.emptyState, { paddingVertical: sy(48), paddingHorizontal: sx(32) }]}>
+                <Text style={[styles.emptyStateTitle, { fontSize: s(FONT_SIZES.lg) }]}>
+                  {searchQuery
+                    ? "No products match your search"
+                    : "No products found"}
+                </Text>
+                <Text
+                  style={[
+                    styles.emptyStateText,
+                    { fontSize: s(FONT_SIZES.sm), marginTop: sy(8) },
+                  ]}
+                >
+                  {searchQuery
+                    ? "Try a different name, SKU, or clear the filters"
+                    : "Add your first product using the + button above"}
                 </Text>
               </View>
             ) : null
@@ -279,9 +294,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  emptyStateTitle: {
+    color: COLORS.text,
+    fontFamily: FONTS.semiBold,
+    textAlign: "center",
+  },
   emptyStateText: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
+    textAlign: "center",
+    lineHeight: 22,
   },
   tabBarContainer: {
     position: "absolute",

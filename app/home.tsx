@@ -62,7 +62,7 @@ export default function HomeScreen() {
   const userRole = formatRole(user?.role);
 
   const handleNewSale = () => {
-    // Navigate to new sale screen
+    navigateToTab("product");
   };
 
   const handleLogout = async () => {
@@ -144,15 +144,18 @@ export default function HomeScreen() {
 
           {/* Logout Button */}
           <Pressable
-            style={[
+            style={({ pressed }) => [
               styles.logoutButton,
               {
                 width: s(46),
                 height: s(46),
                 borderRadius: s(7),
+                opacity: pressed ? 0.7 : 1,
               },
             ]}
             onPress={handleLogout}
+            accessibilityRole="button"
+            accessibilityLabel="Log out"
           >
             <Feather name="log-out" size={s(22)} color={COLORS.primary} />
           </Pressable>
@@ -161,14 +164,18 @@ export default function HomeScreen() {
         {/* New Sale Button */}
         <View style={[styles.buttonContainer, { paddingHorizontal: sx(20) }]}>
           <Pressable
-            style={[
+            style={({ pressed }) => [
               styles.newSaleButton,
               {
                 height: sy(55),
                 borderRadius: s(12),
+                opacity: pressed ? 0.85 : 1,
+                transform: [{ scale: pressed ? 0.985 : 1 }],
               },
             ]}
             onPress={handleNewSale}
+            accessibilityRole="button"
+            accessibilityLabel="Start new sale"
           >
             <PlusIcon size={s(24)} />
             <Text
@@ -271,6 +278,14 @@ export default function HomeScreen() {
               <Text style={[styles.emptyStateText, { fontSize: s(FONT_SIZES.lg) }]}>
                 No active deliveries
               </Text>
+              <Text
+                style={[
+                  styles.emptyStateSubtext,
+                  { fontSize: s(FONT_SIZES.sm), marginTop: sy(6) },
+                ]}
+              >
+                Deliveries will appear here when orders are dispatched
+              </Text>
             </View>
           ) : (
             DELIVERIES.map((delivery) => (
@@ -334,12 +349,12 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.semiBold,
   },
   onlineBadge: {
-    backgroundColor: "rgba(0, 201, 70, 0.14)",
+    backgroundColor: "rgba(34, 197, 94, 0.14)",
     justifyContent: "center",
     alignItems: "center",
   },
   onlineText: {
-    color: "#00A53A",
+    color: COLORS.success,
     fontFamily: FONTS.medium,
   },
   logoutButton: {
@@ -409,7 +424,12 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     color: COLORS.textMuted,
+    fontFamily: FONTS.medium,
+  },
+  emptyStateSubtext: {
+    color: COLORS.textMuted,
     fontFamily: FONTS.regular,
+    textAlign: "center",
   },
   tabBarContainer: {
     position: "absolute",

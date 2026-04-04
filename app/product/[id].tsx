@@ -75,7 +75,7 @@ export default function ProductDetailScreen() {
             Product not found
           </Text>
           <Pressable
-            style={[styles.backButtonAlt, { marginTop: sy(20) }]}
+            style={[styles.backButtonAlt, { marginTop: sy(20), paddingHorizontal: sx(20), paddingVertical: sy(10), borderRadius: s(8) }]}
             onPress={handleBack}
           >
             <Text style={[styles.backButtonText, { fontSize: s(FONT_SIZES.md) }]}>
@@ -369,9 +369,6 @@ const styles = StyleSheet.create({
   },
   backButtonAlt: {
     backgroundColor: COLORS.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
   },
   backButtonText: {
     color: COLORS.surface,
@@ -382,7 +379,7 @@ const styles = StyleSheet.create({
   },
   heroContainer: {
     width: "100%",
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.backgroundDark,
   },
   heroImage: {
     width: "100%",
@@ -393,7 +390,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -404,7 +401,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

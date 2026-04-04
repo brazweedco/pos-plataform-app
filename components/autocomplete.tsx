@@ -199,7 +199,7 @@ export function Autocomplete<T extends AutocompleteItem>({
               <TextInput
                 style={[styles.searchInput, { fontSize: s(FONT_SIZES.md) }]}
                 placeholder="Search..."
-                placeholderTextColor="#71717B"
+                placeholderTextColor={COLORS.textMuted}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 autoFocus

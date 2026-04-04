@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -13,7 +14,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/button";
-import { GooglePayButton } from "@/components/google-pay-button";
+import { TapToPayButton } from "@/components/tap-to-pay-button";
 import { ScreenContainer } from "@/components/screen-container";
 import { ScreenHeader } from "@/components/ui";
 import { FONTS } from "@/constants/fonts";
@@ -33,10 +34,10 @@ type PaymentOption = {
 
 const PAYMENT_OPTIONS: PaymentOption[] = [
   {
-    id: "GOOGLE_PAY",
-    label: "Google Pay",
-    icon: "smartphone",
-    description: "Tap to pay with NFC",
+    id: "TAP_TO_PAY",
+    label: "Tap to Pay",
+    icon: "credit-card",
+    description: "Accept card via NFC",
   },
   {
     id: "CASH",
@@ -57,12 +58,12 @@ export default function CheckoutScreen() {
   const {
     state: checkoutState,
     startCheckout,
-    processGooglePaySuccess,
+    processTapToPaySuccess,
     cancelPaymentForm,
     isProcessing,
   } = useCheckout();
 
-  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("GOOGLE_PAY");
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("TAP_TO_PAY");
   const [tip, setTip] = useState("");
 
   const subtotal = getSubtotal();
@@ -73,17 +74,17 @@ export default function CheckoutScreen() {
     await startCheckout(selectedPayment, tipAmount);
   };
 
-  const handleGooglePaySuccess = async (paymentIntentId: string) => {
-    await processGooglePaySuccess(paymentIntentId);
+  const handleTapToPaySuccess = async (paymentIntentId: string) => {
+    await processTapToPaySuccess(paymentIntentId);
   };
 
-  const handleGooglePayError = (error: string) => {
+  const handleTapToPayError = (error: string) => {
     cancelPaymentForm();
   };
 
-  // Check if we should show the Google Pay button
-  const showGooglePayButton =
-    selectedPayment === "GOOGLE_PAY" &&
+  // Check if we should show the Tap to Pay button
+  const showTapToPayButton =
+    selectedPayment === "TAP_TO_PAY" &&
     checkoutState.step === "awaiting_payment" &&
     checkoutState.saleId;
 
@@ -92,7 +93,7 @@ export default function CheckoutScreen() {
       case "checking_out":
         return "Creating sale...";
       case "awaiting_payment":
-        return "Tap to pay with Google Pay...";
+        return "Ready for card tap...";
       case "processing_payment":
         return "Processing payment...";
       case "completing":
@@ -117,7 +118,7 @@ export default function CheckoutScreen() {
         },
       ]}
     >
-      <View style={styles.itemInfo}>
+      <View style={[styles.itemInfo, { marginRight: sx(12) }]}>
         <Text
           style={[styles.itemName, { fontSize: s(TEXT_SIZES.body) }]}
           numberOfLines={1}
@@ -125,7 +126,7 @@ export default function CheckoutScreen() {
           {item.product.name}
         </Text>
         <Text
-          style={[styles.itemQuantity, { fontSize: s(TEXT_SIZES.bodySmall) }]}
+          style={[styles.itemQuantity, { fontSize: s(TEXT_SIZES.bodySmall), marginTop: sy(2) }]}
         >
           Qty: {item.quantity}
         </Text>
@@ -140,169 +141,195 @@ export default function CheckoutScreen() {
     <ScreenContainer showPattern={false}>
       <View style={[styles.container, { paddingTop: insets.top }]}>
         {/* Header */}
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer, { paddingBottom: sy(20) }]}>
           <ScreenHeader title="Checkout" onBack={() => router.back()} />
         </View>
 
-        {/* Order Summary */}
-        <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
-          <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
-            Order Summary
-          </Text>
-          <View
-            style={[
-              styles.orderCard,
-              {
-                marginTop: sy(12),
-                borderRadius: s(12),
-                padding: sx(16),
-              },
-            ]}
-          >
-            <FlatList
-              data={items}
-              keyExtractor={(item) => item.product.id}
-              renderItem={renderOrderItem}
-              scrollEnabled={false}
-            />
+        {/* Scrollable content */}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={{ paddingBottom: sy(240) }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* Order Summary */}
+          <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
+            <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
+              Order Summary
+            </Text>
+            <View
+              style={[
+                styles.orderCard,
+                {
+                  marginTop: sy(12),
+                  borderRadius: s(12),
+                  padding: sx(16),
+                },
+              ]}
+            >
+              <FlatList
+                data={items}
+                keyExtractor={(item) => item.product.id}
+                renderItem={renderOrderItem}
+                scrollEnabled={false}
+              />
+            </View>
           </View>
-        </View>
 
-        {/* Tip Section */}
-        <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
-          <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
-            Add Tip (Optional)
-          </Text>
-          <View
-            style={[
-              styles.tipInputContainer,
-              {
-                marginTop: sy(12),
-                height: sy(56),
-                borderRadius: s(12),
-                paddingHorizontal: sx(16),
-              },
-            ]}
-          >
-            <Text style={[styles.dollarSign, { fontSize: s(TEXT_SIZES.body) }]}>$</Text>
-            <TextInput
-              style={[styles.tipInput, { fontSize: s(TEXT_SIZES.body) }]}
-              placeholder="0.00"
-              placeholderTextColor={COLORS.textMuted}
-              keyboardType="decimal-pad"
-              value={tip}
-              onChangeText={setTip}
-            />
+          {/* Tip Section */}
+          <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
+            <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
+              Add Tip (Optional)
+            </Text>
+            <View
+              style={[
+                styles.tipInputContainer,
+                {
+                  marginTop: sy(12),
+                  height: sy(56),
+                  borderRadius: s(12),
+                  paddingHorizontal: sx(16),
+                },
+              ]}
+            >
+              <Text style={[styles.dollarSign, { fontSize: s(TEXT_SIZES.body) }]}>$</Text>
+              <TextInput
+                style={[styles.tipInput, { fontSize: s(TEXT_SIZES.body) }]}
+                placeholder="0.00"
+                placeholderTextColor={COLORS.textMuted}
+                keyboardType="decimal-pad"
+                value={tip}
+                onChangeText={setTip}
+                accessibilityLabel="Tip amount in dollars"
+                returnKeyType="done"
+              />
+            </View>
           </View>
-        </View>
 
-        {/* Payment Method */}
-        <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
-          <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
-            Payment Method
-          </Text>
-          <View style={{ marginTop: sy(12), gap: sy(12) }}>
-            {PAYMENT_OPTIONS.map((option) => (
-              <Pressable
-                key={option.id}
-                style={[
-                  styles.paymentOption,
-                  {
-                    borderRadius: s(12),
-                    padding: sx(16),
-                    borderWidth: 2,
-                    borderColor:
-                      selectedPayment === option.id
-                        ? COLORS.primary
-                        : COLORS.backgroundDark,
-                  },
-                ]}
-                onPress={() => setSelectedPayment(option.id)}
-              >
-                <View
-                  style={[
-                    styles.paymentIconContainer,
+          {/* Payment Method */}
+          <View style={[styles.section, { marginTop: sy(20), paddingHorizontal: sx(20) }]}>
+            <Text style={[styles.sectionTitle, { fontSize: s(TEXT_SIZES.sectionTitle) }]}>
+              Payment Method
+            </Text>
+            <View style={{ marginTop: sy(12), gap: sy(12) }}>
+              {PAYMENT_OPTIONS.map((option) => (
+                <Pressable
+                  key={option.id}
+                  style={({ pressed }) => [
+                    styles.paymentOption,
                     {
-                      width: s(44),
-                      height: s(44),
                       borderRadius: s(12),
-                      backgroundColor:
-                        selectedPayment === option.id
-                          ? "rgba(228, 108, 69, 0.1)"
-                          : COLORS.inputBackground,
-                    },
-                  ]}
-                >
-                  <Feather
-                    name={option.icon}
-                    size={s(22)}
-                    color={
-                      selectedPayment === option.id
-                        ? COLORS.primary
-                        : COLORS.text
-                    }
-                  />
-                </View>
-                <View style={styles.paymentInfo}>
-                  <Text
-                    style={[
-                      styles.paymentLabel,
-                      { fontSize: s(TEXT_SIZES.body) },
-                    ]}
-                  >
-                    {option.label}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.paymentDescription,
-                      { fontSize: s(TEXT_SIZES.bodySmall) },
-                    ]}
-                  >
-                    {option.description}
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.radioButton,
-                    {
-                      width: s(24),
-                      height: s(24),
-                      borderRadius: s(12),
+                      padding: sx(16),
                       borderWidth: 2,
                       borderColor:
                         selectedPayment === option.id
                           ? COLORS.primary
                           : COLORS.backgroundDark,
+                      opacity: pressed ? 0.8 : 1,
                     },
                   ]}
+                  onPress={() => setSelectedPayment(option.id)}
+                  accessibilityRole="radio"
+                  accessibilityLabel={`${option.label} - ${option.description}`}
+                  accessibilityState={{ checked: selectedPayment === option.id }}
                 >
-                  {selectedPayment === option.id && (
-                    <View
-                      style={[
-                        styles.radioButtonInner,
-                        {
-                          width: s(12),
-                          height: s(12),
-                          borderRadius: s(6),
-                        },
-                      ]}
+                  <View
+                    style={[
+                      styles.paymentIconContainer,
+                      {
+                        width: s(44),
+                        height: s(44),
+                        borderRadius: s(12),
+                        backgroundColor:
+                          selectedPayment === option.id
+                            ? "rgba(228, 108, 69, 0.1)"
+                            : COLORS.inputBackground,
+                      },
+                    ]}
+                  >
+                    <Feather
+                      name={option.icon}
+                      size={s(22)}
+                      color={
+                        selectedPayment === option.id
+                          ? COLORS.primary
+                          : COLORS.text
+                      }
                     />
-                  )}
-                </View>
-              </Pressable>
-            ))}
+                  </View>
+                  <View style={[styles.paymentInfo, { marginLeft: sx(12) }]}>
+                    <Text
+                      style={[
+                        styles.paymentLabel,
+                        { fontSize: s(TEXT_SIZES.body) },
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.paymentDescription,
+                        { fontSize: s(TEXT_SIZES.bodySmall), marginTop: sy(2) },
+                      ]}
+                    >
+                      {option.description}
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      {
+                        width: s(24),
+                        height: s(24),
+                        borderRadius: s(12),
+                        borderWidth: 2,
+                        borderColor:
+                          selectedPayment === option.id
+                            ? COLORS.primary
+                            : COLORS.backgroundDark,
+                      },
+                    ]}
+                  >
+                    {selectedPayment === option.id && (
+                      <View
+                        style={[
+                          styles.radioButtonInner,
+                          {
+                            width: s(12),
+                            height: s(12),
+                            borderRadius: s(6),
+                          },
+                        ]}
+                      />
+                    )}
+                  </View>
+                </Pressable>
+              ))}
+            </View>
           </View>
-        </View>
 
-        {/* Error Message */}
-        {checkoutState.error && (
-          <View style={[styles.errorContainer, { marginHorizontal: sx(20), marginTop: sy(16) }]}>
-            <Feather name="alert-circle" size={s(18)} color="#DC2626" />
-            <Text style={[styles.errorText, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
-              {checkoutState.error}
-            </Text>
-          </View>
-        )}
+          {/* Error Message */}
+          {checkoutState.error && (
+            <View
+              style={[
+                styles.errorContainer,
+                {
+                  marginHorizontal: sx(20),
+                  marginTop: sy(16),
+                  padding: s(12),
+                  borderRadius: s(8),
+                  gap: sx(8),
+                },
+              ]}
+              accessibilityRole="alert"
+            >
+              <Feather name="alert-circle" size={s(18)} color="#DC2626" />
+              <Text style={[styles.errorText, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
+                {checkoutState.error}
+              </Text>
+            </View>
+          )}
+        </ScrollView>
 
         {/* Footer */}
         <View
@@ -353,7 +380,7 @@ export default function CheckoutScreen() {
 
           {/* Processing Message */}
           {isProcessing && (
-            <View style={[styles.processingContainer, { marginTop: sy(12) }]}>
+            <View style={[styles.processingContainer, { marginTop: sy(12), gap: sx(8) }]}>
               <ActivityIndicator size="small" color={COLORS.primary} />
               <Text style={[styles.processingText, { fontSize: s(TEXT_SIZES.bodySmall) }]}>
                 {getStepMessage()}
@@ -361,22 +388,22 @@ export default function CheckoutScreen() {
             </View>
           )}
 
-          {/* Google Pay Button - shown after checkout starts with Google Pay */}
-          {showGooglePayButton && checkoutState.saleId && (
+          {/* Tap to Pay Button - shown after checkout starts with Tap to Pay */}
+          {showTapToPayButton && checkoutState.saleId && (
             <View style={{ marginTop: sy(16) }}>
-              <GooglePayButton
+              <TapToPayButton
                 saleId={checkoutState.saleId}
                 amount={checkoutState.total}
                 currency="usd"
-                onSuccess={handleGooglePaySuccess}
-                onError={handleGooglePayError}
+                onSuccess={handleTapToPaySuccess}
+                onError={handleTapToPayError}
                 disabled={isProcessing}
               />
             </View>
           )}
 
-          {/* Checkout Button - hidden when Google Pay button is shown */}
-          {!showGooglePayButton && (
+          {/* Checkout Button - hidden when Tap to Pay button is shown */}
+          {!showTapToPayButton && (
             <View style={{ marginTop: sy(16) }}>
               <Button
                 title={isProcessing ? "Processing..." : `Pay $${total.toFixed(2)}`}
@@ -404,7 +431,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.28,
     shadowRadius: 22,
     elevation: 8,
-    paddingBottom: 20,
+  },
+  scrollView: {
+    flex: 1,
   },
   section: {},
   sectionTitle: {
@@ -426,7 +455,6 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     flex: 1,
-    marginRight: 12,
   },
   itemName: {
     color: COLORS.text,
@@ -435,7 +463,6 @@ const styles = StyleSheet.create({
   itemQuantity: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
-    marginTop: 2,
   },
   itemPrice: {
     color: COLORS.text,
@@ -467,7 +494,6 @@ const styles = StyleSheet.create({
   },
   paymentInfo: {
     flex: 1,
-    marginLeft: 12,
   },
   paymentLabel: {
     color: COLORS.text,
@@ -476,7 +502,6 @@ const styles = StyleSheet.create({
   paymentDescription: {
     color: COLORS.textMuted,
     fontFamily: FONTS.regular,
-    marginTop: 2,
   },
   radioButton: {
     justifyContent: "center",
@@ -488,10 +513,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FEF2F2",
-    padding: 12,
-    borderRadius: 8,
-    gap: 8,
+    backgroundColor: "rgba(220, 38, 38, 0.07)",
   },
   errorText: {
     color: "#DC2626",
@@ -501,8 +523,8 @@ const styles = StyleSheet.create({
   footer: {
     position: "absolute",
     bottom: 0,
-    left: 20,
-    right: 20,
+    left: 0,
+    right: 0,
     backgroundColor: COLORS.surface,
     shadowColor: COLORS.primaryDark,
     shadowOffset: { width: 0, height: -4 },
@@ -539,7 +561,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
   },
   processingText: {
     color: COLORS.textMuted,

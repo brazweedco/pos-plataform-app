@@ -21,22 +21,29 @@ export function ProductGridCard({
 }: ProductGridCardProps) {
   const { s, sx, sy } = useScale();
 
+  const isOutOfStock = product.stock === 0;
+
   const handleAddToCart = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-    onAddToCart?.(product);
+    if (!isOutOfStock) {
+      onAddToCart?.(product);
+    }
   };
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.container,
         {
           width: sx(195),
           height: sy(190),
           borderRadius: s(12),
+          opacity: pressed ? 0.88 : 1,
         },
       ]}
       onPress={() => onPress?.(product)}
+      accessibilityRole="button"
+      accessibilityLabel={`${product.name}, $${product.price.toFixed(2)}${isOutOfStock ? ", out of stock" : ""}`}
     >
       {/* Product Image */}
       <View
@@ -56,8 +63,17 @@ export function ProductGridCard({
           contentFit="cover"
         />
 
+        {/* Out of Stock Overlay */}
+        {isOutOfStock && (
+          <View style={[styles.outOfStockOverlay, { borderRadius: s(9) }]}>
+            <Text style={[styles.outOfStockText, { fontSize: s(FONT_SIZES.xs) }]}>
+              Out of Stock
+            </Text>
+          </View>
+        )}
+
         {/* THC Badge */}
-        {product.thcPercentage !== undefined && product.thcPercentage > 0 && (
+        {!isOutOfStock && product.thcPercentage !== undefined && product.thcPercentage > 0 && (
           <View
             style={[
               styles.thcBadge,
@@ -97,21 +113,34 @@ export function ProductGridCard({
         </Text>
 
         <View style={styles.priceRow}>
-          <Text style={[styles.price, { fontSize: s(FONT_SIZES.sm) }]}>
+          <Text
+            style={[
+              styles.price,
+              { fontSize: s(FONT_SIZES.sm) },
+              isOutOfStock && styles.priceDisabled,
+            ]}
+          >
             ${product.price.toFixed(2)}
           </Text>
 
           {/* Cart Button */}
           <Pressable
-            style={[
+            style={({ pressed }) => [
               styles.cartButton,
               {
-                width: s(30),
-                height: s(30),
-                borderRadius: s(15),
+                width: s(32),
+                height: s(32),
+                borderRadius: s(16),
+                opacity: isOutOfStock ? 0.35 : pressed ? 0.75 : 1,
               },
+              isOutOfStock && styles.cartButtonDisabled,
             ]}
             onPress={handleAddToCart}
+            disabled={isOutOfStock}
+            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            accessibilityRole="button"
+            accessibilityLabel={`Add ${product.name} to cart`}
+            accessibilityState={{ disabled: isOutOfStock }}
           >
             <Feather name="shopping-cart" size={s(14)} color={COLORS.surface} />
           </Pressable>
@@ -141,6 +170,21 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  outOfStockOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(15, 47, 56, 0.55)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  outOfStockText: {
+    color: COLORS.surface,
+    fontFamily: FONTS.semiBold,
+    letterSpacing: 0.3,
+  },
   thcBadge: {
     position: "absolute",
     backgroundColor: "rgba(244, 244, 245, 0.24)",
@@ -166,9 +210,15 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontFamily: FONTS.bold,
   },
+  priceDisabled: {
+    color: COLORS.textMuted,
+  },
   cartButton: {
     backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
+  },
+  cartButtonDisabled: {
+    backgroundColor: COLORS.textMuted,
   },
 });

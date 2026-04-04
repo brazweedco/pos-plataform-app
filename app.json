@@ -25,6 +25,10 @@
       "edgeToEdgeEnabled": true,
       "package": "com.brazweed.pos",
       "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.NFC",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
       "intentFilters": [
         {
           "action": "VIEW",
@@ -72,6 +76,12 @@
         {
           "merchantIdentifier": "merchant.com.brazweed.pos",
           "enableGooglePay": true
+        }
+      ],
+      [
+        "@stripe/stripe-terminal-react-native",
+        {
+          "tapToPayEnabled": true
         }
       ]
     ],

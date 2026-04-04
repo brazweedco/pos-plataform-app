@@ -33,6 +33,7 @@ export function SearchBar({
           paddingHorizontal: sx(14),
         },
       ]}
+      accessibilityRole="search"
     >
       <Feather
         name="search"
@@ -46,9 +47,18 @@ export function SearchBar({
         placeholderTextColor={COLORS.textMuted}
         value={value}
         onChangeText={onChangeText}
+        accessibilityLabel={placeholder}
+        returnKeyType="search"
+        clearButtonMode="while-editing"
       />
       {showFilter && (
-        <Pressable onPress={onFilterPress}>
+        <Pressable
+          onPress={onFilterPress}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel="Open filters"
+          style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+        >
           <Feather name="sliders" size={s(24)} color={COLORS.primary} />
         </Pressable>
       )}

@@ -27,7 +27,7 @@ import { mapProductResponseToProduct, ProductRequest } from "@/types/product";
 
 export default function ProductEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { s, sy } = useScale();
+  const { s, sx, sy } = useScale();
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const { showWarning } = useToast();
@@ -99,7 +99,7 @@ export default function ProductEditScreen() {
             Product not found
           </Text>
           <Pressable
-            style={[styles.backButtonAlt, { marginTop: sy(20) }]}
+            style={[styles.backButtonAlt, { marginTop: sy(20), paddingHorizontal: sx(20), paddingVertical: sy(10), borderRadius: s(8) }]}
             onPress={() => router.back()}
           >
             <Text style={[styles.backButtonText, { fontSize: s(FONT_SIZES.md) }]}>
@@ -150,9 +150,6 @@ const styles = StyleSheet.create({
   },
   backButtonAlt: {
     backgroundColor: COLORS.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
   },
   backButtonText: {
     color: COLORS.surface,

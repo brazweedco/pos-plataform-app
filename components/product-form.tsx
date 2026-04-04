@@ -296,7 +296,7 @@ export function ProductForm({
 
       <Input
         label="Product Name *"
-        placeholder="Enter product name"
+        placeholder="e.g. Blue Dream OZ"
         value={name}
         onChangeText={setName}
       />
@@ -306,7 +306,7 @@ export function ProductForm({
 
       <Input
         label="SKU *"
-        placeholder="Enter SKU"
+        placeholder="e.g. BD-001"
         value={sku}
         onChangeText={setSku}
         autoCapitalize="characters"
@@ -317,7 +317,7 @@ export function ProductForm({
 
       <Input
         label="Description"
-        placeholder="Enter product description"
+        placeholder="What makes this product special?"
         value={description}
         onChangeText={(text) => setDescription(text.slice(0, 255))}
         multiline
@@ -331,7 +331,7 @@ export function ProductForm({
 
       <Input
         label="Price *"
-        placeholder="0.00"
+        placeholder="25.00"
         value={price}
         onChangeText={setPrice}
         keyboardType="decimal-pad"
@@ -342,7 +342,7 @@ export function ProductForm({
 
       <Input
         label="Stock Quantity"
-        placeholder="0"
+        placeholder="100"
         value={stockQuantity}
         onChangeText={(text) => {
           // Block "." and "," - only allow integers for stock quantity
@@ -398,7 +398,7 @@ export function ProductForm({
                 { fontSize: s(FONT_SIZES.md), marginTop: sy(10) },
               ]}
             >
-              Tap to add image
+              Tap to upload image
             </Text>
           </View>
         )}
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorText: {
-    color: "#FF541C",
+    color: COLORS.error,
     marginTop: -8,
     marginBottom: 8,
     fontFamily: FONTS.regular,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     color: COLORS.text,
-    fontFamily: FONTS.medium,
+    fontFamily: FONTS.regular,
   },
   imagePickerContainer: {
     backgroundColor: COLORS.inputBackground,
