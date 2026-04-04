@@ -7,15 +7,14 @@
     "icon": "./assets/images/icon.png",
     "scheme": "brazweedpos",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.brazweed.pos",
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-        },
-        "LSApplicationQueriesSchemes": ["square-commerce-v1"]
+        }
       }
     },
     "android": {
@@ -35,7 +34,10 @@
               "scheme": "brazweedpos"
             }
           ],
-          "category": ["DEFAULT", "BROWSABLE"]
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ]
         }
       ]
     },
@@ -63,6 +65,13 @@
             "./assets/fonts/foundry-context-w03-x-bd.ttf",
             "./assets/fonts/foundry-context-w03-xb-bd.ttf"
           ]
+        }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.brazweed.pos",
+          "enableGooglePay": true
         }
       ]
     ],

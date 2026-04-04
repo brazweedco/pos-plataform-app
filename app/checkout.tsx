@@ -13,9 +13,9 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/button";
+import { GooglePayButton } from "@/components/google-pay-button";
 import { ScreenContainer } from "@/components/screen-container";
 import { ScreenHeader } from "@/components/ui";
-import { SquarePaymentForm } from "@/components/square-payment-form";
 import { FONTS } from "@/constants/fonts";
 import { COLORS } from "@/constants/layout";
 import { TEXT_SIZES } from "@/constants/typography";
@@ -33,16 +33,16 @@ type PaymentOption = {
 
 const PAYMENT_OPTIONS: PaymentOption[] = [
   {
+    id: "GOOGLE_PAY",
+    label: "Google Pay",
+    icon: "smartphone",
+    description: "Tap to pay with NFC",
+  },
+  {
     id: "CASH",
     label: "Cash",
     icon: "dollar-sign",
     description: "Pay with cash",
-  },
-  {
-    id: "CARD",
-    label: "Card",
-    icon: "credit-card",
-    description: "Pay with credit or debit card",
   },
 ];
 
@@ -57,12 +57,12 @@ export default function CheckoutScreen() {
   const {
     state: checkoutState,
     startCheckout,
-    processCardToken,
+    processGooglePaySuccess,
     cancelPaymentForm,
     isProcessing,
   } = useCheckout();
 
-  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("CASH");
+  const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("GOOGLE_PAY");
   const [tip, setTip] = useState("");
 
   const subtotal = getSubtotal();
@@ -73,24 +73,26 @@ export default function CheckoutScreen() {
     await startCheckout(selectedPayment, tipAmount);
   };
 
-  const handleCardPaymentSuccess = async (
-    token: string,
-    cardBrand?: string,
-    lastFour?: string
-  ) => {
-    await processCardToken(token, cardBrand, lastFour);
+  const handleGooglePaySuccess = async (paymentIntentId: string) => {
+    await processGooglePaySuccess(paymentIntentId);
   };
 
-  const handleCardPaymentError = (error: string) => {
+  const handleGooglePayError = (error: string) => {
     cancelPaymentForm();
   };
+
+  // Check if we should show the Google Pay button
+  const showGooglePayButton =
+    selectedPayment === "GOOGLE_PAY" &&
+    checkoutState.step === "awaiting_payment" &&
+    checkoutState.saleId;
 
   const getStepMessage = () => {
     switch (checkoutState.step) {
       case "checking_out":
         return "Creating sale...";
-      case "awaiting_card":
-        return "Enter card details...";
+      case "awaiting_payment":
+        return "Tap to pay with Google Pay...";
       case "processing_payment":
         return "Processing payment...";
       case "completing":
@@ -359,25 +361,32 @@ export default function CheckoutScreen() {
             </View>
           )}
 
-          {/* Checkout Button */}
-          <View style={{ marginTop: sy(16) }}>
-            <Button
-              title={isProcessing ? "Processing..." : `Pay $${total.toFixed(2)}`}
-              onPress={handleCheckout}
-              disabled={isProcessing || items.length === 0}
-            />
-          </View>
+          {/* Google Pay Button - shown after checkout starts with Google Pay */}
+          {showGooglePayButton && checkoutState.saleId && (
+            <View style={{ marginTop: sy(16) }}>
+              <GooglePayButton
+                saleId={checkoutState.saleId}
+                amount={checkoutState.total}
+                currency="usd"
+                onSuccess={handleGooglePaySuccess}
+                onError={handleGooglePayError}
+                disabled={isProcessing}
+              />
+            </View>
+          )}
+
+          {/* Checkout Button - hidden when Google Pay button is shown */}
+          {!showGooglePayButton && (
+            <View style={{ marginTop: sy(16) }}>
+              <Button
+                title={isProcessing ? "Processing..." : `Pay $${total.toFixed(2)}`}
+                onPress={handleCheckout}
+                disabled={isProcessing || items.length === 0}
+              />
+            </View>
+          )}
         </View>
       </View>
-
-      {/* Square Payment Form Modal */}
-      <SquarePaymentForm
-        visible={checkoutState.showPaymentForm}
-        amount={checkoutState.total}
-        onSuccess={handleCardPaymentSuccess}
-        onCancel={cancelPaymentForm}
-        onError={handleCardPaymentError}
-      />
     </ScreenContainer>
   );
 }

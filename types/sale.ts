@@ -41,7 +41,7 @@ export interface SaleResponse {
 
 export type SaleStatus = "PENDING" | "COMPLETED" | "VOIDED" | "REFUNDED";
 
-export type PaymentMethod = "CASH" | "CARD" | "SQUARE" | "OTHER";
+export type PaymentMethod = "CASH" | "GOOGLE_PAY" | "APPLE_PAY";
 
 // Sales summary for dashboard/reports
 export interface SaleSummaryResponse {

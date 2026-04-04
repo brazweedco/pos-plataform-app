@@ -1,7 +1,7 @@
 /**
  * useCheckout Hook
  * Encapsulates checkout logic for cart -> sale conversion
- * Payment processing uses Square Web Payments SDK for card payments
+ * Supports CASH and GOOGLE_PAY (NFC tap-to-pay via Stripe)
  */
 
 import { useState, useCallback } from "react";
@@ -10,14 +10,14 @@ import { router } from "expo-router";
 import { useCartStore } from "@/stores/cart-store";
 import { cartApiService } from "@/services/cart-api";
 import { salesService } from "@/services/sales";
-import { squarePaymentService, PaymentStatus } from "@/services/square-pos";
+import { stripePaymentApi } from "@/services/stripe-payment";
 import { PaymentMethod } from "@/types/sale";
 import { CheckoutResponse } from "@/types/cart-api";
 
 export type CheckoutStep =
   | "idle"
   | "checking_out"
-  | "awaiting_card"
+  | "awaiting_payment"
   | "processing_payment"
   | "completing"
   | "completed"
@@ -32,17 +32,14 @@ export interface CheckoutState {
   tipAmount: number;
   paymentMethod: PaymentMethod | null;
   paymentId: string | null;
-  paymentStatus: PaymentStatus | null;
-  showPaymentForm: boolean;
 }
 
 export interface UseCheckoutReturn {
   state: CheckoutState;
   startCheckout: (paymentMethod: PaymentMethod, tip?: number) => Promise<void>;
-  processCardToken: (token: string, cardBrand?: string, lastFour?: string) => Promise<void>;
+  processGooglePaySuccess: (paymentIntentId: string) => Promise<void>;
   cancelPaymentForm: () => void;
   reset: () => void;
-  cancelPayment: () => Promise<void>;
   isProcessing: boolean;
 }
 
@@ -61,8 +58,6 @@ export function useCheckout(): UseCheckoutReturn {
     tipAmount: 0,
     paymentMethod: null,
     paymentId: null,
-    paymentStatus: null,
-    showPaymentForm: false,
   });
 
   const startCheckout = useCallback(
@@ -111,14 +106,14 @@ export function useCheckout(): UseCheckoutReturn {
         }));
 
         // Step 2: Process payment based on method
-        if (paymentMethod === "CARD") {
-          // Show Square Payment Form to collect card details
+        if (paymentMethod === "GOOGLE_PAY") {
+          // Google Pay - show the Google Pay button
+          // The actual payment is handled by GooglePayButton component
+          // which calls processGooglePaySuccess on completion
           setState((prev) => ({
             ...prev,
-            step: "awaiting_card",
-            showPaymentForm: true,
+            step: "awaiting_payment",
           }));
-          // processCardToken will be called when user completes the form
         } else {
           // Cash payment - complete sale directly
           setState((prev) => ({ ...prev, step: "completing" }));
@@ -137,6 +132,7 @@ export function useCheckout(): UseCheckoutReturn {
               saleId: checkoutResult.saleId,
               saleNumber: checkoutResult.saleNumber,
               total: saleTotal.toString(),
+              paymentMethod: "Cash",
             },
           });
         }
@@ -145,7 +141,6 @@ export function useCheckout(): UseCheckoutReturn {
           ...prev,
           step: "error",
           error: error instanceof Error ? error.message : "Checkout failed",
-          showPaymentForm: false,
         }));
       }
     },
@@ -153,17 +148,16 @@ export function useCheckout(): UseCheckoutReturn {
   );
 
   /**
-   * Process card payment with token from Square Web Payments SDK
-   * Called by SquarePaymentForm when user submits card details
+   * Process Google Pay payment success
+   * Called by GooglePayButton when payment is confirmed via Stripe
    */
-  const processCardToken = useCallback(
-    async (token: string, cardBrand?: string, lastFour?: string) => {
+  const processGooglePaySuccess = useCallback(
+    async (paymentIntentId: string) => {
       if (!state.saleId) {
         setState((prev) => ({
           ...prev,
           step: "error",
           error: "No sale to process",
-          showPaymentForm: false,
         }));
         return;
       }
@@ -171,25 +165,24 @@ export function useCheckout(): UseCheckoutReturn {
       setState((prev) => ({
         ...prev,
         step: "processing_payment",
-        showPaymentForm: false,
       }));
 
       try {
-        const paymentResult = await squarePaymentService.processCardPayment(
-          state.saleId,
-          token,
-          state.total,
-          {
-            tipAmount: state.tipAmount > 0 ? state.tipAmount : undefined,
-            notes: `Sale #${state.saleNumber}`,
-          }
-        );
+        // Verify payment status with Stripe
+        const paymentStatus = await stripePaymentApi.getPaymentIntent(paymentIntentId);
 
-        if (paymentResult.status === "COMPLETED") {
+        if (paymentStatus.status === "succeeded") {
+          // Complete the sale on backend
+          setState((prev) => ({ ...prev, step: "completing" }));
+
+          await salesService.complete(state.saleId, "GOOGLE_PAY", {
+            tipAmount: state.tipAmount > 0 ? state.tipAmount : undefined,
+            paymentReference: paymentIntentId,
+          });
+
           setState((prev) => ({
             ...prev,
-            paymentId: paymentResult.id,
-            paymentStatus: paymentResult.status,
+            paymentId: paymentIntentId,
             step: "completed",
           }));
 
@@ -201,42 +194,21 @@ export function useCheckout(): UseCheckoutReturn {
               saleId: state.saleId,
               saleNumber: state.saleNumber || "",
               total: state.total.toString(),
-              cardBrand: cardBrand || "",
-              lastFour: lastFour || "",
+              paymentMethod: "Google Pay",
             },
           });
-        } else if (paymentResult.status === "FAILED") {
+        } else {
           setState((prev) => ({
             ...prev,
             step: "error",
-            error: paymentResult.errorMessage || "Payment failed",
+            error: `Payment not completed. Status: ${paymentStatus.status}`,
           }));
-        } else {
-          // Payment is pending/processing - mark as completed for now
-          setState((prev) => ({
-            ...prev,
-            paymentId: paymentResult.id,
-            paymentStatus: paymentResult.status,
-            step: "completed",
-          }));
-
-          clearCart();
-          router.replace({
-            pathname: "/checkout-success",
-            params: {
-              saleId: state.saleId,
-              saleNumber: state.saleNumber || "",
-              total: state.total.toString(),
-              cardBrand: cardBrand || "",
-              lastFour: lastFour || "",
-            },
-          });
         }
       } catch (error) {
         setState((prev) => ({
           ...prev,
           step: "error",
-          error: error instanceof Error ? error.message : "Payment failed",
+          error: error instanceof Error ? error.message : "Payment verification failed",
         }));
       }
     },
@@ -244,27 +216,15 @@ export function useCheckout(): UseCheckoutReturn {
   );
 
   /**
-   * Cancel the payment form without completing the sale
+   * Cancel the payment without completing the sale
    */
   const cancelPaymentForm = useCallback(() => {
     setState((prev) => ({
       ...prev,
       step: "error",
       error: "Payment cancelled",
-      showPaymentForm: false,
     }));
   }, []);
-
-  const cancelPayment = useCallback(async () => {
-    if (state.paymentId) {
-      try {
-        await squarePaymentService.cancelPayment(state.paymentId);
-      } catch (error) {
-        console.error("Failed to cancel payment:", error);
-      }
-    }
-    reset();
-  }, [state.paymentId]);
 
   const reset = useCallback(() => {
     setState({
@@ -276,8 +236,6 @@ export function useCheckout(): UseCheckoutReturn {
       tipAmount: 0,
       paymentMethod: null,
       paymentId: null,
-      paymentStatus: null,
-      showPaymentForm: false,
     });
   }, []);
 
@@ -289,10 +247,9 @@ export function useCheckout(): UseCheckoutReturn {
   return {
     state,
     startCheckout,
-    processCardToken,
+    processGooglePaySuccess,
     cancelPaymentForm,
     reset,
-    cancelPayment,
     isProcessing,
   };
 }

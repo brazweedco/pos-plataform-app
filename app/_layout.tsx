@@ -1,8 +1,9 @@
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 import { FloatingCartButton } from "@/components/floating-cart-button";
@@ -12,6 +13,11 @@ import { useSession } from "@/hooks/use-session";
 import { QueryProvider } from "@/providers/query-provider";
 import { authService } from "@/services/auth";
 import { useUserStore } from "@/stores/user-store";
+
+// Stripe publishable key (use env var in production)
+const STRIPE_PUBLISHABLE_KEY =
+  process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+  "pk_test_51Qzhx8JARFVa1BeEd2s1ysBZgvcGte2vYJCXt5pa6GveTIMB9OdjX08LlAVvMMqFw1Ph1aj3bJUAY5Xe43vLdymN00QuEywLMK";
 
 // Keep splash screen visible while loading fonts
 SplashScreen.preventAutoHideAsync();
@@ -92,12 +98,28 @@ export default function RootLayout() {
     return null;
   }
 
-  return (
+  // StripeProvider is only available on native platforms
+  const content = (
     <QueryProvider>
       <ToastProvider>
         <AppContent />
       </ToastProvider>
     </QueryProvider>
+  );
+
+  // Wrap with StripeProvider on native platforms only
+  if (Platform.OS === "web") {
+    return content;
+  }
+
+  return (
+    <StripeProvider
+      publishableKey={STRIPE_PUBLISHABLE_KEY}
+      urlScheme="brazweedpos"
+      merchantIdentifier="merchant.com.brazweed.pos"
+    >
+      {content}
+    </StripeProvider>
   );
 }
 
