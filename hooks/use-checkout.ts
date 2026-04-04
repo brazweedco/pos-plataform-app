@@ -47,6 +47,7 @@ export function useCheckout(): UseCheckoutReturn {
   const items = useCartStore((state) => state.items);
   const getTotal = useCartStore((state) => state.getTotal);
   const clearCart = useCartStore((state) => state.clearCart);
+  const ensureCart = useCartStore((state) => state.ensureCart);
   const serverCartId = useCartStore((state) => state.serverCartId);
 
   const [state, setState] = useState<CheckoutState>({
@@ -93,8 +94,39 @@ export function useCheckout(): UseCheckoutReturn {
         const cartId = serverCartId;
 
         // Step 1: Checkout cart to create pending sale
-        const checkoutResult: CheckoutResponse =
-          await cartApiService.checkout(cartId);
+        let checkoutResult: CheckoutResponse;
+        try {
+          checkoutResult = await cartApiService.checkout(cartId);
+        } catch (checkoutError: unknown) {
+          // Check if cart was already processed
+          const errorMessage = checkoutError instanceof Error ? checkoutError.message : "";
+          const isCartAlreadyProcessed =
+            errorMessage.includes("CART_ALREADY_PROCESSED") ||
+            errorMessage.includes("already been processed") ||
+            errorMessage.includes("duplicate") ||
+            errorMessage.includes("already exists") ||
+            errorMessage.includes("constraint");
+
+          if (isCartAlreadyProcessed) {
+            // Cart already converted to sale - clear cart and create a new one
+            clearCart();
+            // Create a new cart for the next sale
+            ensureCart().catch(() => {
+              // Ignore errors - cart will be created when needed
+            });
+            setState((prev) => ({
+              ...prev,
+              step: "error",
+              error: "This cart was already processed. Redirecting to add new items...",
+            }));
+            // Navigate back to products after a short delay
+            setTimeout(() => {
+              router.replace("/(tabs)/products");
+            }, 1500);
+            return;
+          }
+          throw checkoutError;
+        }
 
         const saleTotal = checkoutResult.total + tip;
 
@@ -124,8 +156,12 @@ export function useCheckout(): UseCheckoutReturn {
 
           setState((prev) => ({ ...prev, step: "completed" }));
 
-          // Clear cart and navigate to success
+          // Clear cart and create a new one for the next sale
           clearCart();
+          // Proactively create a new cart so it's ready for the next customer
+          ensureCart().catch(() => {
+            // Ignore errors - cart will be created when needed
+          });
           router.replace({
             pathname: "/checkout-success",
             params: {
@@ -144,7 +180,7 @@ export function useCheckout(): UseCheckoutReturn {
         }));
       }
     },
-    [items, getTotal, serverCartId, clearCart]
+    [items, getTotal, serverCartId, clearCart, ensureCart]
   );
 
   /**
@@ -186,8 +222,12 @@ export function useCheckout(): UseCheckoutReturn {
             step: "completed",
           }));
 
-          // Clear cart and navigate to success
+          // Clear cart and create a new one for the next sale
           clearCart();
+          // Proactively create a new cart so it's ready for the next customer
+          ensureCart().catch(() => {
+            // Ignore errors - cart will be created when needed
+          });
           router.replace({
             pathname: "/checkout-success",
             params: {
@@ -212,19 +252,29 @@ export function useCheckout(): UseCheckoutReturn {
         }));
       }
     },
-    [state.saleId, state.saleNumber, state.total, state.tipAmount, clearCart]
+    [state.saleId, state.saleNumber, state.total, state.tipAmount, clearCart, ensureCart]
   );
 
   /**
    * Cancel the payment without completing the sale
+   * Clears the cart and creates a new one for the next customer
    */
   const cancelPaymentForm = useCallback(() => {
+    clearCart();
+    // Create a new cart for the next sale
+    ensureCart().catch(() => {
+      // Ignore errors - cart will be created when needed
+    });
     setState((prev) => ({
       ...prev,
       step: "error",
-      error: "Payment cancelled",
+      error: "Payment cancelled. Cart has been reset.",
     }));
-  }, []);
+    // Navigate back to products after a short delay
+    setTimeout(() => {
+      router.replace("/(tabs)/products");
+    }, 1500);
+  }, [clearCart, ensureCart]);
 
   const reset = useCallback(() => {
     setState({
