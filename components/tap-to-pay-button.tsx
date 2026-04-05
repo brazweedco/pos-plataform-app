@@ -30,6 +30,7 @@ interface TapToPayButtonProps {
   currency?: string;
   onSuccess: (paymentIntentId: string) => void;
   onError: (error: string) => void;
+  onUnsupportedDevice?: () => void; // Called when device doesn't support Tap to Pay
   disabled?: boolean;
 }
 
@@ -48,6 +49,7 @@ export function TapToPayButton({
   currency = "cad",
   onSuccess,
   onError,
+  onUnsupportedDevice,
   disabled = false,
 }: TapToPayButtonProps) {
   const { s, sx, sy } = useScale();
@@ -94,13 +96,21 @@ export function TapToPayButton({
         if (discoverError) {
           console.error("Discover error:", discoverError);
           setStatus("error");
-          setErrorMessage(discoverError.message || "Failed to discover reader");
+          // Check for unsupported device error
+          if (discoverError.code === "TAP_TO_PAY_UNSUPPORTED_DEVICE" ||
+              discoverError.message?.includes("Trusted Execution Environment")) {
+            setErrorMessage("Este dispositivo não suporta Tap to Pay. Use pagamento em dinheiro.");
+            onUnsupportedDevice?.();
+          } else {
+            setErrorMessage(discoverError.message || "Falha ao descobrir leitor");
+          }
           return;
         }
 
         if (!readers || readers.length === 0) {
           setStatus("error");
-          setErrorMessage("No Tap to Pay reader available on this device");
+          setErrorMessage("Tap to Pay não disponível neste dispositivo. Use pagamento em dinheiro.");
+          onUnsupportedDevice?.();
           return;
         }
 
@@ -132,7 +142,7 @@ export function TapToPayButton({
       setStatus("error");
       setErrorMessage("Tap to Pay is not supported on web");
     }
-  }, [initialize, isInitialized, discoverReaders, connectLocalMobileReader]);
+  }, [initialize, isInitialized, discoverReaders, connectLocalMobileReader, onUnsupportedDevice]);
 
   const handleTapToPay = useCallback(async () => {
     if (status !== "ready" || disabled) return;

@@ -82,6 +82,12 @@ export default function CheckoutScreen() {
     cancelPaymentForm();
   };
 
+  const handleUnsupportedDevice = () => {
+    // Automatically switch to Cash when device doesn't support Tap to Pay
+    setSelectedPayment("CASH");
+    cancelPaymentForm();
+  };
+
   // Check if we should show the Tap to Pay button
   const showTapToPayButton =
     selectedPayment === "TAP_TO_PAY" &&
@@ -397,6 +403,7 @@ export default function CheckoutScreen() {
                 currency="cad"
                 onSuccess={handleTapToPaySuccess}
                 onError={handleTapToPayError}
+                onUnsupportedDevice={handleUnsupportedDevice}
                 disabled={isProcessing}
               />
             </View>
