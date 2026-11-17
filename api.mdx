@@ -1,0 +1,24 @@
+---
+title: "API"
+description: "Endpoints de autenticação."
+---
+
+Base URL: `http://localhost:8080`
+
+## Login
+
+`POST /api/v1/auth/login`
+
+Corpo: `{ "email": string, "password": string }`
+
+Resposta: `{ accessToken, refreshToken, user }`
+
+## Refresh
+
+`POST /api/v1/auth/refresh`
+
+Corpo: `{ "refreshToken": string }`
+
+Resposta: `{ accessToken, refreshToken, user }`
+
+O token é renovado automaticamente quando uma requisição retorna 401.

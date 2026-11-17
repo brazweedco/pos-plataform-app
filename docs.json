@@ -7,6 +7,18 @@
     "light": "#FEF9F3",
     "dark": "#003640"
   },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Começar",
+        "pages": ["index", "setup"]
+      },
+      {
+        "group": "Referência",
+        "pages": ["screens", "api", "design", "commands"]
+      }
+    ]
+  },
   "doc": "BrazWeed POS is a point of sale application for iOS, Android, and Web, built with Expo and React Native.",
   "version": "1.0.0",
   "platforms": ["ios", "android", "web"],
