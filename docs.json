@@ -1,6 +1,13 @@
 {
-  "doc": "BrazWeed POS is a point of sale application for iOS, Android, and Web, built with Expo and React Native.",
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
   "name": "BrazWeed POS",
+  "colors": {
+    "primary": "#E46C45",
+    "light": "#FEF9F3",
+    "dark": "#003640"
+  },
+  "doc": "BrazWeed POS is a point of sale application for iOS, Android, and Web, built with Expo and React Native.",
   "version": "1.0.0",
   "platforms": ["ios", "android", "web"],
   "stack": {
@@ -10,7 +17,10 @@
     "animations": "react-native-reanimated",
     "state": "Zustand",
     "dataFetching": "TanStack React Query",
-    "payments": ["@stripe/stripe-react-native", "@stripe/stripe-terminal-react-native (Tap to Pay)"],
+    "payments": [
+      "@stripe/stripe-react-native",
+      "@stripe/stripe-terminal-react-native (Tap to Pay)"
+    ],
     "navigation": ["expo-router", "@react-navigation/bottom-tabs"]
   },
   "structure": {
@@ -29,24 +39,82 @@
   },
   "screens": [
     { "route": "/", "file": "app/index.tsx", "description": "Splash screen" },
-    { "route": "/login", "file": "app/login.tsx", "description": "Login (email/password, biometric option)" },
-    { "route": "/home", "file": "app/home.tsx", "description": "Home dashboard" },
-    { "route": "/products", "file": "app/products.tsx", "description": "Product listing" },
-    { "route": "/product", "file": "app/product/", "description": "Product details" },
-    { "route": "/product-create", "file": "app/product-create.tsx", "description": "Create product" },
-    { "route": "/product-edit", "file": "app/product-edit/", "description": "Edit product" },
-    { "route": "/inventory", "file": "app/inventory.tsx", "description": "Inventory management" },
-    { "route": "/cart", "file": "app/cart.tsx", "description": "Shopping cart" },
-    { "route": "/checkout", "file": "app/checkout.tsx", "description": "Checkout and payment" },
-    { "route": "/checkout-success", "file": "app/checkout-success.tsx", "description": "Successful checkout confirmation" },
-    { "route": "/orders", "file": "app/orders.tsx", "description": "Order history" },
-    { "route": "/settings", "file": "app/settings.tsx", "description": "App settings" }
+    {
+      "route": "/login",
+      "file": "app/login.tsx",
+      "description": "Login (email/password, biometric option)"
+    },
+    {
+      "route": "/home",
+      "file": "app/home.tsx",
+      "description": "Home dashboard"
+    },
+    {
+      "route": "/products",
+      "file": "app/products.tsx",
+      "description": "Product listing"
+    },
+    {
+      "route": "/product",
+      "file": "app/product/",
+      "description": "Product details"
+    },
+    {
+      "route": "/product-create",
+      "file": "app/product-create.tsx",
+      "description": "Create product"
+    },
+    {
+      "route": "/product-edit",
+      "file": "app/product-edit/",
+      "description": "Edit product"
+    },
+    {
+      "route": "/inventory",
+      "file": "app/inventory.tsx",
+      "description": "Inventory management"
+    },
+    {
+      "route": "/cart",
+      "file": "app/cart.tsx",
+      "description": "Shopping cart"
+    },
+    {
+      "route": "/checkout",
+      "file": "app/checkout.tsx",
+      "description": "Checkout and payment"
+    },
+    {
+      "route": "/checkout-success",
+      "file": "app/checkout-success.tsx",
+      "description": "Successful checkout confirmation"
+    },
+    {
+      "route": "/orders",
+      "file": "app/orders.tsx",
+      "description": "Order history"
+    },
+    {
+      "route": "/settings",
+      "file": "app/settings.tsx",
+      "description": "App settings"
+    }
   ],
   "api": {
     "baseUrl": "http://localhost:8080",
     "endpoints": [
-      { "method": "POST", "path": "/api/v1/auth/login", "body": { "email": "string", "password": "string" }, "response": "{ accessToken, refreshToken, user }" },
-      { "method": "POST", "path": "/api/v1/auth/refresh", "body": { "refreshToken": "string" }, "response": "{ accessToken, refreshToken, user }" }
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login",
+        "body": { "email": "string", "password": "string" },
+        "response": "{ accessToken, refreshToken, user }"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/refresh",
+        "body": { "refreshToken": "string" },
+        "response": "{ accessToken, refreshToken, user }"
+      }
     ],
     "auth": "Automatic token refresh on 401 responses"
   },
@@ -71,7 +139,11 @@
     },
     "scaling": {
       "hook": "useScale",
-      "helpers": { "s": "uniform (fonts, icons, radius)", "sx": "horizontal", "sy": "vertical" }
+      "helpers": {
+        "s": "uniform (fonts, icons, radius)",
+        "sx": "horizontal",
+        "sy": "vertical"
+      }
     },
     "responsive": {
       "mobile": "Full-width layout",
@@ -87,12 +159,13 @@
     "resetProject": "npm run reset-project",
     "fixDeps": "npm run fix-deps"
   },
-  "setup": [
-    "npm install",
-    "npx expo start"
-  ],
+  "setup": ["npm install", "npx expo start"],
   "permissions": {
-    "ios": ["Location (Tap to Pay)", "Bluetooth (card readers)", "NFC (payment cards)"],
+    "ios": [
+      "Location (Tap to Pay)",
+      "Bluetooth (card readers)",
+      "NFC (payment cards)"
+    ],
     "android": ["NFC", "ACCESS_FINE_LOCATION"]
   },
   "links": {
